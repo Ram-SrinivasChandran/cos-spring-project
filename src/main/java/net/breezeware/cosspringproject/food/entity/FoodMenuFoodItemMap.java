@@ -14,7 +14,7 @@ import java.time.Instant;
 @Table(name = "food_menu_food_item_map")
 public class FoodMenuFoodItemMap {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @OneToOne
     @JoinColumn(name = "id")

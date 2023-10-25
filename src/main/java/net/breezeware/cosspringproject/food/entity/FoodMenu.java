@@ -15,7 +15,7 @@ import java.time.Instant;
 @Table(name = "food_menu")
 public class FoodMenu {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @Column(name = "name")
     private String name;

@@ -17,7 +17,7 @@ import java.time.Instant;
 @Table(name = "food_item")
 public class FoodItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     @Column(name = "name", length = 30)
     @NotBlank(message = "Please Provide a Valid Name.")
