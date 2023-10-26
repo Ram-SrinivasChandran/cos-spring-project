@@ -1,12 +1,12 @@
 package net.breezeware.cosspringproject.food.entity;
 
-import com.sun.istack.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
@@ -14,17 +14,20 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "food_item")
+@Table(schema = "food_svc", name = "food_item")
 public class FoodItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "food_item_seq_gen")
+    @SequenceGenerator(name = "food_item_seq_gen",sequenceName = "food_item_seq",schema = "food_svc",allocationSize = 1)
     private long id;
     @Column(name = "name", length = 30)
     @NotBlank(message = "Please Provide a Valid Name.")
-    @Size(min = 1,max = 30)
+    @Size(min = 1, max = 20)
     private String name;
+    @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "cost")
     private double cost;
+    @NotNull(message = "Please Enter a Valid Quantity.")
     @Column(name = "quantity")
     private int quantity;
     @Column(name = "created_on")

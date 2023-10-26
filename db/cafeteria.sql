@@ -9,12 +9,51 @@ CREATE TABLE food_svc.food_menu(
         "id" int8 NOT NULL default NEXTVAL('food_svc.food_menu_seq'),
         "name"  VARCHAR(20) NOT NULL,
         "type"  VARCHAR(20) NOT NULL,
-        "availability_on" VARCHAR(20) NOT NULL,
         "created_on" TIMESTAMPTZ,
     	"modified_on" TIMESTAMPTZ,
         CONSTRAINT food_menu_pkey PRIMARY KEY (id)
 );
 select setval('food_svc.food_menu_seq', (select max(id)+1 from food_svc.food_menu), false);
+
+CREATE SEQUENCE food_svc.availability_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+CREATE TABLE food_svc.availability(
+        "id" int8 NOT NULL default NEXTVAL('food_svc.availability_seq'),
+        "name"  VARCHAR(20) NOT NULL,
+        "day"  VARCHAR(20) NOT NULL,
+        "created_on" TIMESTAMPTZ,
+    	"modified_on" TIMESTAMPTZ,
+        CONSTRAINT availability_pkey PRIMARY KEY (id)
+);
+select setval('food_svc.availability_seq', (select max(id)+1 from food_svc.availability), false);
+
+CREATE SEQUENCE food_svc.food_menu_availability_map_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+CREATE TABLE food_svc.food_menu_availability_map(
+        "id" int8 NOT NULL default NEXTVAL('food_svc.food_menu_availability_map_seq'),
+        "food_menu_id"  int8 NOT NULL,
+        "availability_id"  int8 NOT NULL,
+        "created_on" TIMESTAMPTZ,
+    	"modified_on" TIMESTAMPTZ,
+    	CONSTRAINT fk_food_menu_id
+        FOREIGN KEY(food_menu_id)
+        REFERENCES food_svc."food_menu"(id)MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+        CONSTRAINT fk_availability_id
+        FOREIGN KEY(availability_id)
+        REFERENCES food_svc."availability"(id)MATCH SIMPLE
+        ON UPDATE NO ACTION ON DELETE NO ACTION,
+        CONSTRAINT food_menu_availability_map_pkey PRIMARY KEY (id)
+);
+select setval('food_svc.food_menu_availability_map_seq', (select max(id)+1 from food_svc.food_menu_availability_map), false);
 
 CREATE SEQUENCE food_svc.food_item_seq
   INCREMENT 1
