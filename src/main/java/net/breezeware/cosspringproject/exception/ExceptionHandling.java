@@ -19,7 +19,7 @@ public class ExceptionHandling extends ResponseEntityExceptionHandler {
         ErrorResponse errorResponse=new ErrorResponse();
         errorResponse.setHttpStatusCode(customException.getHttpStatus().value());
         errorResponse.setMessage(customException.getHttpStatus().name());
-        if((Objects.isNull(errorResponse.getMessage())||errorResponse.getMessage().isBlank())&&!customException.getMessages().isEmpty()){
+        if((Objects.isNull(customException.getMessage())||customException.getMessage().isBlank())&&!customException.getMessages().isEmpty()){
             errorResponse.setErrorDetails(customException.getMessages());
         }
         else {
