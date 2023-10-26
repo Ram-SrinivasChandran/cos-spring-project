@@ -17,14 +17,18 @@ public class UserRoleMap {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_role_map_seq_gen")
     @SequenceGenerator(name = "user_role_map_seq_gen", sequenceName = "user_role_map_seq",schema = "user_svc",allocationSize = 1)
     private long id;
+
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User userId;
+
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "role_id",referencedColumnName = "id")
     private Role roleId;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

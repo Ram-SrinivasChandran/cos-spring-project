@@ -19,20 +19,26 @@ public class OrderItem {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "order_item_seq_gen")
     @SequenceGenerator(name = "order_item_seq_gen", sequenceName = "order_item_seq",schema = "order_svc",allocationSize = 1)
     private long id;
+
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "order_id",referencedColumnName = "id")
     private Order orderId;
+
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "food_item_id",referencedColumnName = "id")
     private FoodItem foodItemId;
+
     @NotNull(message = "Please Enter a Valid Quantity.")
     @Column(name = "quantity")
     private int quantity;
+
     @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "cost")
     private double cost;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

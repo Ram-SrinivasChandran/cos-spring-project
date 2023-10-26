@@ -25,26 +25,35 @@ public class Order {
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
     private User userId;
+
     @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "total_cost")
     private double totalCost;
+
     @Column(name = "email")
     private String email;
+
     @Column(name = "phone_number")
     private long phoneNumber;
+
     @OneToOne
     @JoinColumn(name = "user_address_id",referencedColumnName = "id")
     private UserAddressMap userAddressId;
+
     @NotBlank(message = "Please Enter a Valid Status.")
     @Size(min = 1,max = 20)
     @Column(name = "status")
     private String status;
+
     @Column(name = "order_on")
     private Instant orderOn;
+
     @Column(name = "delivery_on")
     private Instant deliveryOn;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
 

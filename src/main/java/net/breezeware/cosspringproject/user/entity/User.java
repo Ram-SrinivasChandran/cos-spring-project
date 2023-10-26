@@ -20,21 +20,29 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_seq_gen")
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq",schema = "user_svc",allocationSize = 1)
     private long id;
+
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1,max = 20)
     @Column(name = "name")
     private String name;
+
     @NotBlank(message = "Please Enter a Valid UserName.")
     @Size(min = 1,max = 20)
     @Column(name = "user_name")
     private String userName;
+
     @NotBlank(message = "Please Enter a Valid Password.")
     @Size(min = 1,max = 20)
     @Column(name = "password")
     private String password;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
+
+    @Transient
+    private long roleId;
 
 }

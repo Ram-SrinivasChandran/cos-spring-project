@@ -18,11 +18,14 @@ public class Availability {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "availability_seq_gen")
     @SequenceGenerator(name = "availability_seq_gen",sequenceName = "availability_seq",schema = "food_svc",allocationSize = 1)
     private long id;
+
     @NotBlank(message = "Please Enter a valid Day.")
     @Column(name = "day")
     private String day;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

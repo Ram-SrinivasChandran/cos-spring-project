@@ -18,14 +18,18 @@ public class FoodMenuFoodItemMap {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "food_menu_food_item_map_seq_gen")
     @SequenceGenerator(name = "food_menu_food_item_map_seq_gen", sequenceName = "food_menu_food_item_map_seq",schema = "food_svc",allocationSize = 1)
     private long id;
+
     @OneToOne
     @JoinColumn(name = "food_item_id",referencedColumnName = "id")
     private FoodItem foodItemId;
+
     @OneToOne
     @JoinColumn(name = "food_menu_id",referencedColumnName = "id")
     private FoodMenu foodMenuId;
+
     @Column(name = "created_on")
     private Instant createdOn;
+
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }
