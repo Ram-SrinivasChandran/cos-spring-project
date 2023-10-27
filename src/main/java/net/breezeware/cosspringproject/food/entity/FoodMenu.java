@@ -3,7 +3,6 @@ package net.breezeware.cosspringproject.food.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.breezeware.cosspringproject.food.enumeration.Days;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
