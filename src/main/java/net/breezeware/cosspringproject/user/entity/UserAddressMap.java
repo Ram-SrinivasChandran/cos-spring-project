@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
@@ -23,41 +22,41 @@ public class UserAddressMap {
 
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User userId;
+    private User user;
 
     @NotBlank(message = "Please Enter a Valid Door Number.")
     @Size(min = 1,max = 20)
-    @Column(name = "door_number")
+    @Column(name = "door_number",length = 20,nullable = false)
     private String doorNumber;
 
     @NotBlank(message = "Please Enter a Valid Street Name.")
     @Size(min = 1,max = 20)
-    @Column(name = "street_name")
+    @Column(name = "street_name",length = 20,nullable = false)
     private String streetName;
 
     @NotBlank(message = "Please Enter a Valid City.")
     @Size(min = 1,max = 20)
-    @Column(name = "city")
+    @Column(name = "city",length = 20,nullable = false)
     private String city;
 
     @NotBlank(message = "Please Enter a Valid District.")
     @Size(min = 1,max = 20)
-    @Column(name = "district")
+    @Column(name = "district",length = 20,nullable = false)
     private String district;
 
     @NotBlank(message = "Please Enter a Valid State.")
     @Size(min = 1,max = 20)
-    @Column(name = "state")
+    @Column(name = "state",length = 20,nullable = false)
     private String state;
 
     @NotBlank(message = "Please Enter a Valid PinCode.")
     @Size(min = 1,max = 20)
-    @Column(name = "pincode")
+    @Column(name = "pincode",length = 20,nullable = false)
     private long pincode;
 
     @NotBlank(message = "Please Enter a Valid LandMark.")
     @Size(min = 1,max = 20)
-    @Column(name = "landmark")
+    @Column(name = "landmark",length = 20,nullable = false)
     private String landmark;
 
     @Column(name = "created_on")

@@ -20,11 +20,11 @@ public class UserRoleMap {
 
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User userId;
+    private User user;
 
     @OneToOne
     @JoinColumn(name = "role_id",referencedColumnName = "id")
-    private Role roleId;
+    private Role role;
 
     @Column(name = "created_on")
     private Instant createdOn;

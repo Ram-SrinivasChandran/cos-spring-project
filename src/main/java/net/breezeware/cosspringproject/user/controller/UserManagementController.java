@@ -1,7 +1,9 @@
 package net.breezeware.cosspringproject.user.controller;
 
+import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.service.api.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,24 +12,34 @@ import java.util.List;
 @RequestMapping("/api/users")
 public class UserManagementController {
     private final UserService userService;
+
     public UserManagementController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping
-    public List<User> getUserList(){
+    public List<User> getUserList() {
         return userService.findAll();
     }
+
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public void createUser(@RequestBody User user){
+    public void createUser(@RequestBody User user) {
         userService.save(user);
     }
+
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id){
+    public User getUserById(@PathVariable Long id) throws CustomException {
         return userService.findById(id);
     }
-    @DeleteMapping
-    public void deleteUser(@RequestBody User user){
-        userService.delete(user);
+
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable Long id) {
+        userService.deleteById(id);
     }
 
+    @PutMapping("/{id}")
+    public void updateUser(@PathVariable Long id, @RequestBody User user) {
+        userService.update(id, user);
+    }
 }

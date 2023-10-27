@@ -122,7 +122,7 @@ CREATE SEQUENCE user_svc.user_seq
 CREATE TABLE user_svc."user" (
 	id int8 NOT NULL default NEXTVAL('user_svc.user_seq'),
 	"name" varchar(20) NOT NULL,
-	user_name varchar(20) NOT NULL,
+	user_name varchar(20) NOT NULL UNIQUE,
 	"password" varchar(20) NOT NULL,
 	created_on timestamptz NULL,
 	modified_on timestamptz NULL,

@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.user.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +14,9 @@ import java.time.Instant;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @Entity
-@Table(schema = "user_svc", name = "user")
+@Table(schema = "user_svc", name = "user",uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name"}) })
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "user_seq_gen")
@@ -23,17 +25,17 @@ public class User {
 
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1,max = 20)
-    @Column(name = "name")
+    @Column(name = "name",length = 20,nullable = false)
     private String name;
 
     @NotBlank(message = "Please Enter a Valid UserName.")
     @Size(min = 1,max = 20)
-    @Column(name = "user_name")
+    @Column(name = "user_name",unique = true,length = 20,nullable = false )
     private String userName;
 
     @NotBlank(message = "Please Enter a Valid Password.")
     @Size(min = 1,max = 20)
-    @Column(name = "password")
+    @Column(name = "password",length = 20,nullable = false)
     private String password;
 
     @Column(name = "created_on")

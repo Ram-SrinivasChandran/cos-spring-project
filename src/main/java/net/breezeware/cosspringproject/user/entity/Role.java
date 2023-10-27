@@ -22,12 +22,12 @@ public class Role {
 
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1,max = 20)
-    @Column(name = "name")
+    @Column(name = "name",length = 20,nullable = false)
     private String name;
 
     @NotBlank(message = "Please Enter a Valid Description.")
     @Size(min = 1,max = 20)
-    @Column(name = "description")
+    @Column(name = "description",length = 20,nullable = false)
     private String description;
 
     @Column(name = "created_on")
