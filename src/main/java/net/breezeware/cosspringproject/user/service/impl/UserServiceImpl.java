@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> findAll() {
+        log.info("Entering findAll()");
+        log.info("Leaving findAll()");
         return userRepository.findAll();
     }
 
@@ -43,11 +45,13 @@ public class UserServiceImpl implements UserService {
         if (id <= 0) {
             throw new CustomException("User Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
-        return userRepository.findById(id).orElseThrow(() -> new CustomException("The User not Found", HttpStatus.NOT_FOUND));
+        log.info("Leaving findById()");
+        return userRepository.findById(id).orElseThrow(() ->new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
 
     @Override
     public User save(User user) {
+        log.info("Entering save()");
         Set<ConstraintViolation<User>> constraintViolationSet = fieldValidator.validate(user);
         ValidationException.handlingException(constraintViolationSet);
         if (user.getRoleId() <= 0) {
@@ -63,11 +67,13 @@ public class UserServiceImpl implements UserService {
         userRoleMap.setCreatedOn(Instant.now());
         userRoleMap.setModifiedOn(Instant.now());
         userRoleMapRepository.save(userRoleMap);
+        log.info("Leaving save()");
         return savedUser;
     }
 
     @Override
     public void update(Long id, User updatedUser) {
+        log.info("Entering update()");
         Set<ConstraintViolation<User>> constraintViolationSet = fieldValidator.validate(updatedUser);
         ValidationException.handlingException(constraintViolationSet);
         User user = findById(id);
@@ -76,21 +82,26 @@ public class UserServiceImpl implements UserService {
         user.setName(updatedUser.getName());
         user.setModifiedOn(Instant.now());
         userRepository.save(user);
+        log.info("Leaving update()");
     }
 
     @Override
     public void delete(User user) {
+        log.info("Entering delete()");
         userRepository.delete(user);
+        log.info("Leaving delete()");
     }
 
     @Override
     public void deleteById(Long id) {
+        log.info("Entering deleteById()");
         User user = findById(id);
         List<UserRoleMap> userRoles = userRoleMapRepository.findByUser(user);
         userRoles.forEach(userRoleId -> {
             userRoleMapRepository.deleteById(userRoleId.getId());
         });
         userRepository.deleteById(id);
+        log.info("Leaving deleteById()");
     }
 
 }

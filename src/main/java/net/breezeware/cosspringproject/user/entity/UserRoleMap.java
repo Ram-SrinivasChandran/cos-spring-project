@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.user.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(schema = "user_svc", name = "user_role_map")
 public class UserRoleMap {
     @Id
