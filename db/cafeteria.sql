@@ -23,7 +23,6 @@ CREATE SEQUENCE food_svc.availability_seq
   CACHE 1;
 CREATE TABLE food_svc.availability(
         "id" int8 NOT NULL default NEXTVAL('food_svc.availability_seq'),
-        "name"  VARCHAR(20) NOT NULL,
         "day"  VARCHAR(20) NOT NULL,
         "created_on" TIMESTAMPTZ,
     	"modified_on" TIMESTAMPTZ,
