@@ -78,7 +78,6 @@ class UserServiceImplTest {
                 assertThrows(CustomException.class, () -> userService.findById(2L));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         assertEquals("The User not Found", exception.getMessage());
-        log.info(exception.getMessage());
     }
 
     @Test
@@ -89,9 +88,11 @@ class UserServiceImplTest {
         when(roleRepository.findById(1L)).thenReturn(Optional.ofNullable(mockRole));
         when(userRepository.save(any())).thenReturn(mockUser);
         when(userRoleMapRepository.save(any())).thenReturn(mockUserRoleMap);
-        User user = userService.save(User.builder().id(1).roleId(1).name("Ram").userName("ram_01").password("breeze123").build());
+        User user = userService.save(mockUser);
         assert mockUser != null;
         assertEquals(user.getName(), mockUser.getName());
+        assertEquals(user.getUserName(), mockUser.getUserName());
+        assertEquals(user.getPassword(), mockUser.getPassword());
     }
 
     @Test

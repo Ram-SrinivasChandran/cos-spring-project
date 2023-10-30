@@ -10,7 +10,7 @@ import net.breezeware.cosspringproject.user.dao.UserRoleMapRepository;
 import net.breezeware.cosspringproject.user.entity.Role;
 import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserRoleMap;
-import net.breezeware.cosspringproject.user.service.api.UserService;
+import net.breezeware.cosspringproject.user.service.api.UserUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserUserService {
 
 
     private final UserRepository userRepository;

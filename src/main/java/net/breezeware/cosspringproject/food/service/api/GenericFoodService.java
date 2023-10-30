@@ -1,9 +1,9 @@
 package net.breezeware.cosspringproject.food.service.api;
 
-import java.util.Set;
+import java.util.List;
 
-public interface FoodManagementService <T,ID>{
-    Set<T> findAll();
+public interface GenericFoodService<T,ID>{
+    List<T> findAll();
     T findById(ID id);
     T save(T object);
     void delete(T object);
