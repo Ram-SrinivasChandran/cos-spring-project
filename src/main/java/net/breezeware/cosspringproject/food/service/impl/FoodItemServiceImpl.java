@@ -32,7 +32,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     @Override
-    public FoodItem findById(Long id) {
+    public FoodItem findById(long id) {
         log.info("Entering findById()");
         if(id<=0){
             log.info("Leaving findById()");
@@ -75,7 +75,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(long id) {
         findById(id);
         foodItemRepository.deleteById(id);
     }

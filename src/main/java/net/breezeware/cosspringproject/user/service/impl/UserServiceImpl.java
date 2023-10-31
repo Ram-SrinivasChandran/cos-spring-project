@@ -10,9 +10,10 @@ import net.breezeware.cosspringproject.user.dao.UserRoleMapRepository;
 import net.breezeware.cosspringproject.user.entity.Role;
 import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserRoleMap;
-import net.breezeware.cosspringproject.user.service.api.UserUserService;
+import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
@@ -23,7 +24,7 @@ import java.util.Set;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserUserService {
+public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserUserService {
         return userRepository.findById(id).orElseThrow(() ->new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
 
+    @Transactional
     @Override
     public User save(User user) {
         log.info("Entering save()");
@@ -71,6 +73,7 @@ public class UserServiceImpl implements UserUserService {
         return savedUser;
     }
 
+    @Transactional
     @Override
     public void update(Long id, User updatedUser) {
         log.info("Entering update()");
@@ -85,6 +88,7 @@ public class UserServiceImpl implements UserUserService {
         log.info("Leaving update()");
     }
 
+    @Transactional
     @Override
     public void delete(User user) {
         log.info("Entering delete()");
@@ -92,6 +96,7 @@ public class UserServiceImpl implements UserUserService {
         log.info("Leaving delete()");
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
         log.info("Entering deleteById()");

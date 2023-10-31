@@ -3,7 +3,7 @@ package net.breezeware.cosspringproject.user.controller;
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.exception.ExceptionHandling;
 import net.breezeware.cosspringproject.user.entity.User;
-import net.breezeware.cosspringproject.user.service.api.UserUserService;
+import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(MockitoExtension.class)
 class UserManagementControllerTest {
     @Mock
-    UserUserService userService;
+    UserService userService;
     @InjectMocks
     UserManagementController userManagementController;
     MockMvc mockMvc;

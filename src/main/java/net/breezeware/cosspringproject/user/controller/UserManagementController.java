@@ -2,7 +2,7 @@ package net.breezeware.cosspringproject.user.controller;
 
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.entity.User;
-import net.breezeware.cosspringproject.user.service.api.UserUserService;
+import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,9 +11,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/users")
 public class UserManagementController {
-    private final UserUserService userService;
+    private final UserService userService;
 
-    public UserManagementController(UserUserService userService) {
+    public UserManagementController(UserService userService) {
         this.userService = userService;
     }
 
