@@ -7,10 +7,7 @@ import net.breezeware.cosspringproject.exception.ValidationException;
 import net.breezeware.cosspringproject.food.dao.FoodMenuRepository;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.food.entity.*;
-import net.breezeware.cosspringproject.food.service.api.FoodItemService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuFoodItemMapService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuService;
+import net.breezeware.cosspringproject.food.service.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +26,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     private final FoodMenuFoodItemMapService foodMenuFoodItemMapService;
     private final FoodMenuAvailabilityMapService foodMenuAvailabilityMapService;
     private final FoodItemService foodItemService;
+    private final AvailabilityService availabilityService;
     private final Validator fieldValidator;
 
     @Override
@@ -63,6 +61,8 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         for (var availability : foodMenuDto.getAvailabilityList()) {
             Set<ConstraintViolation<Availability>> constraintViolationSet2 = fieldValidator.validate(availability);
             ValidationException.handlingException(constraintViolationSet2);
+            availabilityService.findById(availability.getId());
+
         }
         if (!foodMenuRepository.existsByNameAndType(foodMenuDto.getFoodMenu().getName(), foodMenuDto.getFoodMenu().getType())) {
             foodMenuDto.getFoodMenu().setCreatedOn(Instant.now());
