@@ -1,5 +1,6 @@
 package net.breezeware.cosspringproject.food.controller;
 
+import lombok.RequiredArgsConstructor;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.service.api.FoodItemService;
 import org.springframework.http.HttpStatus;
@@ -9,12 +10,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/foodItems")
+@RequiredArgsConstructor
 public class FoodItemController {
-    private final FoodItemService foodItemService;
 
-    public FoodItemController(FoodItemService foodItemService) {
-        this.foodItemService = foodItemService;
-    }
+    private final FoodItemService foodItemService;
 
     @GetMapping
     public List<FoodItem> getFoodItems(){

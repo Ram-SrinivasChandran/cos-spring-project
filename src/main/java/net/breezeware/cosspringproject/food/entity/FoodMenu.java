@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.food.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(schema = "food_svc", name = "food_menu")
 public class FoodMenu {
     @Id

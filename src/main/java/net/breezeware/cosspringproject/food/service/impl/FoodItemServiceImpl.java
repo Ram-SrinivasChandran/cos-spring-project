@@ -27,8 +27,9 @@ public class FoodItemServiceImpl implements FoodItemService {
     @Override
     public List<FoodItem> findAll() {
         log.info("Entering findAll()");
+        List<FoodItem> foodItem = foodItemRepository.findAll();
         log.info("Leaving findAll()");
-        return foodItemRepository.findAll();
+        return foodItem;
     }
 
     @Override
