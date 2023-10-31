@@ -1,11 +1,21 @@
-package net.breezeware.cosspringproject.food.service.api;
+package net.breezeware.cosspringproject.food.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import net.breezeware.cosspringproject.food.dao.FoodMenuAvailabilityMapRepository;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.food.entity.FoodMenuAvailabilityMap;
+import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapService;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
+@Service
+@RequiredArgsConstructor
 public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityMapService {
+
+    private final FoodMenuAvailabilityMapRepository foodMenuAvailabilityMapRepository;
     @Override
     public List<FoodMenuAvailabilityMap> findAll() {
         return null;
@@ -17,8 +27,8 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
     }
 
     @Override
-    public FoodMenuAvailabilityMap save(FoodMenuDto foodMenuDto) {
-        return null;
+    public FoodMenuAvailabilityMap save(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
+        return foodMenuAvailabilityMapRepository.save(foodMenuAvailabilityMap);
     }
 
     @Override

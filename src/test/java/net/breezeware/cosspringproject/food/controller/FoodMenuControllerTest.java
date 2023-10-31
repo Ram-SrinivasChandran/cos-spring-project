@@ -39,7 +39,7 @@ class FoodMenuControllerTest {
     }
 
     @Test
-    void testFindAllFoodItems() throws Exception {
+    void testFindAllFoodMenus() throws Exception {
         Mockito.when(foodMenuService.findAll()).thenReturn(List.of(new FoodMenu(), new FoodMenu()));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/foodMenus"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -47,7 +47,7 @@ class FoodMenuControllerTest {
     }
 
     @Test
-    void testFindFoodItemById() throws Exception {
+    void testFindFoodMenuById() throws Exception {
         FoodMenu mockFoodMenu= FoodMenu.builder().id(1).name("Breakfast").type("Veg").build();
         Mockito.when(foodMenuService.findById(anyLong())).thenReturn(mockFoodMenu);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/foodMenus/{id}",1))

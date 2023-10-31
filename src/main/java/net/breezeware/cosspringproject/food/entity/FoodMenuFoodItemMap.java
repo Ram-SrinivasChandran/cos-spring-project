@@ -1,8 +1,7 @@
 package net.breezeware.cosspringproject.food.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.Instant;
@@ -11,6 +10,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@SuperBuilder
 @Table(schema = "food_svc", name = "food_menu_food_item_map")
 public class FoodMenuFoodItemMap {
     @Id
@@ -20,11 +20,11 @@ public class FoodMenuFoodItemMap {
 
     @OneToOne
     @JoinColumn(name = "food_item_id",referencedColumnName = "id")
-    private FoodItem foodItemId;
+    private FoodItem foodItem;
 
     @OneToOne
     @JoinColumn(name = "food_menu_id",referencedColumnName = "id")
-    private FoodMenu foodMenuId;
+    private FoodMenu foodMenu;
 
     @Column(name = "created_on")
     private Instant createdOn;

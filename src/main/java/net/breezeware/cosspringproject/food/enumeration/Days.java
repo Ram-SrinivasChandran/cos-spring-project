@@ -1,7 +1,7 @@
 package net.breezeware.cosspringproject.food.enumeration;
 
 public enum Days {
-    MONDAY("monday"),TUESDAY("tuesday"),WEDNESDAY("wednesday"),THURSDAY("thursday"),FRIDAY("friday"),SATURDAY("saturday"),SUNDAY("sunday");
+    MONDAY("Monday"),TUESDAY("Tuesday"),WEDNESDAY("Wednesday"),THURSDAY("Thursday"),FRIDAY("Friday"),SATURDAY("Saturday"),SUNDAY("Sunday");
 
     public final String name;
 

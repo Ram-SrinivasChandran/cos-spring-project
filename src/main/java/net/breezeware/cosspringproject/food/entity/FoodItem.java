@@ -16,7 +16,7 @@ import java.time.Instant;
 @AllArgsConstructor
 @Entity
 @Builder
-@Table(schema = "food_svc", name = "food_item")
+@Table(schema = "food_svc", name = "food_item",uniqueConstraints = { @UniqueConstraint(columnNames = { "name"})})
 public class FoodItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "food_item_seq_gen")
@@ -25,7 +25,7 @@ public class FoodItem {
 
     @Column(name = "name", length = 30)
     @NotBlank(message = "Please Provide a Valid Name.")
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 20,message = "FoodItem Name Size should be lesser than 20")
     private String name;
 
     @NotNull(message = "Please Enter a Valid Cost.")

@@ -20,11 +20,11 @@ public class FoodMenuAvailabilityMap {
 
     @OneToOne
     @JoinColumn(name = "food_menu_id",referencedColumnName = "id")
-    private FoodMenu foodMenuId;
+    private FoodMenu foodMenu;
 
     @OneToOne
     @JoinColumn(name = "availability_id",referencedColumnName = "id")
-    private Availability availabilityId;
+    private Availability availability;
 
     @Column(name = "created_on")
     private Instant createdOn;

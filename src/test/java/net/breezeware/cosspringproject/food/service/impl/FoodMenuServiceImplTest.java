@@ -2,7 +2,11 @@ package net.breezeware.cosspringproject.food.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import net.breezeware.cosspringproject.food.dao.FoodMenuRepository;
+import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.food.entity.Availability;
+import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
+import net.breezeware.cosspringproject.food.enumeration.Days;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,7 +36,7 @@ class FoodMenuServiceImplTest {
     Validator validator;
 
     @Test
-    void testFindAllFoodMenus() {
+    void testViewFoodMenus() {
         List<FoodMenu> mockFoodMenus=List.of(new FoodMenu(),new FoodMenu());
         when(foodMenuRepository.findAll()).thenReturn(mockFoodMenus);
         List<FoodMenu> foodMenus=foodMenuService.findAll();
@@ -40,7 +45,7 @@ class FoodMenuServiceImplTest {
     }
 
     @Test
-    void testFindFoodItemsById() {
+    void testViewFoodMenuById() {
         FoodMenu mockFoodMenu= FoodMenu.builder().id(1).build();
         when(foodMenuRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockFoodMenu));
         FoodMenu foodMenu = foodMenuService.findById(1L);
@@ -50,4 +55,14 @@ class FoodMenuServiceImplTest {
         Mockito.verify(foodMenuRepository).findById(anyLong());
     }
 
+    @Test
+    void testCreateFoodMenu(){
+        List<FoodItem> mockFoodItems=List.of(FoodItem.builder().id(1).cost(20).quantity(10).build(), FoodItem.builder().id(2).cost(30).quantity(20).build());
+        FoodMenu mockFoodMenu= FoodMenu.builder().id(1).type("Veg").name("Breakfast").build();
+        List<Availability> mockAvailabilityList=List.of(Availability.builder().id(1).day(Days.MONDAY.name).build(), Availability.builder().id(2).day("Tuesday").build());
+        FoodMenuDto menuDto=FoodMenuDto.builder().foodItems(mockFoodItems).foodMenu(mockFoodMenu).availabilityList(mockAvailabilityList).build();
+        when(foodMenuRepository.save(any())).thenReturn(mockFoodMenu);
+        FoodMenu foodMenu=foodMenuService.save(menuDto);
+        assertEquals(foodMenu.getId(), mockFoodMenu.getId());
+    }
 }

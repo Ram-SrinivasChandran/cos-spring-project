@@ -22,13 +22,12 @@ public class FoodMenu {
     private long id;
 
     @NotBlank(message = "Please Enter a Valid Name.")
-    @Min(1)
-    @Max(20)
+    @Size(min = 1,max = 20,message = "Food Menu type should be greater than or equal to 1")
     @Column(name = "name")
     private String name;
 
     @NotBlank(message = "Please Enter a Valid Type.")
-    @Size(min = 1,max = 20)
+    @Size(min = 1,max = 20,message = "Food Menu type should be greater than or equal to 1")
     @Column(name = "type")
     private String type;
 

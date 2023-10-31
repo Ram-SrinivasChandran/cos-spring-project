@@ -228,3 +228,18 @@ CREATE TABLE order_svc.order_item (
 	CONSTRAINT order_item_pkey PRIMARY KEY (id)
 );
 select setval('order_svc.order_item_seq', (select max(id)+1 from order_svc.order_item ), false);
+
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (1, "Monday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (2, "Tuesday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (3, "Wednesday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (4, "Thursday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (5, "Friday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (6, "Saturday", now(),now());
+INSERT INTO food_svc.availability(id, day, created_on,modified_on)
+VALUES (7, "Sunday", now(),now());
