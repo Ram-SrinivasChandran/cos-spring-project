@@ -97,7 +97,7 @@ class FoodItemServiceImplTest {
     }
 
     @Test
-    void deleteById() {
+    void testDeleteFoodItemById() {
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(25).quantity(20).build();
         doNothing().when(foodItemRepository).deleteById(1L);
         when(foodItemRepository.findById(any())).thenReturn(Optional.ofNullable(mockFoodItem));

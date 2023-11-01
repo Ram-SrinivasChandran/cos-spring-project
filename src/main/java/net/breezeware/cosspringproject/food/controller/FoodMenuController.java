@@ -32,4 +32,8 @@ public class FoodMenuController {
     public void updateFoodMenu(@PathVariable Long id,@RequestBody FoodMenuDto foodMenuDto){
         foodMenuService.update(id,foodMenuDto);
     }
+    @DeleteMapping("/{id}")
+    public void deleteFoodMenu(@PathVariable Long id){
+        foodMenuService.deleteById(id);
+    }
 }

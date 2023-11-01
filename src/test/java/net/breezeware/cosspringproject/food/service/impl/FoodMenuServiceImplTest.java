@@ -116,4 +116,13 @@ class FoodMenuServiceImplTest {
         FoodMenu foodMenu=foodMenuService.save(menuDto);
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
     }
+
+    @Test
+    void testDeleteFoodMenuById() {
+        FoodMenu mockFoodmenu = FoodMenu.builder().id(1).type("Veg").name("Breakfast").build();
+        doNothing().when(foodMenuRepository).deleteById(1L);
+        when(foodMenuRepository.findById(1L)).thenReturn(Optional.ofNullable(mockFoodmenu));
+        foodMenuService.deleteById(1L);
+        Mockito.verify(foodMenuRepository,Mockito.times(1)).deleteById(1L);
+    }
 }

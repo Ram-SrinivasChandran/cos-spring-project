@@ -92,6 +92,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
 
     @Override
     public void update(Long id, FoodMenuDto foodMenuDto) {
+        log.info("Entering update()");
         FoodMenu foodMenu = findById(id);
         foodMenuDto.setFoodMenu(foodMenu);
         for (var foodItem : foodMenuDto.getFoodItems()) {
@@ -130,15 +131,27 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         }
         foodMenuDto.getFoodMenu().setModifiedOn(Instant.now());
         foodMenuRepository.save(foodMenuDto.getFoodMenu());
+        log.info("Leaving update()");
     }
 
     @Override
     public void delete(FoodMenu foodMenu) {
-
+        foodMenuRepository.delete(foodMenu);
     }
 
     @Override
     public void deleteById(long id) {
-
+        log.info("Entering deleteById()");
+        FoodMenu foodMenu = findById(id);
+        List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap = foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
+        List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
+        for (var foodMenuFoodItemMap :listOfFoodMenuFoodItemMap){
+            foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+        }
+        for(var foodMenuAvailabilityMap:listOfFoodMenuAvailabilityMap){
+            foodMenuAvailabilityMapService.deleteById(foodMenuAvailabilityMap.getId());
+        }
+        foodMenuRepository.deleteById(id);
+        log.info("Leaving deleteById()");
     }
 }

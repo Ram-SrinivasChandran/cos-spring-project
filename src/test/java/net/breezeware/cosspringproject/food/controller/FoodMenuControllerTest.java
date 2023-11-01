@@ -111,4 +111,10 @@ class FoodMenuControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+    @Test
+    void testDeleteFoodMenuById() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/foodMenus/{id}",1))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
 }
