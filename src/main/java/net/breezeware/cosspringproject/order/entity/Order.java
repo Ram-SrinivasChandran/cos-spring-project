@@ -24,7 +24,7 @@ public class Order {
     private long id;
     @OneToOne
     @JoinColumn(name = "user_id",referencedColumnName = "id")
-    private User userId;
+    private User user;
 
     @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "total_cost")
