@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.food.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.food.dao.FoodMenuRepository;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.food.entity.*;
@@ -16,12 +17,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import javax.validation.Validator;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
@@ -64,7 +67,20 @@ class FoodMenuServiceImplTest {
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
         Mockito.verify(foodMenuRepository).findById(anyLong());
     }
-
+    @Test
+    void testViewFoodMenuByIdInvalidUserIdThrowCustomException() {
+        CustomException exception =
+                assertThrows(CustomException.class, () -> foodMenuService.findById(-1L));
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
+        assertEquals("The Food Menu Id should be Greater than Zero.", exception.getMessage());
+    }
+    @Test
+    void testViewFoodMenuByIdInvalidUserThrowCustomException() {
+        CustomException exception =
+                assertThrows(CustomException.class, () -> foodMenuService.findById(2L));
+        assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
+        assertEquals("The Food Menu not Found", exception.getMessage());
+    }
     @Test
     void testCreateFoodMenu(){
         List<FoodItem> mockFoodItems=List.of(FoodItem.builder().id(1).cost(20).quantity(10).build(), FoodItem.builder().id(2).cost(30).quantity(20).build());

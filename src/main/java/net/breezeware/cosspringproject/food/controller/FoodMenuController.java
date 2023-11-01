@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
 import net.breezeware.cosspringproject.food.service.api.FoodMenuService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,6 +23,7 @@ public class FoodMenuController {
     public FoodMenu getFoodMenuById(@PathVariable Long id){
         return foodMenuService.findById(id);
     }
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public FoodMenu createFoodMenu(@RequestBody FoodMenuDto foodMenuDto){
         return foodMenuService.save(foodMenuDto);
