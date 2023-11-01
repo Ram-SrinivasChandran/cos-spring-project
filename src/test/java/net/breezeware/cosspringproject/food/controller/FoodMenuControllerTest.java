@@ -84,5 +84,31 @@ class FoodMenuControllerTest {
                                     ]}"""))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+    @Test
+    void testUpdateFoodMenu() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/foodMenus/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {"foodMenu": {},
+                                "foodItems": [
+                                        {
+                                            "id": 2,
+                                            "name": "Idly",
+                                            "cost": 10,
+                                            "quantity": 50
+                                        }
+                                    ],
+                                "availabilityList": [
+                                        {
+                                            "id": 3,
+                                            "day": "Wednesday"
+                                        },
+                                        {
+                                            "id": 4,
+                                            "day": "Thrusday"
+                                        }
+                                    ]}"""))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 
 }

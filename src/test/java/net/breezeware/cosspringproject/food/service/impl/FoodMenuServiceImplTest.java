@@ -27,8 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -90,6 +89,24 @@ class FoodMenuServiceImplTest {
         FoodMenuAvailabilityMap mockFoodMenuAvailabilityMap= FoodMenuAvailabilityMap.builder().id(1).build();
         FoodItem mockFoodItem=FoodItem.builder().id(1).cost(20).quantity(10).build();
         List<Availability> mockAvailabilityList=List.of(Availability.builder().id(1).day(Days.MONDAY.name).build(), Availability.builder().id(2).day("Tuesday").build());
+        FoodMenuDto menuDto=FoodMenuDto.builder().foodItems(mockFoodItems).foodMenu(mockFoodMenu).availabilityList(mockAvailabilityList).build();
+        when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
+        when(availabilityService.findById(anyLong())).thenReturn(mockAvailability);
+        when(foodMenuFoodItemMapService.save(any())).thenReturn(mockFoodMenuFoodItemMap);
+        when(foodMenuAvailabilityMapService.save(any())).thenReturn(mockFoodMenuAvailabilityMap);
+        when(foodMenuRepository.save(any())).thenReturn(mockFoodMenu);
+        FoodMenu foodMenu=foodMenuService.save(menuDto);
+        assertEquals(foodMenu.getId(), mockFoodMenu.getId());
+    }
+    @Test
+    void testUpdateFoodMenu(){
+        List<FoodItem> mockFoodItems=List.of(FoodItem.builder().id(1).cost(20).quantity(10).build(), FoodItem.builder().id(2).cost(30).quantity(20).build());
+        FoodMenu mockFoodMenu= FoodMenu.builder().id(1).type("Veg").name("Breakfast").build();
+        Availability mockAvailability=Availability.builder().id(1).day(Days.MONDAY.name).build();
+        FoodMenuFoodItemMap mockFoodMenuFoodItemMap= FoodMenuFoodItemMap.builder().id(1).build();
+        FoodMenuAvailabilityMap mockFoodMenuAvailabilityMap= FoodMenuAvailabilityMap.builder().id(1).build();
+        FoodItem mockFoodItem=FoodItem.builder().id(1).cost(20).quantity(10).build();
+        List<Availability> mockAvailabilityList=List.of(Availability.builder().id(1).day(Days.MONDAY.name).build(), Availability.builder().id(2).day(Days.TUESDAY.name).build());
         FoodMenuDto menuDto=FoodMenuDto.builder().foodItems(mockFoodItems).foodMenu(mockFoodMenu).availabilityList(mockAvailabilityList).build();
         when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
         when(availabilityService.findById(anyLong())).thenReturn(mockAvailability);

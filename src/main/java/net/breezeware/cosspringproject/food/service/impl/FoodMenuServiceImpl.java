@@ -62,7 +62,6 @@ public class FoodMenuServiceImpl implements FoodMenuService {
             Set<ConstraintViolation<Availability>> constraintViolationSet2 = fieldValidator.validate(availability);
             ValidationException.handlingException(constraintViolationSet2);
             availabilityService.findById(availability.getId());
-
         }
         if (!foodMenuRepository.existsByNameAndType(foodMenuDto.getFoodMenu().getName(), foodMenuDto.getFoodMenu().getType())) {
             foodMenuDto.getFoodMenu().setCreatedOn(Instant.now());
@@ -92,8 +91,45 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     }
 
     @Override
-    public void update(Long id, FoodMenu foodMenu) {
-
+    public void update(Long id, FoodMenuDto foodMenuDto) {
+        FoodMenu foodMenu = findById(id);
+        foodMenuDto.setFoodMenu(foodMenu);
+        for (var foodItem : foodMenuDto.getFoodItems()) {
+            Set<ConstraintViolation<FoodItem>> constraintViolationSet1 = fieldValidator.validate(foodItem);
+            ValidationException.handlingException(constraintViolationSet1);
+            foodItemService.findById(foodItem.getId());
+        }
+        for (var availability : foodMenuDto.getAvailabilityList()) {
+            Set<ConstraintViolation<Availability>> constraintViolationSet2 = fieldValidator.validate(availability);
+            ValidationException.handlingException(constraintViolationSet2);
+            availabilityService.findById(availability.getId());
+        }
+        List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap = foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenuDto.getFoodMenu());
+        List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenuDto.getFoodMenu());
+        for (var foodMenuFoodItemMap :listOfFoodMenuFoodItemMap){
+            foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+        }
+        for(var foodMenuAvailabilityMap:listOfFoodMenuAvailabilityMap){
+            foodMenuAvailabilityMapService.deleteById(foodMenuAvailabilityMap.getId());
+        }
+        for (var foodItem : foodMenuDto.getFoodItems()) {
+            FoodMenuFoodItemMap foodMenuFoodItemMap = new FoodMenuFoodItemMap();
+            foodMenuFoodItemMap.setFoodMenu(foodMenuDto.getFoodMenu());
+            foodMenuFoodItemMap.setFoodItem(foodItem);
+            foodMenuFoodItemMap.setCreatedOn(Instant.now());
+            foodMenuFoodItemMap.setModifiedOn(Instant.now());
+            foodMenuFoodItemMapService.save(foodMenuFoodItemMap);
+        }
+        for (var availability : foodMenuDto.getAvailabilityList()) {
+            FoodMenuAvailabilityMap foodMenuAvailabilityMap = new FoodMenuAvailabilityMap();
+            foodMenuAvailabilityMap.setFoodMenu(foodMenuDto.getFoodMenu());
+            foodMenuAvailabilityMap.setAvailability(availability);
+            foodMenuAvailabilityMap.setCreatedOn(Instant.now());
+            foodMenuAvailabilityMap.setModifiedOn(Instant.now());
+            foodMenuAvailabilityMapService.save(foodMenuAvailabilityMap);
+        }
+        foodMenuDto.getFoodMenu().setModifiedOn(Instant.now());
+        foodMenuRepository.save(foodMenuDto.getFoodMenu());
     }
 
     @Override

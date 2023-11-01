@@ -38,13 +38,18 @@ public class FoodMenuFoodItemMapServiceImpl implements FoodMenuFoodItemMapServic
     }
 
     @Override
+    public List<FoodMenuFoodItemMap> getFoodMenuFoodItemMapByFoodMenu(FoodMenu foodMenu) {
+        return foodMenuFoodItemMapRepository.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
+    }
+
+    @Override
     public void delete(FoodMenuFoodItemMap foodMenuFoodItemMap) {
 
     }
 
     @Override
     public void deleteById(long id) {
-
+        foodMenuFoodItemMapRepository.deleteById(id);
     }
 
     @Override

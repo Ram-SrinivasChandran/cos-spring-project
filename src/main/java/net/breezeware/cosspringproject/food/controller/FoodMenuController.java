@@ -25,7 +25,11 @@ public class FoodMenuController {
     }
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public FoodMenu createFoodMenu(@RequestBody FoodMenuDto foodMenuDto){
-        return foodMenuService.save(foodMenuDto);
+    public void createFoodMenu(@RequestBody FoodMenuDto foodMenuDto){
+        foodMenuService.save(foodMenuDto);
+    }
+    @PutMapping("/{id}")
+    public void updateFoodMenu(@PathVariable Long id,@RequestBody FoodMenuDto foodMenuDto){
+        foodMenuService.update(id,foodMenuDto);
     }
 }

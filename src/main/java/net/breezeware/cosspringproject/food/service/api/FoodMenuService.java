@@ -12,5 +12,5 @@ public interface FoodMenuService {
     FoodMenu save(FoodMenuDto foodMenuDto);
     void delete(FoodMenu foodMenu);
     void deleteById(long id);
-    void update(Long id,FoodMenu foodMenu);
+    void update(Long id,FoodMenuDto foodMenuDto);
 }

@@ -13,4 +13,5 @@ public interface FoodMenuAvailabilityMapService {
     void delete(FoodMenuAvailabilityMap foodMenuAvailabilityMap);
     void deleteById(long id);
     void update(Long id,FoodMenuAvailabilityMap foodMenuAvailabilityMap);
+    List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByFoodMenu(FoodMenu foodMenu);
 }

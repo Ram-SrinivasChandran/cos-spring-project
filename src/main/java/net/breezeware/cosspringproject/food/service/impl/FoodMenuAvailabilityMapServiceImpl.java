@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.breezeware.cosspringproject.food.dao.FoodMenuAvailabilityMapRepository;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.food.entity.FoodMenu;
 import net.breezeware.cosspringproject.food.entity.FoodMenuAvailabilityMap;
 import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapService;
 import org.springframework.stereotype.Service;
@@ -37,8 +38,13 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
     }
 
     @Override
-    public void deleteById(long id) {
+    public List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByFoodMenu(FoodMenu foodMenu) {
+        return foodMenuAvailabilityMapRepository.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
+    }
 
+    @Override
+    public void deleteById(long id) {
+        foodMenuAvailabilityMapRepository.deleteById(id);
     }
 
     @Override
