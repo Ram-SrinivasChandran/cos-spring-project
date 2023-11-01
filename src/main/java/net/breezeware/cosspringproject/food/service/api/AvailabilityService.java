@@ -11,4 +11,5 @@ public interface AvailabilityService {
     void delete(Availability object);
     void deleteById(long id);
     void update(Long id, Availability availability);
+    Availability findByDay(String day);
 }

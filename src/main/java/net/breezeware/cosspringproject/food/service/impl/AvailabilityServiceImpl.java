@@ -52,4 +52,9 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     public void update(Long id, Availability availability) {
 
     }
+
+    @Override
+    public Availability findByDay(String day) {
+        return availabilityRepository.findByDay(day);
+    }
 }

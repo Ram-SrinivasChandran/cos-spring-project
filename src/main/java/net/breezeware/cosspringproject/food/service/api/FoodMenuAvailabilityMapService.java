@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.food.service.api;
 
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.food.entity.Availability;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
 import net.breezeware.cosspringproject.food.entity.FoodMenuAvailabilityMap;
 
@@ -14,4 +15,5 @@ public interface FoodMenuAvailabilityMapService {
     void deleteById(long id);
     void update(Long id,FoodMenuAvailabilityMap foodMenuAvailabilityMap);
     List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByFoodMenu(FoodMenu foodMenu);
+    List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByAvailability(Availability availability);
 }
