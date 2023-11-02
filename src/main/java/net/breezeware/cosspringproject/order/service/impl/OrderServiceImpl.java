@@ -10,6 +10,7 @@ import net.breezeware.cosspringproject.food.service.api.*;
 import net.breezeware.cosspringproject.order.dao.OrderRepository;
 import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
+import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.enumeration.Status;
@@ -77,6 +78,15 @@ public class OrderServiceImpl implements OrderService {
         return foodMenuDtos;
     }
 
+    @Override
+    public Order findById(long id) {
+        if (id <= 0) {
+            log.info("Leaving findById()");
+            throw new CustomException("The Order Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
+        }
+        return orderRepository.findById(id).orElseThrow(()->new CustomException("The Order Id is not available",HttpStatus.NOT_FOUND));
+    }
+
     @Transactional
     @Override
     public Order createOrder(OrderDto orderDto) {
@@ -119,5 +129,24 @@ public class OrderServiceImpl implements OrderService {
         savedOrder.setModifiedOn(Instant.now());
         log.info("Leaving createOrder()");
         return orderRepository.save(savedOrder);
+    }
+
+    @Override
+    public OrderViewDto viewOrder(long id) {
+        log.info("Entering viewOrder()");
+        OrderViewDto orderViewDto=new OrderViewDto();
+        Order order = findById(id);
+        List<OrderItem> orderItems = orderItemService.findByOrder(order);
+        List<FoodItem> foodItems=new ArrayList<>();
+        for(var orderItem:orderItems){
+            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            foodItem.setQuantity(orderItem.getQuantity());
+            foodItem.setCost(orderItem.getCost());
+            foodItems.add(foodItem);
+        }
+        orderViewDto.setOrder(order);
+        orderViewDto.setFoodItems(foodItems);
+        log.info("Leaving viewOrder()");
+        return orderViewDto;
     }
 }

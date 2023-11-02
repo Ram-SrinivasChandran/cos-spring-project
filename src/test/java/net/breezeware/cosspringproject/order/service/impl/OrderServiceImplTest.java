@@ -7,6 +7,7 @@ import net.breezeware.cosspringproject.food.service.api.*;
 import net.breezeware.cosspringproject.order.dao.OrderRepository;
 import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
+import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
@@ -21,6 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.Validator;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -79,5 +81,19 @@ class OrderServiceImplTest {
         Order order=orderService.createOrder(OrderDto.builder().order(mockOrder).foodItemDtos(List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(5).build())).build());
         assertEquals(mockOrder.getUser().getId(),order.getUser().getId());
         assertEquals(mockOrder.getUser().getRoleId(),order.getUser().getRoleId());
+    }
+
+    @Test
+    void testViewOrderById(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
+        List<OrderItem> mockOrderItems=List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
+        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        OrderViewDto orderViewDto = orderService.viewOrder(1L);
+        assertEquals(orderViewDto.getFoodItems().size(),1);
+        assertEquals(orderViewDto.getOrder().getId(),mockOrder.getId());
     }
 }

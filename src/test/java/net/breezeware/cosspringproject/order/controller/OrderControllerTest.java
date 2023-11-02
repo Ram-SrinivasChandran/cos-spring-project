@@ -3,8 +3,11 @@ package net.breezeware.cosspringproject.order.controller;
 import net.breezeware.cosspringproject.exception.ExceptionHandling;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
+import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
+import net.breezeware.cosspringproject.order.enumeration.Status;
 import net.breezeware.cosspringproject.order.service.api.OrderService;
+import net.breezeware.cosspringproject.user.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @ExtendWith(MockitoExtension.class)
@@ -83,5 +87,19 @@ class OrderControllerTest {
                                     ]
                                 }"""))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
+
+    @Test
+    void testViewOrderById() throws Exception {
+        Order mockOrder=new Order();
+        mockOrder.setUser(User.builder().id(1).roleId(2).build());
+        mockOrder.setStatus(Status.INCART.name());
+        OrderViewDto orderViewDto=new OrderViewDto();
+        orderViewDto.setOrder(mockOrder);
+        Mockito.when(orderService.viewOrder(anyLong())).thenReturn(orderViewDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/{id}",1))
+                .andExpectAll(
+                        jsonPath("$.order").value(mockOrder))
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
