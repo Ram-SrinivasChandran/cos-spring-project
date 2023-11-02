@@ -80,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public Order createOrder(OrderDto orderDto) {
+        log.info("Entering createOrder()");
         Order order=orderDto.getOrder();
         if(!userService.isACustomer(order.getUser())){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
@@ -95,7 +96,7 @@ public class OrderServiceImpl implements OrderService {
         order.setStatus(Status.INCART.name());
         order.setCreatedOn(Instant.now());
         order.setModifiedOn(Instant.now());
-        Order savedOrder = orderRepository.saveAndFlush(order);
+        Order savedOrder = orderRepository.save(order);
         double totalCostOfTheOrder=0;
         for(var foodItemDto:foodItemDtos){
             FoodItem foodItem=foodItemDto.getFoodItem();
@@ -116,6 +117,7 @@ public class OrderServiceImpl implements OrderService {
         }
         savedOrder.setTotalCost(totalCostOfTheOrder);
         savedOrder.setModifiedOn(Instant.now());
+        log.info("Leaving createOrder()");
         return orderRepository.save(savedOrder);
     }
 }

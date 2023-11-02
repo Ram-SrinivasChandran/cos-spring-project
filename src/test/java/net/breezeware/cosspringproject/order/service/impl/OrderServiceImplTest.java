@@ -2,15 +2,16 @@ package net.breezeware.cosspringproject.order.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
-import net.breezeware.cosspringproject.food.entity.Availability;
-import net.breezeware.cosspringproject.food.entity.FoodMenu;
-import net.breezeware.cosspringproject.food.entity.FoodMenuAvailabilityMap;
-import net.breezeware.cosspringproject.food.entity.FoodMenuFoodItemMap;
-import net.breezeware.cosspringproject.food.service.api.AvailabilityService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuFoodItemMapService;
-import net.breezeware.cosspringproject.food.service.api.FoodMenuService;
+import net.breezeware.cosspringproject.food.entity.*;
+import net.breezeware.cosspringproject.food.service.api.*;
 import net.breezeware.cosspringproject.order.dao.OrderRepository;
+import net.breezeware.cosspringproject.order.dto.FoodItemDto;
+import net.breezeware.cosspringproject.order.dto.OrderDto;
+import net.breezeware.cosspringproject.order.entity.Order;
+import net.breezeware.cosspringproject.order.entity.OrderItem;
+import net.breezeware.cosspringproject.order.service.api.OrderItemService;
+import net.breezeware.cosspringproject.user.entity.User;
+import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,9 +20,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.Validator;
-
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
@@ -39,6 +40,12 @@ class OrderServiceImplTest {
     FoodMenuService foodMenuService;
     @Mock
     FoodMenuFoodItemMapService foodMenuFoodItemMapService;
+    @Mock
+    UserService userService;
+    @Mock
+    FoodItemService foodItemService;
+    @Mock
+    OrderItemService orderItemService;
     @InjectMocks
     OrderServiceImpl orderService;
     @Mock
@@ -57,5 +64,20 @@ class OrderServiceImplTest {
         when(foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(any())).thenReturn(mockListOfFoodMenuAvailabilityMap);
         List<FoodMenuDto> foodMenuDtos = orderService.viewFoodMenus();
         Assertions.assertThat(foodMenuDtos).hasSize(2);
+    }
+    @Test
+    void testCreateOrder(){
+        Order mockOrder= new Order();
+        mockOrder.setUser(User.builder().id(1).roleId(2).build());
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(30).quantity(30).build();
+        OrderItem mockOrderItem= OrderItem.builder().id(1).quantity(2).cost(50).build();
+        when(userService.isACustomer(any())).thenReturn(true);
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
+        when(orderItemService.createOrderItem(any())).thenReturn(mockOrderItem);
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        Order order=orderService.createOrder(OrderDto.builder().order(mockOrder).foodItemDtos(List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(5).build())).build());
+        assertEquals(mockOrder.getUser().getId(),order.getUser().getId());
+        assertEquals(mockOrder.getUser().getRoleId(),order.getUser().getRoleId());
     }
 }
