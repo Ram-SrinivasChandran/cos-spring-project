@@ -40,7 +40,6 @@ public class Order {
     @JoinColumn(name = "user_address_id",referencedColumnName = "id")
     private UserAddressMap userAddressId;
 
-    @NotBlank(message = "Please Enter a Valid Status.")
     @Size(min = 1,max = 20)
     @Column(name = "status")
     private String status;

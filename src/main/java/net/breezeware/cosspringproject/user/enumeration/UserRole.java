@@ -1,10 +1,11 @@
 package net.breezeware.cosspringproject.user.enumeration;
 
-public enum UserRole {
-    ADMIN("admin"),CUSTOMER("customer"),CAFETERIASTAFF("cafeteria_staff"),DELIVERYSTAFF("delivery_staff");
-    private final String name;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    UserRole(String name) {
-        this.name=name;
-    }
+@AllArgsConstructor
+@Getter
+public enum UserRole {
+    ADMIN("admin"), CUSTOMER("customer"), CAFETERIASTAFF("cafeteria_staff"), DELIVERYSTAFF("delivery_staff");
+    private final String name;
 }

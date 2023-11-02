@@ -10,6 +10,7 @@ import net.breezeware.cosspringproject.user.dao.UserRoleMapRepository;
 import net.breezeware.cosspringproject.user.entity.Role;
 import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserRoleMap;
+import net.breezeware.cosspringproject.user.enumeration.UserRole;
 import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -110,4 +111,18 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving deleteById()");
     }
 
+    @Override
+    public boolean isACustomer(User user) {
+        boolean userCheck=false;
+        User checkedUser = findById(user.getId());
+        List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
+        for (var userRoleMap:listOfUserRoleMap){
+            Role role = userRoleMap.getRole();
+            if (role.getName().equals(UserRole.CUSTOMER.getName())) {
+                userCheck = true;
+                break;
+            }
+        }
+        return userCheck;
+    }
 }

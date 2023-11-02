@@ -2,10 +2,10 @@ package net.breezeware.cosspringproject.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.order.dto.OrderDto;
+import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.service.api.OrderService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,6 +19,10 @@ public class OrderController {
     @GetMapping("/foodMenus")
     List<FoodMenuDto> getFoodMenus(){
         return orderService.viewFoodMenus();
+    }
+    @PostMapping
+    Order createOrder(@RequestBody OrderDto orderDto){
+        return orderService.createOrder(orderDto);
     }
 
 }

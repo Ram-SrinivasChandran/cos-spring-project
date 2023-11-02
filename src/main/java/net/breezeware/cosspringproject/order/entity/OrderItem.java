@@ -22,11 +22,11 @@ public class OrderItem {
 
     @OneToOne
     @JoinColumn(name = "order_id",referencedColumnName = "id")
-    private Order orderId;
+    private Order order;
 
     @OneToOne
     @JoinColumn(name = "food_item_id",referencedColumnName = "id")
-    private FoodItem foodItemId;
+    private FoodItem foodItem;
 
     @NotNull(message = "Please Enter a Valid Quantity.")
     @Column(name = "quantity")
