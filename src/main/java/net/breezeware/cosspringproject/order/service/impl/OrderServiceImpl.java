@@ -107,30 +107,14 @@ public class OrderServiceImpl implements OrderService {
         order.setCreatedOn(Instant.now());
         order.setModifiedOn(Instant.now());
         Order savedOrder = orderRepository.save(order);
-        double totalCostOfTheOrder=0;
-        for(var foodItemDto:foodItemDtos){
-            FoodItem foodItem=foodItemDto.getFoodItem();
-            FoodItem retainedFoodItem = foodItemService.findById(foodItem.getId());
-            if(retainedFoodItem.getQuantity()<foodItemDto.getRequiredQuantity()){
-                throw new CustomException("The FoodItem Quantity is Unavailable",HttpStatus.BAD_REQUEST);
-            }else {
-                OrderItem orderItem=new OrderItem();
-                orderItem.setOrder(savedOrder);
-                orderItem.setFoodItem(foodItem);
-                orderItem.setQuantity(foodItemDto.getRequiredQuantity());
-                orderItem.setCost(foodItem.getCost()*foodItemDto.getRequiredQuantity());
-                orderItem.setCreatedOn(Instant.now());
-                orderItem.setModifiedOn(Instant.now());
-                OrderItem createdOrderItem = orderItemService.createOrderItem(orderItem);
-                totalCostOfTheOrder+=createdOrderItem.getCost();
-            }
-        }
+        double totalCostOfTheOrder=orderItemService.addOrderItems(order,foodItemDtos);
         savedOrder.setTotalCost(totalCostOfTheOrder);
         savedOrder.setModifiedOn(Instant.now());
         log.info("Leaving createOrder()");
         return orderRepository.save(savedOrder);
     }
 
+    @Transactional
     @Override
     public OrderViewDto viewOrder(long id) {
         log.info("Entering viewOrder()");
@@ -148,5 +132,52 @@ public class OrderServiceImpl implements OrderService {
         orderViewDto.setFoodItems(foodItems);
         log.info("Leaving viewOrder()");
         return orderViewDto;
+    }
+    @Transactional
+    @Override
+    public void updateOrder(long id,List<FoodItemDto> foodItemDtos) {
+        log.info("Entering updateOrder()");
+        Order order = findById(id);
+        for(var foodItemDto:foodItemDtos){
+            FoodItem foodItem=foodItemDto.getFoodItem();
+            Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
+            ValidationException.handlingException(constraintViolationSet);
+        }
+        double totalCostOfTheOrder=0;
+        List<OrderItem> orderItems = orderItemService.findByOrder(order);
+        for(var orderItem:orderItems){
+            for(var foodItemDto:foodItemDtos){
+                if(foodItemDto.getFoodItem().getId()==orderItem.getFoodItem().getId()){
+                    orderItem.setFoodItem(foodItemDto.getFoodItem());
+                    orderItem.setCost(foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost());
+                    orderItem.setQuantity(foodItemDto.getRequiredQuantity());
+                    orderItem.setModifiedOn(Instant.now());
+                    orderItemService.createOrderItem(orderItem);
+                    totalCostOfTheOrder+=foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost();
+                }else{
+                    orderItemService.deleteOrderItemById(orderItem.getId());
+                    break;
+                }
+            }
+        }
+        for(var foodItemDto:foodItemDtos){
+            for(var orderItem:orderItems){
+                if (foodItemDto.getFoodItem().getId()!=orderItem.getFoodItem().getId()){
+                    OrderItem saveOrderItem= new OrderItem();
+                    saveOrderItem.setOrder(order);
+                    saveOrderItem.setFoodItem(foodItemDto.getFoodItem());
+                    saveOrderItem.setQuantity(foodItemDto.getRequiredQuantity());
+                    saveOrderItem.setCost(foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost());
+                    saveOrderItem.setCreatedOn(Instant.now());
+                    saveOrderItem.setModifiedOn(Instant.now());
+                    orderItemService.createOrderItem(saveOrderItem);
+                    totalCostOfTheOrder+=foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost();
+                    break;
+                }
+            }
+        }
+        order.setTotalCost(totalCostOfTheOrder);
+        order.setModifiedOn(Instant.now());
+        orderRepository.save(order);
     }
 }

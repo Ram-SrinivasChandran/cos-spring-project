@@ -1,6 +1,7 @@
 package net.breezeware.cosspringproject.order.service.api;
 
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
@@ -12,4 +13,5 @@ public interface OrderService {
     Order createOrder(OrderDto orderDto);
     OrderViewDto viewOrder(long id);
     Order findById(long id);
+    void updateOrder(long id,List<FoodItemDto>foodItemDtos);
 }

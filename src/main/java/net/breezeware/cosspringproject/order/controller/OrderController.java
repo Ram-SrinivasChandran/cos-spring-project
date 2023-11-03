@@ -2,6 +2,7 @@ package net.breezeware.cosspringproject.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
+import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
@@ -30,6 +31,11 @@ public class OrderController {
     @GetMapping("/{id}")
     OrderViewDto viewOrder(@PathVariable long id){
         return orderService.viewOrder(id);
+    }
+
+    @PutMapping("/{id}")
+    void updateOrder(@PathVariable long id, @RequestBody List<FoodItemDto> foodItemDtos){
+        orderService.updateOrder(id,foodItemDtos);
     }
 
 }
