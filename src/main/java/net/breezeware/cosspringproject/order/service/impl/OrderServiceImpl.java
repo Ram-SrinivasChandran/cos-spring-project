@@ -179,5 +179,6 @@ public class OrderServiceImpl implements OrderService {
         order.setTotalCost(totalCostOfTheOrder);
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
+        log.info("Leaving updateOrder()");
     }
 }

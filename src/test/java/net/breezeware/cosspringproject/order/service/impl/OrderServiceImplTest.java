@@ -27,6 +27,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @Slf4j
@@ -95,5 +96,20 @@ class OrderServiceImplTest {
         OrderViewDto orderViewDto = orderService.viewOrder(1L);
         assertEquals(orderViewDto.getFoodItems().size(),1);
         assertEquals(orderViewDto.getOrder().getId(),mockOrder.getId());
+    }
+
+    @Test
+    void testUpdateOrder(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
+        OrderItem mockOrderItem=OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build();
+        List<OrderItem> mockOrderItems=List.of(mockOrderItem);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(orderItemService.findByOrder(mockOrder)).thenReturn(mockOrderItems);
+        when(orderItemService.createOrderItem(mockOrderItem)).thenReturn(mockOrderItem);
+        when(orderRepository.save(mockOrder)).thenReturn(mockOrder);
+        orderService.updateOrder(1,List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(2).build()));
+        verify(orderRepository).findById(1L);
     }
 }

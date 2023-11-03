@@ -102,4 +102,41 @@ class OrderControllerTest {
                         jsonPath("$.order").value(mockOrder))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void testUpdateOrder()throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                [
+                                    {
+                                        "foodItem": {
+                                            "id": 1,
+                                            "name": "Dosa",
+                                            "cost": 20,
+                                            "quantity": 30
+                                        },
+                                        "requiredQuantity": 4
+                                    },
+                                    {
+                                        "foodItem": {
+                                            "id": 3,
+                                            "name": "Poori",
+                                            "cost": 30,
+                                            "quantity": 20
+                                        },
+                                        "requiredQuantity": 5
+                                    },
+                                    {
+                                        "foodItem": {
+                                            "id": 4,
+                                            "name": "Pongal",
+                                            "cost": 25,
+                                            "quantity": 10
+                                        },
+                                        "requiredQuantity": 5
+                                    }
+                                ]
+                                """))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }
