@@ -161,4 +161,38 @@ class OrderControllerTest {
                                 }"""))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+    @Test
+    void testPlaceOrder()throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/placeOrder/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                "userAddressMap": {
+                                        "id": 7,
+                                        "user": {
+                                            "id": 6,
+                                            "name": "Seenu",
+                                            "userName": "seenu_06",
+                                            "password": "breeze123",
+                                            "createdOn": null,
+                                            "modifiedOn": null,
+                                            "roleId": 0
+                                        },
+                                        "doorNumber": "123",
+                                        "streetName": "Thirumal Nagar",
+                                        "city": "Dindigul",
+                                        "district": "Dindigul",
+                                        "state": "TamilNadu",
+                                        "pincode": 624001,
+                                        "landmark": "Ayyapan Kovil",
+                                        "createdOn": "2023-11-06T09:10:39.739795690Z",
+                                        "modifiedOn": "2023-11-06T09:10:39.739798606Z"
+                                    },
+                                    "email": "chand2ram@gmail.com",
+                                    "phoneNumber": "9677963066",
+                                    "deliveryTime": "2023-11-06T12:00:00.000Z"
+                                }
+                                """))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

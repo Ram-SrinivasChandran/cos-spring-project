@@ -8,6 +8,7 @@ import net.breezeware.cosspringproject.order.dao.OrderRepository;
 import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
+import net.breezeware.cosspringproject.order.dto.PlaceOrderDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
@@ -24,6 +25,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.Validator;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -124,5 +126,21 @@ class OrderServiceImplTest {
         UserAddressMap address = orderService.createAddress(mockAddress);
         assertEquals(address.getId(),mockAddress.getId());
         assertEquals(address.getPincode(),mockAddress.getPincode());
+    }
+    @Test
+    void testPlaceOrder(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        UserAddressMap mockAddress= UserAddressMap.builder().id(1).pincode(624001).build();
+        PlaceOrderDto mockPlaceOrderDto=PlaceOrderDto.builder().userAddressMap(mockAddress).email("chand2ram@gmail.com").phoneNumber("9677963066").deliveryTime(Instant.parse("2023-11-06T12:00:00.000Z")).build();
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
+        List<OrderItem> mockOrderItems=List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
+        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        OrderViewDto orderViewDto = orderService.placeOrder(1L,mockPlaceOrderDto);
+        assertEquals(orderViewDto.getFoodItems().size(),1);
+        assertEquals(orderViewDto.getOrder().getId(),mockOrder.getId());
     }
 }
