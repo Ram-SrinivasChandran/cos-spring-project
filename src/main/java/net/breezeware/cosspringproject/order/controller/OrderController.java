@@ -51,5 +51,8 @@ public class OrderController {
         log.info("Entering placeOrder()");
         return orderService.placeOrder(id, placeOrderDto);
     }
-
+    @PutMapping("/cancelOrder/{id}")
+    void cancelOrder(@PathVariable long id){
+        orderService.cancelOrder(id);
+    }
 }

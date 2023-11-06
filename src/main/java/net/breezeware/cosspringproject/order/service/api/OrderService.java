@@ -18,4 +18,5 @@ public interface OrderService {
     void updateOrder(long id,List<FoodItemDto>foodItemDtos);
     UserAddressMap createAddress(UserAddressMap userAddressMap);
     OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto);
+    void cancelOrder(long id);
 }

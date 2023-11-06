@@ -86,11 +86,13 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public Order findById(long id) {
+        log.info("Entering findById()");
         if (id <= 0) {
-            log.info("Leaving findById()");
             throw new CustomException("The Order Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
-        return orderRepository.findById(id).orElseThrow(()->new CustomException("The Order Id is not available",HttpStatus.NOT_FOUND));
+        Order order = orderRepository.findById(id).orElseThrow(() -> new CustomException("The Order Id is not available", HttpStatus.NOT_FOUND));
+        log.info("Leaving findById()");
+        return order;
     }
 
     @Transactional
@@ -109,7 +111,7 @@ public class OrderServiceImpl implements OrderService {
             Set<ConstraintViolation<FoodItem>> constraintViolationSet1 = fieldValidator.validate(foodItem);
             ValidationException.handlingException(constraintViolationSet1);
         }
-        order.setStatus(Status.INCART.name());
+        order.setStatus(Status.IN_CART.name());
         order.setCreatedOn(Instant.now());
         order.setModifiedOn(Instant.now());
         Order savedOrder = orderRepository.save(order);
@@ -216,7 +218,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomException("Enter a Valid Phone Number",HttpStatus.BAD_REQUEST);
         }
         order.setPhoneNumber(placeOrderDto.getPhoneNumber());
-        order.setStatus(Status.ORDERPLACED.name());
+        order.setStatus(Status.ORDER_PLACED.name());
         order.setEmail(placeOrderDto.getEmail());
         order.setDeliveryOn(placeOrderDto.getDeliveryTime());
         order.setModifiedOn(Instant.now());
@@ -252,5 +254,22 @@ public class OrderServiceImpl implements OrderService {
         boolean matches = pattern.matcher(email).matches();
         log.info("Leaving validateEmail()");
         return matches;
+    }
+
+    @Override
+    public void cancelOrder(long id) {
+        log.info("Entering cancelOrder()");
+        Order order = findById(id);
+        order.setStatus(Status.ORDER_CANCELLED.name());
+        List<OrderItem> orderItems = orderItemService.findByOrder(order);
+        for(var orderItem:orderItems){
+            int orderItemQuantity=orderItem.getQuantity();
+            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            int foodItemQuantity = foodItem.getQuantity();
+            foodItem.setQuantity(foodItemQuantity+orderItemQuantity);
+            foodItemService.save(foodItem);
+        }
+        orderRepository.save(order);
+        log.info("Leaving cancelOrder()");
     }
 }

@@ -143,4 +143,19 @@ class OrderServiceImplTest {
         assertEquals(orderViewDto.getFoodItems().size(),1);
         assertEquals(orderViewDto.getOrder().getId(),mockOrder.getId());
     }
+    @Test
+    void testCancelOrder(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
+        List<OrderItem> mockOrderItems=List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
+        orderService.cancelOrder(1L);
+        verify(orderRepository).findById(1L);
+        verify(foodItemService).findById(1L);
+        verify(orderItemService).findByOrder(any());
+    }
 }

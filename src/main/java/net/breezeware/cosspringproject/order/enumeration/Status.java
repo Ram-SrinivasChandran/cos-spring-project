@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Status {
-    INCART("in_cart"),ORDERCANCELLED("order_cancelled"),ORDERPLACED("order_placed"), RECEIVEDORDER("received_order"),ORDERPREPAREDWAITINGFORDELIVERY("order_prepared_waiting_for_delivery"),PENDINGDELIVERY("pending_delivery"),ORDERDELIVERED("order_delivered");
-    private String orderStatus;
+    IN_CART("in_cart"), ORDER_CANCELLED("order_cancelled"), ORDER_PLACED("order_placed"), RECEIVED_ORDER("received_order"), ORDER_PREPARED_WAITING_FOR_DELIVERY("order_prepared_waiting_for_delivery"), PENDING_DELIVERY("pending_delivery"), ORDER_DELIVERED("order_delivered");
+    private final String orderStatus;
 }

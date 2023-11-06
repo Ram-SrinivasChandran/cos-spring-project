@@ -2,7 +2,6 @@ package net.breezeware.cosspringproject.order.controller;
 
 import net.breezeware.cosspringproject.exception.ExceptionHandling;
 import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
-import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.enumeration.Status;
@@ -93,7 +92,7 @@ class OrderControllerTest {
     void testViewOrderById() throws Exception {
         Order mockOrder=new Order();
         mockOrder.setUser(User.builder().id(1).roleId(2).build());
-        mockOrder.setStatus(Status.INCART.name());
+        mockOrder.setStatus(Status.IN_CART.name());
         OrderViewDto orderViewDto=new OrderViewDto();
         orderViewDto.setOrder(mockOrder);
         Mockito.when(orderService.viewOrder(anyLong())).thenReturn(orderViewDto);
@@ -193,6 +192,12 @@ class OrderControllerTest {
                                     "deliveryTime": "2023-11-06T12:00:00.000Z"
                                 }
                                 """))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+    @Test
+    void testCancelOrder()throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/cancelOrder/{id}",1)
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }
