@@ -222,6 +222,14 @@ public class OrderServiceImpl implements OrderService {
         order.setModifiedOn(Instant.now());
         order.setOrderOn(Instant.now());
         order.setUserAddress(placeOrderDto.getUserAddressMap());
+        List<OrderItem> orderItems = orderItemService.findByOrder(order);
+        for(var orderItem:orderItems){
+            int orderItemQuantity=orderItem.getQuantity();
+            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            int foodItemQuantity = foodItem.getQuantity();
+            foodItem.setQuantity(foodItemQuantity-orderItemQuantity);
+            foodItemService.save(foodItem);
+        }
         Order savedOrder = orderRepository.save(order);
         log.info("Leaving placeOrder()");
         return viewOrder(savedOrder.getId());
