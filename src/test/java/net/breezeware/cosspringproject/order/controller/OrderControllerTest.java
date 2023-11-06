@@ -200,4 +200,11 @@ class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void testViewActiveOrders() throws Exception {
+        Mockito.when(orderService.viewActiveOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/activeOrders?user-id=1"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }

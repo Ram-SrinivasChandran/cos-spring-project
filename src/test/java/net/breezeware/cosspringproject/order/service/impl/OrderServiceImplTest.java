@@ -147,7 +147,6 @@ class OrderServiceImplTest {
     void testCancelOrder(){
         Order mockOrder=new Order();
         mockOrder.setId(1);
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
         List<OrderItem> mockOrderItems=List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
@@ -157,5 +156,16 @@ class OrderServiceImplTest {
         verify(orderRepository).findById(1L);
         verify(foodItemService).findById(1L);
         verify(orderItemService).findByOrder(any());
+    }
+    @Test
+    void testViewActiveOrders(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        List<Order> mockOrders=List.of(mockOrder);
+        when(orderRepository.getOrderByStatus(any())).thenReturn(mockOrders);
+        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        List<OrderViewDto> orderViewDtos = orderService.viewActiveOrders(1L);
+        Assertions.assertThat(orderViewDtos).hasSize(1);
     }
 }

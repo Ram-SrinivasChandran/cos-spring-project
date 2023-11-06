@@ -19,4 +19,5 @@ public interface OrderService {
     UserAddressMap createAddress(UserAddressMap userAddressMap);
     OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto);
     void cancelOrder(long id);
+    List<OrderViewDto> viewActiveOrders(long id);
 }

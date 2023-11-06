@@ -55,4 +55,8 @@ public class OrderController {
     void cancelOrder(@PathVariable long id){
         orderService.cancelOrder(id);
     }
+    @GetMapping("/activeOrders")
+    List<OrderViewDto> activeOrders(@RequestParam (value = "user-id") long id){
+        return orderService.viewActiveOrders(id);
+    }
 }

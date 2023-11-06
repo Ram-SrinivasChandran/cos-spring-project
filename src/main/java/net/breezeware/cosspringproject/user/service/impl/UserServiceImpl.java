@@ -126,4 +126,20 @@ public class UserServiceImpl implements UserService {
         }
         return userCheck;
     }
+
+    @Override
+    public boolean isACafeteriaStaff(long id) {
+        boolean userCheck=false;
+        log.info("Entering isACustomer(), id: {}", id);
+        User checkedUser = findById(id);
+        List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
+        for (var userRoleMap:listOfUserRoleMap){
+            Role role = userRoleMap.getRole();
+            if (role.getName().equals(UserRole.CAFETERIASTAFF.getName())) {
+                userCheck = true;
+                break;
+            }
+        }
+        return userCheck;
+    }
 }

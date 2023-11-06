@@ -32,9 +32,11 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -271,5 +273,24 @@ public class OrderServiceImpl implements OrderService {
         }
         orderRepository.save(order);
         log.info("Leaving cancelOrder()");
+    }
+
+    @Override
+    public List<OrderViewDto> viewActiveOrders(long id) {
+        log.info("Entering viewActiveOrders()");
+        if(!userService.isACafeteriaStaff(id)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        List<OrderViewDto>activeOrders=new ArrayList<>();
+        List<Order> orders=orderRepository.getOrderByStatus(Status.ORDER_PLACED.name());
+        for(var order:orders){
+            OrderViewDto activeOrder = viewOrder(order.getId());
+            activeOrders.add(activeOrder);
+        }
+        List<OrderViewDto> sortedActiveOrders = activeOrders.stream()
+                .sorted(Comparator.comparing(c -> c.getOrder().getDeliveryOn()))
+                .toList();
+        log.info("Leaving viewActiveOrders()");
+        return sortedActiveOrders;
     }
 }
