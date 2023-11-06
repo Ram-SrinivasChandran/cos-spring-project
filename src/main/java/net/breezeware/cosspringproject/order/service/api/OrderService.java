@@ -4,6 +4,7 @@ import net.breezeware.cosspringproject.food.dto.FoodMenuDto;
 import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
+import net.breezeware.cosspringproject.order.dto.PlaceOrderDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 
@@ -16,4 +17,5 @@ public interface OrderService {
     Order findById(long id);
     void updateOrder(long id,List<FoodItemDto>foodItemDtos);
     UserAddressMap createAddress(UserAddressMap userAddressMap);
+    OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto);
 }

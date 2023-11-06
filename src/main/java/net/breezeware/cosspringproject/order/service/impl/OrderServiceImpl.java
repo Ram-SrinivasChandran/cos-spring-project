@@ -11,11 +11,13 @@ import net.breezeware.cosspringproject.order.dao.OrderRepository;
 import net.breezeware.cosspringproject.order.dto.FoodItemDto;
 import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
+import net.breezeware.cosspringproject.order.dto.PlaceOrderDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.enumeration.Status;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
 import net.breezeware.cosspringproject.order.service.api.OrderService;
+import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
 import net.breezeware.cosspringproject.user.service.api.UserService;
@@ -32,6 +34,7 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Slf4j
 @Service
@@ -188,6 +191,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public UserAddressMap createAddress(UserAddressMap userAddressMap) {
         log.info("Entering createAddress()");
+        Set<ConstraintViolation<User>> constraintViolationSet = fieldValidator.validate(userAddressMap.getUser());
+        ValidationException.handlingException(constraintViolationSet);
+        Set<ConstraintViolation<UserAddressMap>> constraintViolationSet1 = fieldValidator.validate(userAddressMap);
+        ValidationException.handlingException(constraintViolationSet1);
         if(!userService.isACustomer(userAddressMap.getUser())){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
@@ -196,5 +203,46 @@ public class OrderServiceImpl implements OrderService {
         UserAddressMap savedAddress = userAddressMapService.save(userAddressMap);
         log.info("Leaving createAddress()");
         return savedAddress;
+    }
+
+    @Override
+    public OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto) {
+        log.info("Entering placeOrder()");
+        Order order = findById(id);
+        if(!validateEmail(placeOrderDto.getEmail())){
+            throw new CustomException("Enter a valid Email Address",HttpStatus.BAD_REQUEST);
+        }
+        if(!validatePhoneNumber(placeOrderDto.getPhoneNumber())){
+            throw new CustomException("Enter a Valid Phone Number",HttpStatus.BAD_REQUEST);
+        }
+        order.setPhoneNumber(placeOrderDto.getPhoneNumber());
+        order.setStatus(Status.ORDERPLACED.name());
+        order.setEmail(placeOrderDto.getEmail());
+        order.setDeliveryOn(placeOrderDto.getDeliveryTime());
+        order.setModifiedOn(Instant.now());
+        order.setOrderOn(Instant.now());
+        order.setUserAddress(placeOrderDto.getUserAddressMap());
+        Order savedOrder = orderRepository.save(order);
+        log.info("Leaving placeOrder()");
+        return viewOrder(savedOrder.getId());
+    }
+    private boolean validatePhoneNumber(String phoneNumber) {
+        log.info("Entering validatePhoneNumber()");
+        if (phoneNumber.length() != 10) {
+            return false;
+        }
+        String phoneRegex = "^[0-9()-]+$";
+        Pattern pattern = Pattern.compile(phoneRegex);
+        boolean matches = pattern.matcher(phoneNumber).matches();
+        log.info("Leaving validatePhoneNumber()");
+        return matches;
+    }
+    private boolean validateEmail(String email) {
+        log.info("Entering validateEmail()");
+        String emailRegex = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        boolean matches = pattern.matcher(email).matches();
+        log.info("Leaving validateEmail()");
+        return matches;
     }
 }

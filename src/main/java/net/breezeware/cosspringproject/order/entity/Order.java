@@ -5,6 +5,7 @@ import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
@@ -28,15 +29,17 @@ public class Order {
     @Column(name = "total_cost")
     private double totalCost;
 
+    @NotBlank(message = "Please Enter the Email")
     @Column(name = "email")
     private String email;
 
+    @NotBlank(message = "Please Enter the Phone Number")
     @Column(name = "phone_number")
-    private long phoneNumber;
+    private String phoneNumber;
 
     @OneToOne
     @JoinColumn(name = "user_address_id", referencedColumnName = "id")
-    private UserAddressMap userAddressId;
+    private UserAddressMap userAddress;
 
     @Size(min = 1, max = 20)
     @Column(name = "status")
