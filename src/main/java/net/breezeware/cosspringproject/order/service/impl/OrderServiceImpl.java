@@ -16,6 +16,8 @@ import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.enumeration.Status;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
 import net.breezeware.cosspringproject.order.service.api.OrderService;
+import net.breezeware.cosspringproject.user.entity.UserAddressMap;
+import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
 import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -44,6 +46,7 @@ public class OrderServiceImpl implements OrderService {
     private final FoodItemService foodItemService;
     private final UserService userService;
     private final OrderItemService orderItemService;
+    private final UserAddressMapService userAddressMapService;
     private final Validator fieldValidator;
     @Override
     public List<FoodMenuDto> viewFoodMenus() {
@@ -180,5 +183,18 @@ public class OrderServiceImpl implements OrderService {
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
         log.info("Leaving updateOrder()");
+    }
+
+    @Override
+    public UserAddressMap createAddress(UserAddressMap userAddressMap) {
+        log.info("Entering createAddress()");
+        if(!userService.isACustomer(userAddressMap.getUser())){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        userAddressMap.setCreatedOn(Instant.now());
+        userAddressMap.setModifiedOn(Instant.now());
+        UserAddressMap savedAddress = userAddressMapService.save(userAddressMap);
+        log.info("Leaving createAddress()");
+        return savedAddress;
     }
 }

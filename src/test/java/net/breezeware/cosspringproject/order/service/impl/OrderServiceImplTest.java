@@ -11,7 +11,10 @@ import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
+import net.breezeware.cosspringproject.user.dao.UserAddressMapRepository;
 import net.breezeware.cosspringproject.user.entity.User;
+import net.breezeware.cosspringproject.user.entity.UserAddressMap;
+import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
 import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -45,6 +48,8 @@ class OrderServiceImplTest {
     FoodMenuFoodItemMapService foodMenuFoodItemMapService;
     @Mock
     UserService userService;
+    @Mock
+    UserAddressMapService userAddressMapService;
     @Mock
     FoodItemService foodItemService;
     @Mock
@@ -111,5 +116,13 @@ class OrderServiceImplTest {
         when(orderRepository.save(mockOrder)).thenReturn(mockOrder);
         orderService.updateOrder(1,List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(2).build()));
         verify(orderRepository).findById(1L);
+    }
+    @Test
+    void testCreateAddress(){
+        UserAddressMap mockAddress= UserAddressMap.builder().id(1).pincode(624001).build();
+        when(userAddressMapService.save(any())).thenReturn(mockAddress);
+        UserAddressMap address = orderService.createAddress(mockAddress);
+        assertEquals(address.getId(),mockAddress.getId());
+        assertEquals(address.getPincode(),mockAddress.getPincode());
     }
 }

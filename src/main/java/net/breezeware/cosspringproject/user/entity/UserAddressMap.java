@@ -1,11 +1,13 @@
 package net.breezeware.cosspringproject.user.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.Instant;
 
@@ -13,6 +15,7 @@ import java.time.Instant;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 @Table(schema = "user_svc", name = "user_address_map")
 public class UserAddressMap {
     @Id
@@ -49,12 +52,11 @@ public class UserAddressMap {
     @Column(name = "state",length = 20,nullable = false)
     private String state;
 
-    @NotBlank(message = "Please Enter a Valid PinCode.")
-    @Size(min = 1,max = 20)
-    @Column(name = "pincode",length = 20,nullable = false)
+    @NotNull(message = "Please Enter a Valid PinCode.")
+    @Column(name = "pincode",nullable = false)
     private long pincode;
 
-    @NotBlank(message = "Please Enter a Valid LandMark.")
+    @NotBlank(message = "Please Enter a Valid Landmark.")
     @Size(min = 1,max = 20)
     @Column(name = "landmark",length = 20,nullable = false)
     private String landmark;

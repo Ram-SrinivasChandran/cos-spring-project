@@ -139,4 +139,26 @@ class OrderControllerTest {
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void testCreateAddress()throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/orders/address")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("""
+                                {
+                                    "user": {
+                                        "id": 6,
+                                        "name": "Seenu",
+                                        "userName": "seenu_06",
+                                        "password": "breeze123"
+                                    },
+                                    "doorNumber": 123,
+                                    "streetName": "Thirumal Nagar",
+                                    "city": "Dindigul",
+                                    "district": "Dindigul",
+                                    "state": "TamilNadu",
+                                    "pincode": 624001,
+                                    "landmark": "Ayyapan Kovil"
+                                }"""))
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+    }
 }

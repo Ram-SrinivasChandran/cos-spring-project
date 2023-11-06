@@ -114,6 +114,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean isACustomer(User user) {
         boolean userCheck=false;
+        log.info("Entering isACustomer(), id: {}", user.getId());
         User checkedUser = findById(user.getId());
         List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
         for (var userRoleMap:listOfUserRoleMap){

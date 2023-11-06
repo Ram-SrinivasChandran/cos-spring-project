@@ -7,6 +7,7 @@ import net.breezeware.cosspringproject.order.dto.OrderDto;
 import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.service.api.OrderService;
+import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,6 +37,11 @@ public class OrderController {
     @PutMapping("/{id}")
     void updateOrder(@PathVariable long id, @RequestBody List<FoodItemDto> foodItemDtos){
         orderService.updateOrder(id,foodItemDtos);
+    }
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/address")
+    UserAddressMap createAddress(@RequestBody UserAddressMap userAddressMap){
+        return orderService.createAddress(userAddressMap);
     }
 
 }
