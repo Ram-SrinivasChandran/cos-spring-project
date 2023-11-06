@@ -20,4 +20,5 @@ public interface OrderService {
     OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto);
     void cancelOrder(long id);
     List<OrderViewDto> viewActiveOrders(long id);
+    OrderViewDto viewReceivedOrder(long userId,long orderId);
 }

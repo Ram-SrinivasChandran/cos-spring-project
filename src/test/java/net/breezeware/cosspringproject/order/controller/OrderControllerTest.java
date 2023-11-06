@@ -207,4 +207,13 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+    @Test
+    void testViewReceivedOrder() throws Exception {
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        OrderViewDto mockOrderViewDto=OrderViewDto.builder().order(mockOrder).build();
+        Mockito.when(orderService.viewReceivedOrder(1L,1L)).thenReturn(mockOrderViewDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/receivedOrder/{id}?user-id=1",1))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

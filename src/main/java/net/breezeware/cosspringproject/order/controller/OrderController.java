@@ -59,4 +59,8 @@ public class OrderController {
     List<OrderViewDto> activeOrders(@RequestParam (value = "user-id") long id){
         return orderService.viewActiveOrders(id);
     }
+    @GetMapping("/receivedOrder/{id}")
+    OrderViewDto receivedOrder(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
+        return orderService.viewReceivedOrder(userId,orderId);
+    }
 }

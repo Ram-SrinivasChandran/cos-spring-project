@@ -168,4 +168,14 @@ class OrderServiceImplTest {
         List<OrderViewDto> orderViewDtos = orderService.viewActiveOrders(1L);
         Assertions.assertThat(orderViewDtos).hasSize(1);
     }
+    @Test
+    void testViewReceivedOrder(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        OrderViewDto orderViewDto = orderService.viewReceivedOrder(1L, 1L);
+        assertEquals(mockOrder.getId(),orderViewDto.getOrder().getId());
+    }
 }

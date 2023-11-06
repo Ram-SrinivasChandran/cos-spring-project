@@ -281,16 +281,34 @@ public class OrderServiceImpl implements OrderService {
         if(!userService.isACafeteriaStaff(id)){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        List<OrderViewDto>activeOrders=new ArrayList<>();
-        List<Order> orders=orderRepository.getOrderByStatus(Status.ORDER_PLACED.name());
-        for(var order:orders){
-            OrderViewDto activeOrder = viewOrder(order.getId());
-            activeOrders.add(activeOrder);
-        }
+        List<OrderViewDto>activeOrders=viewOrderListByStatus(Status.ORDER_PLACED.name());
         List<OrderViewDto> sortedActiveOrders = activeOrders.stream()
                 .sorted(Comparator.comparing(c -> c.getOrder().getDeliveryOn()))
                 .toList();
         log.info("Leaving viewActiveOrders()");
         return sortedActiveOrders;
+    }
+
+    @Override
+    public OrderViewDto viewReceivedOrder(long userId, long orderId) {
+        log.info("Entering viewReceivedOrder()");
+        if(!userService.isACafeteriaStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        Order order = findById(orderId);
+        order.setStatus(Status.RECEIVED_ORDER.name());
+        order.setModifiedOn(Instant.now());
+        Order savedOrder = orderRepository.save(order);
+        return viewOrder(savedOrder.getId());
+    }
+
+    private List<OrderViewDto> viewOrderListByStatus(String status){
+        List<OrderViewDto>orderList=new ArrayList<>();
+        List<Order> orders=orderRepository.getOrderByStatus(status);
+        for(var order:orders){
+            OrderViewDto activeOrder = viewOrder(order.getId());
+            orderList.add(activeOrder);
+        }
+        return orderList;
     }
 }
