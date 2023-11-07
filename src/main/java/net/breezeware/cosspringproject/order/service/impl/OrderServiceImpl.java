@@ -336,4 +336,14 @@ public class OrderServiceImpl implements OrderService {
         changeStatus(orderId,Status.PENDING_DELIVERY.name());
         log.info("Leaving changeStatusToPendingDelivery()");
     }
+
+    @Override
+    public void changeStatusToOrderDelivered(long userId, long orderId) {
+        log.info("Entering changeStatusToOrderDelivered()");
+        if(!userService.isADeliveryStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        changeStatus(orderId,Status.ORDER_DELIVERED.name());
+        log.info("Leaving changeStatusToOrderDelivered()");
+    }
 }

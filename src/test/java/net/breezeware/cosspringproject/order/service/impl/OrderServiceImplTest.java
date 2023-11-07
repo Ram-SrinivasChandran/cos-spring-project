@@ -200,4 +200,15 @@ class OrderServiceImplTest {
         verify(orderRepository).findById(1L);
         verify(orderRepository).save(any());
     }
+    @Test
+    void testChangeStatusToOrderDelivered(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        orderService.changeStatusToOrderDelivered(1L,1L);
+        verify(orderRepository).findById(1L);
+        verify(orderRepository).save(any());
+    }
 }

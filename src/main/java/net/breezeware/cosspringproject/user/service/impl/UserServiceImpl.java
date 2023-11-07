@@ -113,29 +113,46 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isACustomer(User user) {
-        boolean userCheck=false;
         log.info("Entering isACustomer(), id: {}", user.getId());
         User checkedUser = findById(user.getId());
-        List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
-        for (var userRoleMap:listOfUserRoleMap){
-            Role role = userRoleMap.getRole();
-            if (role.getName().equals(UserRole.CUSTOMER.getName())) {
-                userCheck = true;
-                break;
-            }
-        }
+        boolean userCheck=checkUser(checkedUser,UserRole.CUSTOMER.getName());
+        log.info("Leaving isACustomer()");
         return userCheck;
     }
 
     @Override
     public boolean isACafeteriaStaff(long id) {
-        boolean userCheck=false;
-        log.info("Entering isACustomer(), id: {}", id);
+        log.info("Entering isACafeteriaStaff(), id: {}", id);
         User checkedUser = findById(id);
+        boolean userCheck=checkUser(checkedUser,UserRole.CAFETERIASTAFF.getName());
+        log.info("Leaving isACafeteriaStaff()");
+        return userCheck;
+    }
+
+    @Override
+    public boolean isAAdmin(long id) {
+        log.info("Entering isAAdmin(), id: {}", id);
+        User checkedUser = findById(id);
+        boolean userCheck=checkUser(checkedUser,UserRole.ADMIN.getName());
+        log.info("Leaving isAAdmin()");
+        return userCheck;
+    }
+
+    @Override
+    public boolean isADeliveryStaff(long id) {
+        log.info("Entering isADeliveryStaff(), id: {}", id);
+        User checkedUser = findById(id);
+        boolean userCheck=checkUser(checkedUser,UserRole.DELIVERYSTAFF.getName());
+        log.info("Leaving isADeliveryStaff()");
+        return userCheck;
+    }
+
+    private boolean checkUser(User checkedUser, String status){
+        boolean userCheck=false;
         List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
         for (var userRoleMap:listOfUserRoleMap){
             Role role = userRoleMap.getRole();
-            if (role.getName().equals(UserRole.CAFETERIASTAFF.getName())) {
+            if (role.getName().equals(status)) {
                 userCheck = true;
                 break;
             }
