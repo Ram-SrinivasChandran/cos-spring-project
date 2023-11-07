@@ -11,6 +11,7 @@ import net.breezeware.cosspringproject.order.dto.OrderViewDto;
 import net.breezeware.cosspringproject.order.dto.PlaceOrderDto;
 import net.breezeware.cosspringproject.order.entity.Order;
 import net.breezeware.cosspringproject.order.entity.OrderItem;
+import net.breezeware.cosspringproject.order.enumeration.Status;
 import net.breezeware.cosspringproject.order.service.api.OrderItemService;
 import net.breezeware.cosspringproject.user.dao.UserAddressMapRepository;
 import net.breezeware.cosspringproject.user.entity.User;
@@ -22,12 +23,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.Validator;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
+import java.util.Stack;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -221,5 +224,15 @@ class OrderServiceImplTest {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         List<OrderViewDto> orderViewDtos = orderService.viewCancelledOrders(1L);
         Assertions.assertThat(orderViewDtos).hasSize(1);
+    }
+    @Test
+    void testViewCancelledOrder(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        mockOrder.setStatus(Status.ORDER_CANCELLED.name());
+        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        orderService.viewCancelledOrder(1L,1L);
+        verify(orderRepository, Mockito.times(2)).findById(1L);
     }
 }

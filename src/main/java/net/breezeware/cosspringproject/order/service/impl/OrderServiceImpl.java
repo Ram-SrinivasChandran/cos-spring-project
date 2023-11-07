@@ -295,16 +295,13 @@ public class OrderServiceImpl implements OrderService {
         if(!userService.isACafeteriaStaff(userId)){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        Order savedOrder=viewOrderByStatus(orderId,Status.RECEIVED_ORDER.name());
+        Order order = findById(orderId);
+        order.setStatus(Status.RECEIVED_ORDER.name());
+        order.setModifiedOn(Instant.now());
+        Order savedOrder = orderRepository.save(order);
+        log.info("Leaving viewReceivedOrder()");
         return viewOrder(savedOrder.getId());
     }
-    private Order viewOrderByStatus(long orderId,String status){
-        Order order = findById(orderId);
-        order.setStatus(status);
-        order.setModifiedOn(Instant.now());
-        return orderRepository.save(order);
-    }
-
     private List<OrderViewDto> viewOrderListByStatus(String status){
         List<OrderViewDto>orderList=new ArrayList<>();
         List<Order> orders=orderRepository.getOrderByStatus(status);
@@ -359,5 +356,23 @@ public class OrderServiceImpl implements OrderService {
         List<OrderViewDto>cancelledOrders=viewOrderListByStatus(Status.ORDER_CANCELLED.name());
         log.info("Leaving viewCancelledOrders()");
         return cancelledOrders;
+    }
+
+    @Override
+    public OrderViewDto viewCancelledOrder(long userId, long orderId) {
+        log.info("Entering viewCancelledOrders()");
+        if(!userService.isADeliveryStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        Order order=viewOrderByStatus(orderId,Status.ORDER_CANCELLED.name());
+        log.info("Leaving viewCancelledOrders()");
+        return viewOrder(order.getId());
+    }
+    private Order viewOrderByStatus(long orderId,String status){
+        Order order = findById(orderId);
+        if(order.getStatus().equals(status)){
+            return order;
+        }
+        throw new CustomException("The Order is Not with the Status of "+status,HttpStatus.NOT_FOUND);
     }
 }

@@ -79,4 +79,8 @@ public class OrderController {
     List<OrderViewDto> cancelledOrders(@RequestParam (value = "user-id") long id){
         return orderService.viewCancelledOrders(id);
     }
+    @GetMapping("/cancelledOrder/{id}")
+    OrderViewDto cancelledOrder(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
+        return orderService.viewCancelledOrder(userId,orderId);
+    }
 }
