@@ -235,4 +235,15 @@ class OrderServiceImplTest {
         orderService.viewCancelledOrder(1L,1L);
         verify(orderRepository, Mockito.times(2)).findById(1L);
     }
+    @Test
+    void testViewCompletedOrders(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        List<Order> mockOrders=List.of(mockOrder);
+        when(orderRepository.getOrderByStatus(any())).thenReturn(mockOrders);
+        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        List<OrderViewDto> orderViewDtos = orderService.viewCompletedOrders(1L);
+        Assertions.assertThat(orderViewDtos).hasSize(1);
+    }
 }

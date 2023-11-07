@@ -26,4 +26,5 @@ public interface OrderService {
     void changeStatusToOrderDelivered(long userId, long orderId);
     List<OrderViewDto> viewCancelledOrders(long id);
     OrderViewDto viewCancelledOrder(long userId,long orderId);
+    List<OrderViewDto> viewCompletedOrders(long id);
 }

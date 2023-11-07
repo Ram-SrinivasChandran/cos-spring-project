@@ -375,4 +375,15 @@ public class OrderServiceImpl implements OrderService {
         }
         throw new CustomException("The Order is Not with the Status of "+status,HttpStatus.NOT_FOUND);
     }
+
+    @Override
+    public List<OrderViewDto> viewCompletedOrders(long id) {
+        log.info("Entering viewCompletedOrders()");
+        if(!userService.isADeliveryStaff(id)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        List<OrderViewDto>completedOrders=viewOrderListByStatus(Status.ORDER_DELIVERED.name());
+        log.info("Leaving viewCompletedOrders()");
+        return completedOrders;
+    }
 }

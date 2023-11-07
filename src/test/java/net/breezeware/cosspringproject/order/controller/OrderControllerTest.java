@@ -260,4 +260,11 @@ class OrderControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelledOrder/{id}?user-id=1", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void testViewCompletedOrders() throws Exception {
+        Mockito.when(orderService.viewCompletedOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/completedOrders?user-id=1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
 }
