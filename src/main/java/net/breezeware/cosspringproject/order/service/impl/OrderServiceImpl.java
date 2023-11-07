@@ -311,4 +311,17 @@ public class OrderServiceImpl implements OrderService {
         }
         return orderList;
     }
+
+    @Override
+    public void changeStatusToWaitingForDelivery(long userId, long orderId) {
+        log.info("Entering changeStatusToWaitingForDelivery()");
+        if(!userService.isACafeteriaStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        Order order = findById(orderId);
+        order.setStatus(Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
+        order.setModifiedOn(Instant.now());
+        orderRepository.save(order);
+        log.info("Leaving changeStatusToWaitingForDelivery()");
+    }
 }

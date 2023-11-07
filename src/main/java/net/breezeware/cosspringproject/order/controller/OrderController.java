@@ -63,4 +63,8 @@ public class OrderController {
     OrderViewDto receivedOrder(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
         return orderService.viewReceivedOrder(userId,orderId);
     }
+    @PutMapping("/orderPrepared/{id}")
+    void changeOrderStatusToOrderPrepared(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
+        orderService.changeStatusToWaitingForDelivery(userId,orderId);
+    }
 }

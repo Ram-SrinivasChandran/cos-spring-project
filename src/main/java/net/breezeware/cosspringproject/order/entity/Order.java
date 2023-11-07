@@ -41,7 +41,7 @@ public class Order {
     @JoinColumn(name = "user_address_id", referencedColumnName = "id")
     private UserAddressMap userAddress;
 
-    @Size(min = 1, max = 20)
+    @Size(min = 1, max = 35)
     @Column(name = "status")
     private String status;
 

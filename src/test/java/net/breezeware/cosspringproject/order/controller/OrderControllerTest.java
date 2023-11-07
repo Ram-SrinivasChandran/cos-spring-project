@@ -216,4 +216,10 @@ class OrderControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/receivedOrder/{id}?user-id=1",1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+    @Test
+    void testChangeOrderStatusToOrderPrepared()throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderPrepared/{id}?user-id=1",1)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
 }

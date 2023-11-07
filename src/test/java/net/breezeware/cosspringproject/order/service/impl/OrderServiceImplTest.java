@@ -178,4 +178,15 @@ class OrderServiceImplTest {
         OrderViewDto orderViewDto = orderService.viewReceivedOrder(1L, 1L);
         assertEquals(mockOrder.getId(),orderViewDto.getOrder().getId());
     }
+    @Test
+    void testChangeStatusToWaitingForDelivery(){
+        Order mockOrder=new Order();
+        mockOrder.setId(1);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        orderService.changeStatusToWaitingForDelivery(1L,1L);
+        verify(orderRepository).findById(1L);
+        verify(orderRepository).save(any());
+    }
 }
