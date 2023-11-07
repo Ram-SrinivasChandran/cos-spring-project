@@ -87,4 +87,8 @@ public class OrderController {
     List<OrderViewDto> completedOrders(@RequestParam (value = "user-id") long id){
         return orderService.viewCompletedOrders(id);
     }
+    @GetMapping("/completedOrder/{id}")
+    OrderViewDto completedOrder(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
+        return orderService.viewCompletedOrder(userId,orderId);
+    }
 }

@@ -386,4 +386,15 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving viewCompletedOrders()");
         return completedOrders;
     }
+
+    @Override
+    public OrderViewDto viewCompletedOrder(long userId, long orderId) {
+        log.info("Entering viewCompletedOrder()");
+        if(!userService.isADeliveryStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        Order order=viewOrderByStatus(orderId,Status.ORDER_DELIVERED.name());
+        log.info("Leaving viewCompletedOrder()");
+        return viewOrder(order.getId());
+    }
 }

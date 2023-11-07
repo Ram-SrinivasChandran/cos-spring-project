@@ -27,4 +27,5 @@ public interface OrderService {
     List<OrderViewDto> viewCancelledOrders(long id);
     OrderViewDto viewCancelledOrder(long userId,long orderId);
     List<OrderViewDto> viewCompletedOrders(long id);
+    OrderViewDto viewCompletedOrder(long userId,long orderId);
 }
