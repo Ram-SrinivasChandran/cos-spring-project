@@ -22,4 +22,5 @@ public interface OrderService {
     List<OrderViewDto> viewActiveOrders(long id);
     OrderViewDto viewReceivedOrder(long userId,long orderId);
     void changeStatusToWaitingForDelivery(long userId, long orderId);
+    void changeStatusToPendingDelivery(long userId, long orderId);
 }

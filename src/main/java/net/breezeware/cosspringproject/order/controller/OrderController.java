@@ -67,4 +67,8 @@ public class OrderController {
     void changeOrderStatusToOrderPrepared(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
         orderService.changeStatusToWaitingForDelivery(userId,orderId);
     }
+    @PutMapping("/pendingDelivery/{id}")
+    void changeOrderStatusToDeliveryPending(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
+        orderService.changeStatusToPendingDelivery(userId,orderId);
+    }
 }

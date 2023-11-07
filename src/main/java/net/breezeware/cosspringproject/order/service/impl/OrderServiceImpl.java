@@ -318,10 +318,22 @@ public class OrderServiceImpl implements OrderService {
         if(!userService.isACafeteriaStaff(userId)){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
+        changeStatus(orderId,Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
+        log.info("Leaving changeStatusToWaitingForDelivery()");
+    }
+    private void changeStatus(long orderId,String status){
         Order order = findById(orderId);
-        order.setStatus(Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
+        order.setStatus(status);
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
-        log.info("Leaving changeStatusToWaitingForDelivery()");
+    }
+    @Override
+    public void changeStatusToPendingDelivery(long userId, long orderId) {
+        log.info("Entering changeStatusToPendingDelivery()");
+        if(!userService.isACafeteriaStaff(userId)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        changeStatus(orderId,Status.PENDING_DELIVERY.name());
+        log.info("Leaving changeStatusToPendingDelivery()");
     }
 }
