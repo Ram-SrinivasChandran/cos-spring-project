@@ -295,11 +295,14 @@ public class OrderServiceImpl implements OrderService {
         if(!userService.isACafeteriaStaff(userId)){
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        Order order = findById(orderId);
-        order.setStatus(Status.RECEIVED_ORDER.name());
-        order.setModifiedOn(Instant.now());
-        Order savedOrder = orderRepository.save(order);
+        Order savedOrder=viewOrderByStatus(orderId,Status.RECEIVED_ORDER.name());
         return viewOrder(savedOrder.getId());
+    }
+    private Order viewOrderByStatus(long orderId,String status){
+        Order order = findById(orderId);
+        order.setStatus(status);
+        order.setModifiedOn(Instant.now());
+        return orderRepository.save(order);
     }
 
     private List<OrderViewDto> viewOrderListByStatus(String status){
@@ -345,5 +348,16 @@ public class OrderServiceImpl implements OrderService {
         }
         changeStatus(orderId,Status.ORDER_DELIVERED.name());
         log.info("Leaving changeStatusToOrderDelivered()");
+    }
+
+    @Override
+    public List<OrderViewDto> viewCancelledOrders(long id) {
+        log.info("Entering viewCancelledOrders()");
+        if(!userService.isADeliveryStaff(id)){
+            throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
+        }
+        List<OrderViewDto>cancelledOrders=viewOrderListByStatus(Status.ORDER_CANCELLED.name());
+        log.info("Leaving viewCancelledOrders()");
+        return cancelledOrders;
     }
 }

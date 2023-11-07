@@ -51,7 +51,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void testCreateOrder()throws Exception{
+    void testCreateOrder() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/orders")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -90,20 +90,21 @@ class OrderControllerTest {
 
     @Test
     void testViewOrderById() throws Exception {
-        Order mockOrder=new Order();
+        Order mockOrder = new Order();
         mockOrder.setUser(User.builder().id(1).roleId(2).build());
         mockOrder.setStatus(Status.IN_CART.name());
-        OrderViewDto orderViewDto=new OrderViewDto();
+        OrderViewDto orderViewDto = new OrderViewDto();
         orderViewDto.setOrder(mockOrder);
         Mockito.when(orderService.viewOrder(anyLong())).thenReturn(orderViewDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/{id}",1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/{id}", 1))
                 .andExpectAll(
                         jsonPath("$.order").value(mockOrder))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testUpdateOrder()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/{id}",1)
+    void testUpdateOrder() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 [
@@ -138,8 +139,9 @@ class OrderControllerTest {
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testCreateAddress()throws Exception{
+    void testCreateAddress() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/orders/address")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
@@ -160,9 +162,10 @@ class OrderControllerTest {
                                 }"""))
                 .andExpect(MockMvcResultMatchers.status().isCreated());
     }
+
     @Test
-    void testPlaceOrder()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/placeOrder/{id}",1)
+    void testPlaceOrder() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/placeOrder/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -194,12 +197,14 @@ class OrderControllerTest {
                                 """))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testCancelOrder()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/cancelOrder/{id}",1)
+    void testCancelOrder() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/cancelOrder/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
     void testViewActiveOrders() throws Exception {
         Mockito.when(orderService.viewActiveOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
@@ -207,31 +212,43 @@ class OrderControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
+
     @Test
     void testViewReceivedOrder() throws Exception {
-        Order mockOrder=new Order();
+        Order mockOrder = new Order();
         mockOrder.setId(1);
-        OrderViewDto mockOrderViewDto=OrderViewDto.builder().order(mockOrder).build();
-        Mockito.when(orderService.viewReceivedOrder(1L,1L)).thenReturn(mockOrderViewDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/receivedOrder/{id}?user-id=1",1))
+        OrderViewDto mockOrderViewDto = OrderViewDto.builder().order(mockOrder).build();
+        Mockito.when(orderService.viewReceivedOrder(1L, 1L)).thenReturn(mockOrderViewDto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/receivedOrder/{id}?user-id=1", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testChangeOrderStatusToOrderPrepared()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderPrepared/{id}?user-id=1",1)
+    void testChangeOrderStatusToOrderPrepared() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderPrepared/{id}?user-id=1", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testChangeOrderStatusToPendingDelivery()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/pendingDelivery/{id}?user-id=1",1)
+    void testChangeOrderStatusToPendingDelivery() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/pendingDelivery/{id}?user-id=1", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     @Test
-    void testChangeOrderStatusToOrderDelivered()throws Exception{
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderDelivered/{id}?user-id=1",1)
+    void testChangeOrderStatusToOrderDelivered() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderDelivered/{id}?user-id=1", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void testViewCancelledOrders() throws Exception {
+        Mockito.when(orderService.viewCancelledOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelledOrders?user-id=1").contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 }

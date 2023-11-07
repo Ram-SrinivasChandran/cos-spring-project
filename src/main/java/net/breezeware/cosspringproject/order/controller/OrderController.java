@@ -75,4 +75,8 @@ public class OrderController {
     void changeOrderStatusToOrderDelivered(@RequestParam (value = "user-id") long userId,@PathVariable("id") long orderId){
         orderService.changeStatusToOrderDelivered(userId,orderId);
     }
+    @GetMapping("/cancelledOrders")
+    List<OrderViewDto> cancelledOrders(@RequestParam (value = "user-id") long id){
+        return orderService.viewCancelledOrders(id);
+    }
 }
