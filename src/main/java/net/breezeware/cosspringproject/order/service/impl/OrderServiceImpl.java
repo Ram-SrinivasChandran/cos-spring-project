@@ -149,11 +149,12 @@ public class OrderServiceImpl implements OrderService {
     public void updateOrder(long id, List<FoodItemDto> foodItemDtos) {
         log.info("Entering updateOrder()");
         Order order = findById(id);
-        for (var foodItemDto : foodItemDtos) {
-            FoodItem foodItem = foodItemDto.getFoodItem();
-            Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
-            ValidationException.handlingException(constraintViolationSet);
-        }
+        foodItemDtos
+                .forEach(foodItemDto -> {
+                    FoodItem foodItem = foodItemDto.getFoodItem();
+                    Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
+                    ValidationException.handlingException(constraintViolationSet);
+                });
         double totalCostOfTheOrder = 0;
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         List<Long> updatedFoodItemIds = foodItemDtos.stream().map(FoodItemDto::getFoodItem).map(FoodItem::getId).toList();
