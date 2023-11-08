@@ -1,7 +1,16 @@
 package net.breezeware.cosspringproject.user.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Instant;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.exception.ValidationException;
 import net.breezeware.cosspringproject.user.dao.RoleRepository;
@@ -12,27 +21,19 @@ import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.entity.UserRoleMap;
 import net.breezeware.cosspringproject.user.enumeration.UserRole;
 import net.breezeware.cosspringproject.user.service.api.UserService;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.time.Instant;
-import java.util.List;
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-
     private final UserRepository userRepository;
     private final UserRoleMapRepository userRoleMapRepository;
     private final RoleRepository roleRepository;
     private final Validator fieldValidator;
-
 
     @Override
     public List<User> findAll() {
@@ -48,8 +49,10 @@ public class UserServiceImpl implements UserService {
         if (id <= 0) {
             throw new CustomException("User Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
+
         log.info("Leaving findById()");
-        return userRepository.findById(id).orElseThrow(() ->new CustomException("The User not Found", HttpStatus.NOT_FOUND));
+        return userRepository.findById(id)
+                .orElseThrow(() -> new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
 
     @Transactional
@@ -61,7 +64,9 @@ public class UserServiceImpl implements UserService {
         if (user.getRoleId() <= 0) {
             throw new CustomException("Role Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
-        Role role = roleRepository.findById(user.getRoleId()).orElseThrow(() -> new CustomException("Invalid role", HttpStatus.BAD_REQUEST));
+
+        Role role = roleRepository.findById(user.getRoleId())
+                .orElseThrow(() -> new CustomException("Invalid role", HttpStatus.BAD_REQUEST));
         user.setCreatedOn(Instant.now());
         user.setModifiedOn(Instant.now());
         User savedUser = userRepository.save(user);
@@ -115,7 +120,7 @@ public class UserServiceImpl implements UserService {
     public boolean isACustomer(User user) {
         log.info("Entering isACustomer(), id: {}", user.getId());
         User checkedUser = findById(user.getId());
-        boolean userCheck=checkUser(checkedUser,UserRole.CUSTOMER.getName());
+        boolean userCheck = checkUser(checkedUser, UserRole.CUSTOMER.getName());
         log.info("Leaving isACustomer()");
         return userCheck;
     }
@@ -124,7 +129,7 @@ public class UserServiceImpl implements UserService {
     public boolean isACafeteriaStaff(long id) {
         log.info("Entering isACafeteriaStaff(), id: {}", id);
         User checkedUser = findById(id);
-        boolean userCheck=checkUser(checkedUser,UserRole.CAFETERIASTAFF.getName());
+        boolean userCheck = checkUser(checkedUser, UserRole.CAFETERIASTAFF.getName());
         log.info("Leaving isACafeteriaStaff()");
         return userCheck;
     }
@@ -133,7 +138,7 @@ public class UserServiceImpl implements UserService {
     public boolean isAAdmin(long id) {
         log.info("Entering isAAdmin(), id: {}", id);
         User checkedUser = findById(id);
-        boolean userCheck=checkUser(checkedUser,UserRole.ADMIN.getName());
+        boolean userCheck = checkUser(checkedUser, UserRole.ADMIN.getName());
         log.info("Leaving isAAdmin()");
         return userCheck;
     }
@@ -142,21 +147,23 @@ public class UserServiceImpl implements UserService {
     public boolean isADeliveryStaff(long id) {
         log.info("Entering isADeliveryStaff(), id: {}", id);
         User checkedUser = findById(id);
-        boolean userCheck=checkUser(checkedUser,UserRole.DELIVERYSTAFF.getName());
+        boolean userCheck = checkUser(checkedUser, UserRole.DELIVERYSTAFF.getName());
         log.info("Leaving isADeliveryStaff()");
         return userCheck;
     }
 
-    private boolean checkUser(User checkedUser, String status){
-        boolean userCheck=false;
+    private boolean checkUser(User checkedUser, String status) {
+        boolean userCheck = false;
         List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
-        for (var userRoleMap:listOfUserRoleMap){
+        for (var userRoleMap : listOfUserRoleMap) {
             Role role = userRoleMap.getRole();
             if (role.getName().equals(status)) {
                 userCheck = true;
                 break;
             }
+
         }
+
         return userCheck;
     }
 }

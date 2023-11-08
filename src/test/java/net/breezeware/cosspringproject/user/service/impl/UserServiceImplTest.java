@@ -1,13 +1,17 @@
 package net.breezeware.cosspringproject.user.service.impl;
 
-import lombok.extern.slf4j.Slf4j;
-import net.breezeware.cosspringproject.exception.CustomException;
-import net.breezeware.cosspringproject.user.dao.RoleRepository;
-import net.breezeware.cosspringproject.user.dao.UserRepository;
-import net.breezeware.cosspringproject.user.dao.UserRoleMapRepository;
-import net.breezeware.cosspringproject.user.entity.Role;
-import net.breezeware.cosspringproject.user.entity.User;
-import net.breezeware.cosspringproject.user.entity.UserRoleMap;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Optional;
+
+import javax.validation.Validator;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,16 +21,15 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 
-import javax.validation.Validator;
-import java.util.List;
-import java.util.Optional;
+import net.breezeware.cosspringproject.exception.CustomException;
+import net.breezeware.cosspringproject.user.dao.RoleRepository;
+import net.breezeware.cosspringproject.user.dao.UserRepository;
+import net.breezeware.cosspringproject.user.dao.UserRoleMapRepository;
+import net.breezeware.cosspringproject.user.entity.Role;
+import net.breezeware.cosspringproject.user.entity.User;
+import net.breezeware.cosspringproject.user.entity.UserRoleMap;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.when;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -66,16 +69,14 @@ class UserServiceImplTest {
 
     @Test
     void testFindUserByIdInvalidUserIdThrowCustomException() {
-        CustomException exception =
-                assertThrows(CustomException.class, () -> userService.findById(-1L));
+        CustomException exception = assertThrows(CustomException.class, () -> userService.findById(-1L));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
         assertEquals("User Id Must be Greater Than Zero.", exception.getMessage());
     }
 
     @Test
     void testFindUserByIdInvalidUserThrowCustomException() {
-        CustomException exception =
-                assertThrows(CustomException.class, () -> userService.findById(2L));
+        CustomException exception = assertThrows(CustomException.class, () -> userService.findById(2L));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         assertEquals("The User not Found", exception.getMessage());
     }
@@ -110,7 +111,7 @@ class UserServiceImplTest {
         User user = User.builder().id(1).roleId(1).build();
         doNothing().when(userRepository).delete(user);
         userService.delete(user);
-        Mockito.verify(userRepository,Mockito.times(1)).delete(user);
+        Mockito.verify(userRepository, Mockito.times(1)).delete(user);
     }
 
     @Test
@@ -119,6 +120,6 @@ class UserServiceImplTest {
         when(userRepository.findById(any())).thenReturn(Optional.of(user));
         doNothing().when(userRepository).deleteById(1L);
         userService.deleteById(1L);
-        Mockito.verify(userRepository,Mockito.times(1)).deleteById(1L);
+        Mockito.verify(userRepository, Mockito.times(1)).deleteById(1L);
     }
 }

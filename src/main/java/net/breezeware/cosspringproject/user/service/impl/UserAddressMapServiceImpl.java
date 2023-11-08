@@ -1,21 +1,24 @@
 package net.breezeware.cosspringproject.user.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.dao.UserAddressMapRepository;
 import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserAddressMapServiceImpl implements UserAddressMapService {
     private final UserAddressMapRepository userAddressMapRepository;
+
     @Override
     public List<UserAddressMap> findAll() {
         return userAddressMapRepository.findAll();
@@ -27,8 +30,10 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         if (id <= 0) {
             throw new CustomException("Address Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
+
         log.info("Leaving findById()");
-        return userAddressMapRepository.findById(id).orElseThrow(() ->new CustomException("The Address not Found", HttpStatus.NOT_FOUND));
+        return userAddressMapRepository.findById(id)
+                .orElseThrow(() -> new CustomException("The Address not Found", HttpStatus.NOT_FOUND));
     }
 
     @Override

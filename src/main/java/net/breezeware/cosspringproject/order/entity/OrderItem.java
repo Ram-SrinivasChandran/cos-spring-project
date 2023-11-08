@@ -1,14 +1,24 @@
 package net.breezeware.cosspringproject.order.entity;
 
+import java.time.Instant;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import net.breezeware.cosspringproject.food.entity.FoodItem;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import net.breezeware.cosspringproject.food.entity.FoodItem;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import java.time.Instant;
 
 @Data
 @NoArgsConstructor
@@ -18,16 +28,17 @@ import java.time.Instant;
 @Table(schema = "order_svc", name = "order_item")
 public class OrderItem {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "order_item_seq_gen")
-    @SequenceGenerator(name = "order_item_seq_gen", sequenceName = "order_item_seq",schema = "order_svc",allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "order_item_seq_gen")
+    @SequenceGenerator(name = "order_item_seq_gen", sequenceName = "order_item_seq", schema = "order_svc",
+            allocationSize = 1)
     private long id;
 
     @OneToOne
-    @JoinColumn(name = "order_id",referencedColumnName = "id")
+    @JoinColumn(name = "order_id", referencedColumnName = "id")
     private Order order;
 
     @OneToOne
-    @JoinColumn(name = "food_item_id",referencedColumnName = "id")
+    @JoinColumn(name = "food_item_id", referencedColumnName = "id")
     private FoodItem foodItem;
 
     @NotNull(message = "Please Enter a Valid Quantity.")

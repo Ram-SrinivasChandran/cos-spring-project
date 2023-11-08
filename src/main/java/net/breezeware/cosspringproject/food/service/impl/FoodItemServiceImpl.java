@@ -1,20 +1,23 @@
 package net.breezeware.cosspringproject.food.service.impl;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.time.Instant;
+import java.util.List;
+import java.util.Set;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validator;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
+
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.exception.ValidationException;
 import net.breezeware.cosspringproject.food.dao.FoodItemRepository;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.service.api.FoodItemService;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validator;
-import java.time.Instant;
-import java.util.List;
-import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -35,12 +38,14 @@ public class FoodItemServiceImpl implements FoodItemService {
     @Override
     public FoodItem findById(long id) {
         log.info("Entering findById()");
-        if(id<=0){
+        if (id <= 0) {
             log.info("Leaving findById()");
-            throw new CustomException("The Food Item Id should be Greater than Zero.",HttpStatus.BAD_REQUEST);
+            throw new CustomException("The Food Item Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
+
         log.info("Leaving findById()");
-        return foodItemRepository.findById(id).orElseThrow(()->new CustomException("The Food Item not Found", HttpStatus.NOT_FOUND));
+        return foodItemRepository.findById(id)
+                .orElseThrow(() -> new CustomException("The Food Item not Found", HttpStatus.NOT_FOUND));
     }
 
     @Override
@@ -59,7 +64,7 @@ public class FoodItemServiceImpl implements FoodItemService {
         log.info("Entering update()");
         Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(updatedFoodItem);
         ValidationException.handlingException(constraintViolationSet);
-        FoodItem foodItem=findById(id);
+        FoodItem foodItem = findById(id);
         foodItem.setName(updatedFoodItem.getName());
         foodItem.setCost(updatedFoodItem.getCost());
         foodItem.setQuantity(updatedFoodItem.getQuantity());
