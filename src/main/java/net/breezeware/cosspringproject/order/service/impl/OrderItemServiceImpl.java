@@ -30,7 +30,10 @@ public class OrderItemServiceImpl implements OrderItemService {
     }
     @Override
     public List<OrderItem> findByOrder(Order order) {
-        return orderItemRepository.findByOrder(order);
+        log.info("Entering findByOrder()");
+        List<OrderItem> orderItems = orderItemRepository.findByOrder(order);
+        log.info("Leaving findByOrder()");
+        return orderItems;
     }
 
     @Override

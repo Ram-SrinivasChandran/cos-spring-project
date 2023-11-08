@@ -116,7 +116,6 @@ class FoodMenuServiceImplTest {
         FoodMenu foodMenu=foodMenuService.save(menuDto);
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
     }
-
     @Test
     void testDeleteFoodMenuById() {
         FoodMenu mockFoodmenu = FoodMenu.builder().id(1).type("Veg").name("Breakfast").build();

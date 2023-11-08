@@ -10,12 +10,15 @@ import net.breezeware.cosspringproject.food.entity.*;
 import net.breezeware.cosspringproject.food.service.api.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 import java.time.Instant;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -90,6 +93,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         }
     }
 
+    @Transactional
     @Override
     public void update(Long id, FoodMenuDto foodMenuDto) {
         log.info("Entering update()");
@@ -107,32 +111,62 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         }
         List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap = foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenuDto.getFoodMenu());
         List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenuDto.getFoodMenu());
-        for (var foodMenuFoodItemMap :listOfFoodMenuFoodItemMap){
-            foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+        Set<String> retrievedFoodItemName = listOfFoodMenuFoodItemMap.stream()
+                .map(foodMenuFoodItemMap -> foodMenuFoodItemMap.getFoodItem().getName()).collect(Collectors.toSet());
+        Set<String> foodItemNames = foodMenuDto.getFoodItems()
+                .stream()
+                .map(FoodItem::getName)
+                .collect(Collectors.toSet());
+        boolean containsAll = retrievedFoodItemName.containsAll(foodItemNames);
+        if (!containsAll) {
+            listOfFoodMenuFoodItemMap.forEach(foodMenuFoodItemMap -> {
+                if (!foodItemNames.contains(foodMenuFoodItemMap.getFoodItem().getName())) {
+                    foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+                }
+            });
+            foodMenuDto.getFoodItems().forEach(foodItem -> {
+                if (!retrievedFoodItemName.contains(foodItem.getName())) {
+                    FoodMenuFoodItemMap newFoodMenuFoodItemMap = new FoodMenuFoodItemMap();
+                    newFoodMenuFoodItemMap.setFoodMenu(foodMenu);
+                    newFoodMenuFoodItemMap.setFoodItem(foodItem);
+                    newFoodMenuFoodItemMap.setCreatedOn(Instant.now());
+                    newFoodMenuFoodItemMap.setModifiedOn(Instant.now());
+                    foodMenuFoodItemMapService.save(newFoodMenuFoodItemMap);
+                }
+            });
         }
-        for(var foodMenuAvailabilityMap:listOfFoodMenuAvailabilityMap){
-            foodMenuAvailabilityMapService.deleteById(foodMenuAvailabilityMap.getId());
-        }
-        for (var foodItem : foodMenuDto.getFoodItems()) {
-            FoodMenuFoodItemMap foodMenuFoodItemMap = new FoodMenuFoodItemMap();
-            foodMenuFoodItemMap.setFoodMenu(foodMenuDto.getFoodMenu());
-            foodMenuFoodItemMap.setFoodItem(foodItem);
-            foodMenuFoodItemMap.setCreatedOn(Instant.now());
-            foodMenuFoodItemMap.setModifiedOn(Instant.now());
-            foodMenuFoodItemMapService.save(foodMenuFoodItemMap);
-        }
-        for (var availability : foodMenuDto.getAvailabilityList()) {
-            FoodMenuAvailabilityMap foodMenuAvailabilityMap = new FoodMenuAvailabilityMap();
-            foodMenuAvailabilityMap.setFoodMenu(foodMenuDto.getFoodMenu());
-            foodMenuAvailabilityMap.setAvailability(availability);
-            foodMenuAvailabilityMap.setCreatedOn(Instant.now());
-            foodMenuAvailabilityMap.setModifiedOn(Instant.now());
-            foodMenuAvailabilityMapService.save(foodMenuAvailabilityMap);
+        Set<Long> availabilities = foodMenuDto.getAvailabilityList()
+                .stream()
+                .map(Availability::getId)
+                .collect(Collectors.toSet());
+        Set<Long> retrievedAvailability = listOfFoodMenuAvailabilityMap.stream()
+                .map(foodMenuAvailabilityMap -> foodMenuAvailabilityMap.getAvailability().getId())
+                .collect(Collectors.toSet());
+        boolean areAvailabilityEquals = listOfFoodMenuAvailabilityMap.stream()
+                .map(foodMenuAvailabilityMap -> foodMenuAvailabilityMap.getAvailability().getId())
+                .allMatch(availabilities::contains);
+        if (!areAvailabilityEquals) {
+            listOfFoodMenuAvailabilityMap.forEach(availabilityMap -> {
+                if (!availabilities.contains(availabilityMap.getAvailability().getId())) {
+                    foodMenuAvailabilityMapService.deleteById(availabilityMap.getId());
+                }
+            });
+            foodMenuDto.getAvailabilityList().forEach(availability -> {
+                if (!retrievedAvailability.contains(availability.getId())) {
+                    FoodMenuAvailabilityMap foodMenuAvailabilityMap = new FoodMenuAvailabilityMap();
+                    foodMenuAvailabilityMap.setFoodMenu(foodMenu);
+                    foodMenuAvailabilityMap.setAvailability(availability);
+                    foodMenuAvailabilityMap.setCreatedOn(Instant.now());
+                    foodMenuAvailabilityMap.setModifiedOn(Instant.now());
+                    foodMenuAvailabilityMapService.save(foodMenuAvailabilityMap);
+                }
+            });
         }
         foodMenuDto.getFoodMenu().setModifiedOn(Instant.now());
         foodMenuRepository.save(foodMenuDto.getFoodMenu());
         log.info("Leaving update()");
     }
+
 
     @Override
     public void delete(FoodMenu foodMenu) {
@@ -145,10 +179,10 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         FoodMenu foodMenu = findById(id);
         List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap = foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
         List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
-        for (var foodMenuFoodItemMap :listOfFoodMenuFoodItemMap){
+        for (var foodMenuFoodItemMap : listOfFoodMenuFoodItemMap) {
             foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
         }
-        for(var foodMenuAvailabilityMap:listOfFoodMenuAvailabilityMap){
+        for (var foodMenuAvailabilityMap : listOfFoodMenuAvailabilityMap) {
             foodMenuAvailabilityMapService.deleteById(foodMenuAvailabilityMap.getId());
         }
         foodMenuRepository.deleteById(id);

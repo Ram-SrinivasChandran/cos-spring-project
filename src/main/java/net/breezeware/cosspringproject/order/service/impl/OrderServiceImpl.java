@@ -36,7 +36,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -53,6 +52,7 @@ public class OrderServiceImpl implements OrderService {
     private final OrderItemService orderItemService;
     private final UserAddressMapService userAddressMapService;
     private final Validator fieldValidator;
+
     @Override
     public List<FoodMenuDto> viewFoodMenus() {
         log.info("Entering viewFoodMenus()");
@@ -60,22 +60,22 @@ public class OrderServiceImpl implements OrderService {
         ZoneId zoneId = ZoneId.of("UTC");
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(currentInstant, zoneId);
         DayOfWeek dayOfWeek = zonedDateTime.getDayOfWeek();
-        String todayDay= String.valueOf(dayOfWeek);
+        String todayDay = String.valueOf(dayOfWeek);
         Availability availabilityByDay = availability.findByDay(todayDay.toLowerCase());
         List<FoodMenuAvailabilityMap> foodMenusAvailability = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByAvailability(availabilityByDay);
-        List<FoodMenuDto> foodMenuDtos=new ArrayList<>();
-        for(var foodMenuAvailability :foodMenusAvailability){
+        List<FoodMenuDto> foodMenuDtos = new ArrayList<>();
+        for (var foodMenuAvailability : foodMenusAvailability) {
             FoodMenuDto foodMenuDto = new FoodMenuDto();
             FoodMenu foodMenu = foodMenuService.findById(foodMenuAvailability.getFoodMenu().getId());
             foodMenuDto.setFoodMenu(foodMenu);
             List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap = foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
-            List<FoodItem> foodItems=new ArrayList<>();
-            for(var foodMenuFoodItemMap:listOfFoodMenuFoodItemMap){
+            List<FoodItem> foodItems = new ArrayList<>();
+            for (var foodMenuFoodItemMap : listOfFoodMenuFoodItemMap) {
                 foodItems.add(foodMenuFoodItemMap.getFoodItem());
             }
             List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap = foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
-            List<Availability> availabilities=new ArrayList<>();
-            for(var foodMenuAvailableMap:listOfFoodMenuAvailabilityMap){
+            List<Availability> availabilities = new ArrayList<>();
+            for (var foodMenuAvailableMap : listOfFoodMenuAvailabilityMap) {
                 availabilities.add(foodMenuAvailableMap.getAvailability());
             }
             foodMenuDto.setAvailabilityList(availabilities);
@@ -101,15 +101,15 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order createOrder(OrderDto orderDto) {
         log.info("Entering createOrder()");
-        Order order=orderDto.getOrder();
-        if(!userService.isACustomer(order.getUser())){
+        Order order = orderDto.getOrder();
+        if (!userService.isACustomer(order.getUser())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
         Set<ConstraintViolation<Order>> constraintViolationSet = fieldValidator.validate(order);
         ValidationException.handlingException(constraintViolationSet);
-        List<FoodItemDto>foodItemDtos=orderDto.getFoodItemDtos();
-        for(var foodItemDto:foodItemDtos){
-            FoodItem foodItem=foodItemDto.getFoodItem();
+        List<FoodItemDto> foodItemDtos = orderDto.getFoodItemDtos();
+        for (var foodItemDto : foodItemDtos) {
+            FoodItem foodItem = foodItemDto.getFoodItem();
             Set<ConstraintViolation<FoodItem>> constraintViolationSet1 = fieldValidator.validate(foodItem);
             ValidationException.handlingException(constraintViolationSet1);
         }
@@ -117,7 +117,7 @@ public class OrderServiceImpl implements OrderService {
         order.setCreatedOn(Instant.now());
         order.setModifiedOn(Instant.now());
         Order savedOrder = orderRepository.save(order);
-        double totalCostOfTheOrder=orderItemService.addOrderItems(order,foodItemDtos);
+        double totalCostOfTheOrder = orderItemService.addOrderItems(order, foodItemDtos);
         savedOrder.setTotalCost(totalCostOfTheOrder);
         savedOrder.setModifiedOn(Instant.now());
         log.info("Leaving createOrder()");
@@ -128,11 +128,11 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewOrder(long id) {
         log.info("Entering viewOrder()");
-        OrderViewDto orderViewDto=new OrderViewDto();
+        OrderViewDto orderViewDto = new OrderViewDto();
         Order order = findById(id);
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
-        List<FoodItem> foodItems=new ArrayList<>();
-        for(var orderItem:orderItems){
+        List<FoodItem> foodItems = new ArrayList<>();
+        for (var orderItem : orderItems) {
             FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
             foodItem.setQuantity(orderItem.getQuantity());
             foodItem.setCost(orderItem.getCost());
@@ -143,47 +143,50 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving viewOrder()");
         return orderViewDto;
     }
+
     @Transactional
     @Override
-    public void updateOrder(long id,List<FoodItemDto> foodItemDtos) {
+    public void updateOrder(long id, List<FoodItemDto> foodItemDtos) {
         log.info("Entering updateOrder()");
         Order order = findById(id);
-        for(var foodItemDto:foodItemDtos){
-            FoodItem foodItem=foodItemDto.getFoodItem();
+        for (var foodItemDto : foodItemDtos) {
+            FoodItem foodItem = foodItemDto.getFoodItem();
             Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
             ValidationException.handlingException(constraintViolationSet);
         }
-        double totalCostOfTheOrder=0;
+        double totalCostOfTheOrder = 0;
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
-        for(var orderItem:orderItems){
-            for(var foodItemDto:foodItemDtos){
-                if(foodItemDto.getFoodItem().getId()==orderItem.getFoodItem().getId()){
-                    orderItem.setFoodItem(foodItemDto.getFoodItem());
-                    orderItem.setCost(foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost());
-                    orderItem.setQuantity(foodItemDto.getRequiredQuantity());
-                    orderItem.setModifiedOn(Instant.now());
-                    orderItemService.createOrderItem(orderItem);
-                    totalCostOfTheOrder+=foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost();
-                }else{
-                    orderItemService.deleteOrderItemById(orderItem.getId());
-                    break;
-                }
-            }
+        List<Long> updatedFoodItemIds = foodItemDtos.stream().map(FoodItemDto::getFoodItem).map(FoodItem::getId).toList();
+        List<OrderItem> notNeededOrderItems = orderItems.stream().filter(orderItem -> !updatedFoodItemIds.contains(orderItem.getFoodItem().getId())).toList();
+        for (var notNeededOrderItem : notNeededOrderItems) {
+            orderItemService.deleteOrderItemById(notNeededOrderItem.getId());
         }
-        for(var foodItemDto:foodItemDtos){
-            for(var orderItem:orderItems){
-                if (foodItemDto.getFoodItem().getId()!=orderItem.getFoodItem().getId()){
-                    OrderItem saveOrderItem= new OrderItem();
-                    saveOrderItem.setOrder(order);
-                    saveOrderItem.setFoodItem(foodItemDto.getFoodItem());
-                    saveOrderItem.setQuantity(foodItemDto.getRequiredQuantity());
-                    saveOrderItem.setCost(foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost());
-                    saveOrderItem.setCreatedOn(Instant.now());
-                    saveOrderItem.setModifiedOn(Instant.now());
-                    orderItemService.createOrderItem(saveOrderItem);
-                    totalCostOfTheOrder+=foodItemDto.getRequiredQuantity()*foodItemDto.getFoodItem().getCost();
-                    break;
+        orderItems.removeAll(notNeededOrderItems);
+        for (var foodItemDto : foodItemDtos) {
+            long updatedFoodItemId = foodItemDto.getFoodItem().getId();
+            boolean isFoodItemAlreadyInOrder = orderItems.stream().map(OrderItem::getFoodItem).map(FoodItem::getId).toList().contains(updatedFoodItemId);
+            if (isFoodItemAlreadyInOrder) {
+                for (var orderItem : orderItems) {
+                    if (updatedFoodItemId == orderItem.getFoodItem().getId()) {
+                        orderItem.setFoodItem(foodItemDto.getFoodItem());
+                        orderItem.setCost(foodItemDto.getRequiredQuantity() * orderItem.getFoodItem().getCost());
+                        orderItem.setQuantity(foodItemDto.getRequiredQuantity());
+                        orderItem.setModifiedOn(Instant.now());
+                        orderItemService.createOrderItem(orderItem);
+                        totalCostOfTheOrder += foodItemDto.getRequiredQuantity() * orderItem.getFoodItem().getCost();
+                    }
                 }
+            } else {
+                OrderItem saveOrderItem = new OrderItem();
+                FoodItem foodItem = foodItemService.findById(foodItemDto.getFoodItem().getId());
+                saveOrderItem.setOrder(order);
+                saveOrderItem.setFoodItem(foodItemDto.getFoodItem());
+                saveOrderItem.setQuantity(foodItemDto.getRequiredQuantity());
+                saveOrderItem.setCost(foodItemDto.getRequiredQuantity() * foodItem.getCost());
+                saveOrderItem.setCreatedOn(Instant.now());
+                saveOrderItem.setModifiedOn(Instant.now());
+                orderItemService.createOrderItem(saveOrderItem);
+                totalCostOfTheOrder += foodItemDto.getRequiredQuantity() * foodItem.getCost();
             }
         }
         order.setTotalCost(totalCostOfTheOrder);
@@ -199,7 +202,7 @@ public class OrderServiceImpl implements OrderService {
         ValidationException.handlingException(constraintViolationSet);
         Set<ConstraintViolation<UserAddressMap>> constraintViolationSet1 = fieldValidator.validate(userAddressMap);
         ValidationException.handlingException(constraintViolationSet1);
-        if(!userService.isACustomer(userAddressMap.getUser())){
+        if (!userService.isACustomer(userAddressMap.getUser())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
         userAddressMap.setCreatedOn(Instant.now());
@@ -213,11 +216,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
         Order order = findById(id);
-        if(!validateEmail(placeOrderDto.getEmail())){
-            throw new CustomException("Enter a valid Email Address",HttpStatus.BAD_REQUEST);
+        if (!validateEmail(placeOrderDto.getEmail())) {
+            throw new CustomException("Enter a valid Email Address", HttpStatus.BAD_REQUEST);
         }
-        if(!validatePhoneNumber(placeOrderDto.getPhoneNumber())){
-            throw new CustomException("Enter a Valid Phone Number",HttpStatus.BAD_REQUEST);
+        if (!validatePhoneNumber(placeOrderDto.getPhoneNumber())) {
+            throw new CustomException("Enter a Valid Phone Number", HttpStatus.BAD_REQUEST);
         }
         order.setPhoneNumber(placeOrderDto.getPhoneNumber());
         order.setStatus(Status.ORDER_PLACED.name());
@@ -227,17 +230,18 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderOn(Instant.now());
         order.setUserAddress(placeOrderDto.getUserAddressMap());
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
-        for(var orderItem:orderItems){
-            int orderItemQuantity=orderItem.getQuantity();
+        for (var orderItem : orderItems) {
+            int orderItemQuantity = orderItem.getQuantity();
             FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
             int foodItemQuantity = foodItem.getQuantity();
-            foodItem.setQuantity(foodItemQuantity-orderItemQuantity);
+            foodItem.setQuantity(foodItemQuantity - orderItemQuantity);
             foodItemService.save(foodItem);
         }
         Order savedOrder = orderRepository.save(order);
         log.info("Leaving placeOrder()");
         return viewOrder(savedOrder.getId());
     }
+
     private boolean validatePhoneNumber(String phoneNumber) {
         log.info("Entering validatePhoneNumber()");
         if (phoneNumber.length() != 10) {
@@ -249,6 +253,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving validatePhoneNumber()");
         return matches;
     }
+
     private boolean validateEmail(String email) {
         log.info("Entering validateEmail()");
         String emailRegex = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$";
@@ -264,11 +269,11 @@ public class OrderServiceImpl implements OrderService {
         Order order = findById(id);
         order.setStatus(Status.ORDER_CANCELLED.name());
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
-        for(var orderItem:orderItems){
-            int orderItemQuantity=orderItem.getQuantity();
+        for (var orderItem : orderItems) {
+            int orderItemQuantity = orderItem.getQuantity();
             FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
             int foodItemQuantity = foodItem.getQuantity();
-            foodItem.setQuantity(foodItemQuantity+orderItemQuantity);
+            foodItem.setQuantity(foodItemQuantity + orderItemQuantity);
             foodItemService.save(foodItem);
         }
         orderRepository.save(order);
@@ -278,10 +283,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderViewDto> viewActiveOrders(long id) {
         log.info("Entering viewActiveOrders()");
-        if(!userService.isACafeteriaStaff(id)){
+        if (!userService.isACafeteriaStaff(id)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        List<OrderViewDto>activeOrders=viewOrderListByStatus(Status.ORDER_PLACED.name());
+        List<OrderViewDto> activeOrders = viewOrderListByStatus(Status.ORDER_PLACED.name());
         List<OrderViewDto> sortedActiveOrders = activeOrders.stream()
                 .sorted(Comparator.comparing(c -> c.getOrder().getDeliveryOn()))
                 .toList();
@@ -292,7 +297,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewReceivedOrder(long userId, long orderId) {
         log.info("Entering viewReceivedOrder()");
-        if(!userService.isACafeteriaStaff(userId)){
+        if (!userService.isACafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
         Order order = findById(orderId);
@@ -302,10 +307,11 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving viewReceivedOrder()");
         return viewOrder(savedOrder.getId());
     }
-    private List<OrderViewDto> viewOrderListByStatus(String status){
-        List<OrderViewDto>orderList=new ArrayList<>();
-        List<Order> orders=orderRepository.getOrderByStatus(status);
-        for(var order:orders){
+
+    private List<OrderViewDto> viewOrderListByStatus(String status) {
+        List<OrderViewDto> orderList = new ArrayList<>();
+        List<Order> orders = orderRepository.getOrderByStatus(status);
+        for (var order : orders) {
             OrderViewDto activeOrder = viewOrder(order.getId());
             orderList.add(activeOrder);
         }
@@ -315,45 +321,47 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void changeStatusToWaitingForDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToWaitingForDelivery()");
-        if(!userService.isACafeteriaStaff(userId)){
+        if (!userService.isACafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        changeStatus(orderId,Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
+        changeStatus(orderId, Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
         log.info("Leaving changeStatusToWaitingForDelivery()");
     }
-    private void changeStatus(long orderId,String status){
+
+    private void changeStatus(long orderId, String status) {
         Order order = findById(orderId);
         order.setStatus(status);
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
     }
+
     @Override
     public void changeStatusToPendingDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToPendingDelivery()");
-        if(!userService.isACafeteriaStaff(userId)){
+        if (!userService.isACafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        changeStatus(orderId,Status.PENDING_DELIVERY.name());
+        changeStatus(orderId, Status.PENDING_DELIVERY.name());
         log.info("Leaving changeStatusToPendingDelivery()");
     }
 
     @Override
     public void changeStatusToOrderDelivered(long userId, long orderId) {
         log.info("Entering changeStatusToOrderDelivered()");
-        if(!userService.isADeliveryStaff(userId)){
+        if (!userService.isADeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        changeStatus(orderId,Status.ORDER_DELIVERED.name());
+        changeStatus(orderId, Status.ORDER_DELIVERED.name());
         log.info("Leaving changeStatusToOrderDelivered()");
     }
 
     @Override
     public List<OrderViewDto> viewCancelledOrders(long id) {
         log.info("Entering viewCancelledOrders()");
-        if(!userService.isADeliveryStaff(id)){
+        if (!userService.isADeliveryStaff(id)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        List<OrderViewDto>cancelledOrders=viewOrderListByStatus(Status.ORDER_CANCELLED.name());
+        List<OrderViewDto> cancelledOrders = viewOrderListByStatus(Status.ORDER_CANCELLED.name());
         log.info("Leaving viewCancelledOrders()");
         return cancelledOrders;
     }
@@ -361,28 +369,29 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewCancelledOrder(long userId, long orderId) {
         log.info("Entering viewCancelledOrders()");
-        if(!userService.isADeliveryStaff(userId)){
+        if (!userService.isADeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        Order order=viewOrderByStatus(orderId,Status.ORDER_CANCELLED.name());
+        Order order = viewOrderByStatus(orderId, Status.ORDER_CANCELLED.name());
         log.info("Leaving viewCancelledOrders()");
         return viewOrder(order.getId());
     }
-    private Order viewOrderByStatus(long orderId,String status){
+
+    private Order viewOrderByStatus(long orderId, String status) {
         Order order = findById(orderId);
-        if(order.getStatus().equals(status)){
+        if (order.getStatus().equals(status)) {
             return order;
         }
-        throw new CustomException("The Order is Not with the Status of "+status,HttpStatus.NOT_FOUND);
+        throw new CustomException("The Order is Not with the Status of " + status, HttpStatus.NOT_FOUND);
     }
 
     @Override
     public List<OrderViewDto> viewCompletedOrders(long id) {
         log.info("Entering viewCompletedOrders()");
-        if(!userService.isADeliveryStaff(id)){
+        if (!userService.isADeliveryStaff(id)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        List<OrderViewDto>completedOrders=viewOrderListByStatus(Status.ORDER_DELIVERED.name());
+        List<OrderViewDto> completedOrders = viewOrderListByStatus(Status.ORDER_DELIVERED.name());
         log.info("Leaving viewCompletedOrders()");
         return completedOrders;
     }
@@ -390,10 +399,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewCompletedOrder(long userId, long orderId) {
         log.info("Entering viewCompletedOrder()");
-        if(!userService.isADeliveryStaff(userId)){
+        if (!userService.isADeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
-        Order order=viewOrderByStatus(orderId,Status.ORDER_DELIVERED.name());
+        Order order = viewOrderByStatus(orderId, Status.ORDER_DELIVERED.name());
         log.info("Leaving viewCompletedOrder()");
         return viewOrder(order.getId());
     }

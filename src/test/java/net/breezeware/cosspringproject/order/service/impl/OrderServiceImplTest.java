@@ -28,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import javax.validation.Validator;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Stack;
@@ -35,8 +36,7 @@ import java.util.Stack;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Slf4j
 @ExtendWith(MockitoExtension.class)
@@ -86,8 +86,6 @@ class OrderServiceImplTest {
         OrderItem mockOrderItem= OrderItem.builder().id(1).quantity(2).cost(50).build();
         when(userService.isACustomer(any())).thenReturn(true);
         when(orderRepository.save(any())).thenReturn(mockOrder);
-        when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
-        when(orderItemService.createOrderItem(any())).thenReturn(mockOrderItem);
         when(orderRepository.save(any())).thenReturn(mockOrder);
         Order order=orderService.createOrder(OrderDto.builder().order(mockOrder).foodItemDtos(List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(5).build())).build());
         assertEquals(mockOrder.getUser().getId(),order.getUser().getId());
@@ -112,20 +110,27 @@ class OrderServiceImplTest {
     void testUpdateOrder(){
         Order mockOrder=new Order();
         mockOrder.setId(1);
-        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).build();
-        OrderItem mockOrderItem=OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build();
-        List<OrderItem> mockOrderItems=List.of(mockOrderItem);
+        FoodItem mockFoodItem= FoodItem.builder().id(1).cost(20).quantity(20).createdOn(Instant.now()).modifiedOn(Instant.now()).build();
+        OrderItem mockOrderItem=OrderItem.builder().id(1).order(mockOrder).foodItem(mockFoodItem).quantity(10).cost(20).build();
+        List<OrderItem> mockOrderItems=new ArrayList<>();
+        mockOrderItems.add(mockOrderItem);
+        List<OrderItem> mockNotNeededOrderItem=new ArrayList<>();
+        mockNotNeededOrderItem.add(mockOrderItem);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderItemService.findByOrder(mockOrder)).thenReturn(mockOrderItems);
-        when(orderItemService.createOrderItem(mockOrderItem)).thenReturn(mockOrderItem);
+        mockOrderItems.removeAll(mockNotNeededOrderItem);
+        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        doReturn(mockOrderItem).when(orderItemService).createOrderItem(any(OrderItem.class));
         when(orderRepository.save(mockOrder)).thenReturn(mockOrder);
         orderService.updateOrder(1,List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(2).build()));
         verify(orderRepository).findById(1L);
     }
     @Test
     void testCreateAddress(){
-        UserAddressMap mockAddress= UserAddressMap.builder().id(1).pincode(624001).build();
+        User mockUser= User.builder().id(1).name("Ram").userName("ram_06").password("breeze123").roleId(1).build();
+        UserAddressMap mockAddress= UserAddressMap.builder().id(1).user(mockUser).pincode(624001).build();
         when(userAddressMapService.save(any())).thenReturn(mockAddress);
+        when(userService.isACustomer(mockUser)).thenReturn(true);
         UserAddressMap address = orderService.createAddress(mockAddress);
         assertEquals(address.getId(),mockAddress.getId());
         assertEquals(address.getPincode(),mockAddress.getPincode());
