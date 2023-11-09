@@ -17,6 +17,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The `FoodMenuAvailabilityMap` entity class represents the mapping between a
+ * food menu and its availability schedule.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,23 +28,39 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(schema = "food_svc", name = "food_menu_availability_map")
 public class FoodMenuAvailabilityMap {
+    /**
+     * The unique identifier for the food menu availability map.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_menu_availability_map_seq_gen")
     @SequenceGenerator(name = "food_menu_availability_map_seq_gen", sequenceName = "food_menu_availability_map_seq",
             schema = "food_svc", allocationSize = 1)
     private long id;
 
+    /**
+     * The food menu associated with this availability map.
+     */
     @OneToOne
     @JoinColumn(name = "food_menu_id", referencedColumnName = "id")
     private FoodMenu foodMenu;
 
+    /**
+     * The availability schedule associated with this map.
+     */
     @OneToOne
     @JoinColumn(name = "availability_id", referencedColumnName = "id")
     private Availability availability;
 
+    /**
+     * The timestamp indicating when the food menu availability map was created.
+     */
     @Column(name = "created_on")
     private Instant createdOn;
 
+    /**
+     * The timestamp indicating when the food menu availability map was last
+     * modified.
+     */
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

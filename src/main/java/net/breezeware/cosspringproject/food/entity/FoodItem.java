@@ -19,6 +19,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * The `FoodItem` entity class represents an item of food available in a menu.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -26,28 +29,46 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(schema = "food_svc", name = "food_item", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
 public class FoodItem {
+    /**
+     * The unique identifier for the food item.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_item_seq_gen")
     @SequenceGenerator(name = "food_item_seq_gen", sequenceName = "food_item_seq", schema = "food_svc",
             allocationSize = 1)
     private long id;
 
-    @Column(name = "name", length = 30)
+    /**
+     * The name of the food item, which must be unique.
+     */
+    @Column(name = "name", length = 30, unique = true)
     @NotBlank(message = "Please Provide a Valid Name.")
     @Size(min = 1, max = 20, message = "FoodItem Name Size should be lesser than 20")
     private String name;
 
+    /**
+     * The cost of the food item.
+     */
     @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "cost")
     private double cost;
 
+    /**
+     * The quantity of the food item available.
+     */
     @NotNull(message = "Please Enter a Valid Quantity.")
     @Column(name = "quantity")
     private int quantity;
 
+    /**
+     * The timestamp indicating when the food item was created.
+     */
     @Column(name = "created_on")
     private Instant createdOn;
 
+    /**
+     * The timestamp indicating when the food item was last modified.
+     */
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

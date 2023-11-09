@@ -72,13 +72,13 @@ public class OrderServiceImpl implements OrderService {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(currentInstant, zoneId);
         DayOfWeek dayOfWeek = zonedDateTime.getDayOfWeek();
         String todayDay = String.valueOf(dayOfWeek);
-        Availability availabilityByDay = availability.findByDay(todayDay.toLowerCase());
+        Availability availabilityByDay = availability.findAvailabilityByDay(todayDay.toLowerCase());
         List<FoodMenuAvailabilityMap> foodMenusAvailability =
                 foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByAvailability(availabilityByDay);
         List<FoodMenuDto> foodMenuDtos = new ArrayList<>();
         for (var foodMenuAvailability : foodMenusAvailability) {
             FoodMenuDto foodMenuDto = new FoodMenuDto();
-            FoodMenu foodMenu = foodMenuService.findById(foodMenuAvailability.getFoodMenu().getId());
+            FoodMenu foodMenu = foodMenuService.findFoodMenuById(foodMenuAvailability.getFoodMenu().getId());
             foodMenuDto.setFoodMenu(foodMenu);
             List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap =
                     foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
@@ -154,7 +154,7 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         List<FoodItem> foodItems = new ArrayList<>();
         for (var orderItem : orderItems) {
-            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            FoodItem foodItem = foodItemService.findFoodItemById(orderItem.getFoodItem().getId());
             foodItem.setQuantity(orderItem.getQuantity());
             foodItem.setCost(orderItem.getCost());
             foodItems.add(foodItem);
@@ -206,7 +206,7 @@ public class OrderServiceImpl implements OrderService {
 
             } else {
                 OrderItem saveOrderItem = new OrderItem();
-                FoodItem foodItem = foodItemService.findById(foodItemDto.getFoodItem().getId());
+                FoodItem foodItem = foodItemService.findFoodItemById(foodItemDto.getFoodItem().getId());
                 saveOrderItem.setOrder(order);
                 saveOrderItem.setFoodItem(foodItemDto.getFoodItem());
                 saveOrderItem.setQuantity(foodItemDto.getRequiredQuantity());
@@ -265,10 +265,10 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         for (var orderItem : orderItems) {
             int orderItemQuantity = orderItem.getQuantity();
-            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            FoodItem foodItem = foodItemService.findFoodItemById(orderItem.getFoodItem().getId());
             int foodItemQuantity = foodItem.getQuantity();
             foodItem.setQuantity(foodItemQuantity - orderItemQuantity);
-            foodItemService.save(foodItem);
+            foodItemService.saveFoodItem(foodItem);
         }
 
         Order savedOrder = orderRepository.save(order);
@@ -306,10 +306,10 @@ public class OrderServiceImpl implements OrderService {
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         for (var orderItem : orderItems) {
             int orderItemQuantity = orderItem.getQuantity();
-            FoodItem foodItem = foodItemService.findById(orderItem.getFoodItem().getId());
+            FoodItem foodItem = foodItemService.findFoodItemById(orderItem.getFoodItem().getId());
             int foodItemQuantity = foodItem.getQuantity();
             foodItem.setQuantity(foodItemQuantity + orderItemQuantity);
-            foodItemService.save(foodItem);
+            foodItemService.saveFoodItem(foodItem);
         }
 
         orderRepository.save(order);

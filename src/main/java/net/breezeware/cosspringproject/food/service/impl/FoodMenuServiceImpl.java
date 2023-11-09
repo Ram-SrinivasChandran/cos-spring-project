@@ -42,42 +42,50 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     private final AvailabilityService availabilityService;
     private final Validator fieldValidator;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<FoodMenu> findAll() {
-        log.info("Entering findAll()");
+    public List<FoodMenu> findAllFoodMenu() {
+        log.info("Entering findAllFoodMenu()");
         List<FoodMenu> foodMenus = foodMenuRepository.findAll();
-        log.info("Leaving findAll()");
+        log.info("Leaving findAllFoodMenu()");
         return foodMenus;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodMenu findById(long id) {
-        log.info("Entering findById()");
-        if (id <= 0) {
-            log.info("Leaving findById()");
+    public FoodMenu findFoodMenuById(long foodMenuId) {
+        log.info("Entering findFoodMenuById()");
+        if (foodMenuId <= 0) {
             throw new CustomException("The Food Menu Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Leaving findById()");
-        return foodMenuRepository.findById(id)
+        log.info("Leaving findFoodMenuById()");
+        return foodMenuRepository.findById(foodMenuId)
                 .orElseThrow(() -> new CustomException("The Food Menu not Found", HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodMenu save(FoodMenuDto foodMenuDto) {
-        log.info("Entering save()");
+    public FoodMenu saveFoodMenu(FoodMenuDto foodMenuDto) {
+        log.info("Entering saveFoodMenu()");
         Set<ConstraintViolation<FoodMenu>> constraintViolationSet = fieldValidator.validate(foodMenuDto.getFoodMenu());
         ValidationException.handlingException(constraintViolationSet);
         for (var foodItem : foodMenuDto.getFoodItems()) {
             Set<ConstraintViolation<FoodItem>> constraintViolationSet1 = fieldValidator.validate(foodItem);
             ValidationException.handlingException(constraintViolationSet1);
-            foodItemService.findById(foodItem.getId());
+            foodItemService.findFoodItemById(foodItem.getId());
         }
 
         for (var availability : foodMenuDto.getAvailabilityList()) {
             Set<ConstraintViolation<Availability>> constraintViolationSet2 = fieldValidator.validate(availability);
             ValidationException.handlingException(constraintViolationSet2);
-            availabilityService.findById(availability.getId());
+            availabilityService.findAvailabilityById(availability.getId());
         }
 
         if (!foodMenuRepository.existsByNameAndType(foodMenuDto.getFoodMenu().getName(),
@@ -91,7 +99,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
                 foodMenuFoodItemMap.setFoodItem(foodItem);
                 foodMenuFoodItemMap.setCreatedOn(Instant.now());
                 foodMenuFoodItemMap.setModifiedOn(Instant.now());
-                foodMenuFoodItemMapService.save(foodMenuFoodItemMap);
+                foodMenuFoodItemMapService.saveFoodMenuFoodItemMap(foodMenuFoodItemMap);
             }
 
             for (var availability : foodMenuDto.getAvailabilityList()) {
@@ -100,10 +108,10 @@ public class FoodMenuServiceImpl implements FoodMenuService {
                 foodMenuAvailabilityMap.setAvailability(availability);
                 foodMenuAvailabilityMap.setCreatedOn(Instant.now());
                 foodMenuAvailabilityMap.setModifiedOn(Instant.now());
-                foodMenuAvailabilityMapService.save(foodMenuAvailabilityMap);
+                foodMenuAvailabilityMapService.saveFoodMenuAvailabilityMap(foodMenuAvailabilityMap);
             }
 
-            log.info("Leaving save()");
+            log.info("Leaving saveFoodMenu()");
             return addedFoodMenu;
         } else {
             throw new CustomException("The Food Menu is Already Exists", HttpStatus.ALREADY_REPORTED);
@@ -111,22 +119,25 @@ public class FoodMenuServiceImpl implements FoodMenuService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
-    public void update(Long id, FoodMenuDto foodMenuDto) {
-        log.info("Entering update()");
-        FoodMenu foodMenu = findById(id);
+    public void updateFoodMenu(long foodMenuId, FoodMenuDto foodMenuDto) {
+        log.info("Entering updateFoodMenu()");
+        FoodMenu foodMenu = findFoodMenuById(foodMenuId);
         foodMenuDto.setFoodMenu(foodMenu);
         for (var foodItem : foodMenuDto.getFoodItems()) {
             Set<ConstraintViolation<FoodItem>> constraintViolationSet1 = fieldValidator.validate(foodItem);
             ValidationException.handlingException(constraintViolationSet1);
-            foodItemService.findById(foodItem.getId());
+            foodItemService.findFoodItemById(foodItem.getId());
         }
 
         for (var availability : foodMenuDto.getAvailabilityList()) {
             Set<ConstraintViolation<Availability>> constraintViolationSet2 = fieldValidator.validate(availability);
             ValidationException.handlingException(constraintViolationSet2);
-            availabilityService.findById(availability.getId());
+            availabilityService.findAvailabilityById(availability.getId());
         }
 
         List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap =
@@ -141,7 +152,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         if (!containsAll) {
             listOfFoodMenuFoodItemMap.forEach(foodMenuFoodItemMap -> {
                 if (!foodItemNames.contains(foodMenuFoodItemMap.getFoodItem().getName())) {
-                    foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+                    foodMenuFoodItemMapService.deleteFoodMenuFoodItemMapById(foodMenuFoodItemMap.getId());
                 }
 
             });
@@ -152,7 +163,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
                     newFoodMenuFoodItemMap.setFoodItem(foodItem);
                     newFoodMenuFoodItemMap.setCreatedOn(Instant.now());
                     newFoodMenuFoodItemMap.setModifiedOn(Instant.now());
-                    foodMenuFoodItemMapService.save(newFoodMenuFoodItemMap);
+                    foodMenuFoodItemMapService.saveFoodMenuFoodItemMap(newFoodMenuFoodItemMap);
                 }
 
             });
@@ -169,7 +180,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
         if (!areAvailabilityEquals) {
             listOfFoodMenuAvailabilityMap.forEach(availabilityMap -> {
                 if (!availabilities.contains(availabilityMap.getAvailability().getId())) {
-                    foodMenuAvailabilityMapService.deleteById(availabilityMap.getId());
+                    foodMenuAvailabilityMapService.deleteFoodMenuAvailabilityMapById(availabilityMap.getId());
                 }
 
             });
@@ -180,7 +191,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
                     foodMenuAvailabilityMap.setAvailability(availability);
                     foodMenuAvailabilityMap.setCreatedOn(Instant.now());
                     foodMenuAvailabilityMap.setModifiedOn(Instant.now());
-                    foodMenuAvailabilityMapService.save(foodMenuAvailabilityMap);
+                    foodMenuAvailabilityMapService.saveFoodMenuAvailabilityMap(foodMenuAvailabilityMap);
                 }
 
             });
@@ -188,31 +199,39 @@ public class FoodMenuServiceImpl implements FoodMenuService {
 
         foodMenuDto.getFoodMenu().setModifiedOn(Instant.now());
         foodMenuRepository.save(foodMenuDto.getFoodMenu());
-        log.info("Leaving update()");
+        log.info("Leaving updateFoodMenu()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void delete(FoodMenu foodMenu) {
+    public void deleteFoodMenu(FoodMenu foodMenu) {
+        log.info("Entering deleteFoodMenu()");
         foodMenuRepository.delete(foodMenu);
+        log.info("Leaving deleteFoodMenu()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void deleteById(long id) {
-        log.info("Entering deleteById()");
-        FoodMenu foodMenu = findById(id);
+    public void deleteFoodMenuById(long foodMenuId) {
+        log.info("Entering deleteFoodMenuById()");
+        FoodMenu foodMenu = findFoodMenuById(foodMenuId);
         List<FoodMenuFoodItemMap> listOfFoodMenuFoodItemMap =
                 foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(foodMenu);
         List<FoodMenuAvailabilityMap> listOfFoodMenuAvailabilityMap =
                 foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
         for (var foodMenuFoodItemMap : listOfFoodMenuFoodItemMap) {
-            foodMenuFoodItemMapService.deleteById(foodMenuFoodItemMap.getId());
+            foodMenuFoodItemMapService.deleteFoodMenuFoodItemMapById(foodMenuFoodItemMap.getId());
         }
 
         for (var foodMenuAvailabilityMap : listOfFoodMenuAvailabilityMap) {
-            foodMenuAvailabilityMapService.deleteById(foodMenuAvailabilityMap.getId());
+            foodMenuAvailabilityMapService.deleteFoodMenuAvailabilityMapById(foodMenuAvailabilityMap.getId());
         }
 
-        foodMenuRepository.deleteById(id);
-        log.info("Leaving deleteById()");
+        foodMenuRepository.deleteById(foodMenuId);
+        log.info("Leaving deleteFoodMenuById()");
     }
 }

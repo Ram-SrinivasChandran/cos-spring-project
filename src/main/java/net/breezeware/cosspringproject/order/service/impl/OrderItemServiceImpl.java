@@ -31,6 +31,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<OrderItem> findByOrder(Order order) {
         log.info("Entering findByOrder()");
@@ -49,7 +52,7 @@ public class OrderItemServiceImpl implements OrderItemService {
         double totalCostOfTheOrder = 0;
         for (var foodItemDto : foodItemDtos) {
             FoodItem foodItem = foodItemDto.getFoodItem();
-            FoodItem retainedFoodItem = foodItemService.findById(foodItem.getId());
+            FoodItem retainedFoodItem = foodItemService.findFoodItemById(foodItem.getId());
             if (retainedFoodItem.getQuantity() < foodItemDto.getRequiredQuantity()) {
                 throw new CustomException("The FoodItem Quantity is Unavailable", HttpStatus.BAD_REQUEST);
             } else {

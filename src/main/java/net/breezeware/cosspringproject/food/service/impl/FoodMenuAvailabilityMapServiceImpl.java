@@ -2,8 +2,10 @@ package net.breezeware.cosspringproject.food.service.impl;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.food.dao.FoodMenuAvailabilityMapRepository;
 import net.breezeware.cosspringproject.food.entity.Availability;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
@@ -20,43 +22,86 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
 
     private final FoodMenuAvailabilityMapRepository foodMenuAvailabilityMapRepository;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<FoodMenuAvailabilityMap> findAll() {
-        return null;
+    public List<FoodMenuAvailabilityMap> findAllFoodMenuAvailabilityMap() {
+        log.info("Entering findAllFoodMenuAvailabilityMap()");
+        List<FoodMenuAvailabilityMap> foodMenuAvailabilities = foodMenuAvailabilityMapRepository.findAll();
+        log.info("Leaving findAllFoodMenuAvailabilityMap()");
+        return foodMenuAvailabilities;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodMenuAvailabilityMap findById(long id) {
-        return null;
+    public FoodMenuAvailabilityMap findFoodMenuAvailabilityMapById(long foodMenuAvailabilityMapId) {
+        log.info("Entering findFoodMenuAvailabilityMapById()");
+        if (foodMenuAvailabilityMapId <= 0) {
+            throw new CustomException("The Food Menu Availability Map Id should be Greater than Zero.",
+                    HttpStatus.BAD_REQUEST);
+        }
+
+        log.info("Leaving findFoodMenuAvailabilityMapById()");
+        return foodMenuAvailabilityMapRepository.findById(foodMenuAvailabilityMapId).orElseThrow(
+                () -> new CustomException("The Food Menu Availability Map Id not Found", HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodMenuAvailabilityMap save(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
-        return foodMenuAvailabilityMapRepository.save(foodMenuAvailabilityMap);
+    public FoodMenuAvailabilityMap saveFoodMenuAvailabilityMap(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
+        log.info("Entering saveFoodMenuAvailabilityMap()");
+        FoodMenuAvailabilityMap savedFoodMenuAvailabilityMap =
+                foodMenuAvailabilityMapRepository.save(foodMenuAvailabilityMap);
+        log.info("Leaving saveFoodMenuAvailabilityMap()");
+        return savedFoodMenuAvailabilityMap;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void delete(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
-
+    public void deleteFoodMenuAvailabilityMap(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
+        log.info("Entering deleteFoodMenuAvailabilityMap()");
+        foodMenuAvailabilityMapRepository.delete(foodMenuAvailabilityMap);
+        log.info("Leaving deleteFoodMenuAvailabilityMap()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByFoodMenu(FoodMenu foodMenu) {
-        return foodMenuAvailabilityMapRepository.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
+        log.info("Entering getFoodMenuAvailabilityMapByFoodMenu()");
+        List<FoodMenuAvailabilityMap> foodMenuAvailabilityMapByFoodMenus =
+                foodMenuAvailabilityMapRepository.getFoodMenuAvailabilityMapByFoodMenu(foodMenu);
+        log.info("Leaving getFoodMenuAvailabilityMapByFoodMenu()");
+        return foodMenuAvailabilityMapByFoodMenus;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void deleteById(long id) {
-        foodMenuAvailabilityMapRepository.deleteById(id);
+    public void deleteFoodMenuAvailabilityMapById(long foodMenuAvailabilityMapId) {
+        log.info("Entering deleteFoodMenuAvailabilityMapById()");
+        foodMenuAvailabilityMapRepository.deleteById(foodMenuAvailabilityMapId);
+        log.info("Leaving deleteFoodMenuAvailabilityMapById()");
     }
 
-    @Override
-    public void update(Long id, FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
-
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByAvailability(Availability availability) {
-        return foodMenuAvailabilityMapRepository.getFoodMenuAvailabilityMapByAvailability(availability);
+        log.info("Entering getFoodMenuAvailabilityMapByAvailability()");
+        List<FoodMenuAvailabilityMap> foodMenuAvailabilityMapByAvailabilities =
+                foodMenuAvailabilityMapRepository.getFoodMenuAvailabilityMapByAvailability(availability);
+        log.info("Leaving getFoodMenuAvailabilityMapByAvailability()");
+        return foodMenuAvailabilityMapByAvailabilities;
     }
 }

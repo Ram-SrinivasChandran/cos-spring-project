@@ -27,62 +27,81 @@ public class FoodItemServiceImpl implements FoodItemService {
     private final FoodItemRepository foodItemRepository;
     private final Validator fieldValidator;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<FoodItem> findAll() {
-        log.info("Entering findAll()");
+    public List<FoodItem> findAllFoodItems() {
+        log.info("Entering findAllFoodItems()");
         List<FoodItem> foodItem = foodItemRepository.findAll();
-        log.info("Leaving findAll()");
+        log.info("Leaving findAllFoodItems()");
         return foodItem;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodItem findById(long id) {
-        log.info("Entering findById()");
-        if (id <= 0) {
-            log.info("Leaving findById()");
+    public FoodItem findFoodItemById(long foodItemId) {
+        log.info("Entering findFoodItemById()");
+        if (foodItemId <= 0) {
             throw new CustomException("The Food Item Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Leaving findById()");
-        return foodItemRepository.findById(id)
+        log.info("Leaving findFoodItemById()");
+        return foodItemRepository.findById(foodItemId)
                 .orElseThrow(() -> new CustomException("The Food Item not Found", HttpStatus.NOT_FOUND));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public FoodItem save(FoodItem foodItem) {
-        log.info("Entering save()");
+    public FoodItem saveFoodItem(FoodItem foodItem) {
+        log.info("Entering saveFoodItem()");
         Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
         ValidationException.handlingException(constraintViolationSet);
         foodItem.setCreatedOn(Instant.now());
         foodItem.setModifiedOn(Instant.now());
-        log.info("Leaving save()");
+        log.info("Leaving saveFoodItem()");
         return foodItemRepository.save(foodItem);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void update(Long id, FoodItem updatedFoodItem) {
-        log.info("Entering update()");
+    public void updateFoodItem(long foodItemId, FoodItem updatedFoodItem) {
+        log.info("Entering updateFoodItem()");
         Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(updatedFoodItem);
         ValidationException.handlingException(constraintViolationSet);
-        FoodItem foodItem = findById(id);
+        FoodItem foodItem = findFoodItemById(foodItemId);
         foodItem.setName(updatedFoodItem.getName());
         foodItem.setCost(updatedFoodItem.getCost());
         foodItem.setQuantity(updatedFoodItem.getQuantity());
         foodItem.setModifiedOn(Instant.now());
         foodItemRepository.save(foodItem);
-        log.info("Leaving update()");
+        log.info("Leaving updateFoodItem()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void delete(FoodItem foodItem) {
-        log.info("Entering delete()");
+    public void deleteFoodItem(FoodItem foodItem) {
+        log.info("Entering deleteFoodItem()");
         foodItemRepository.delete(foodItem);
-        log.info("Leaving delete()");
+        log.info("Leaving deleteFoodItem()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void deleteById(long id) {
-        findById(id);
-        foodItemRepository.deleteById(id);
+    public void deleteFoodItemById(long foodItemId) {
+        log.info("Entering deleteFoodItemById()");
+        findFoodItemById(foodItemId);
+        foodItemRepository.deleteById(foodItemId);
+        log.info("Leaving deleteFoodItemById()");
     }
 }

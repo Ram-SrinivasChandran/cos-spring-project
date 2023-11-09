@@ -27,27 +27,27 @@ public class FoodMenuController {
 
     @GetMapping
     public List<FoodMenu> getFoodMenus() {
-        return foodMenuService.findAll();
+        return foodMenuService.findAllFoodMenu();
     }
 
-    @GetMapping("/{id}")
-    public FoodMenu getFoodMenuById(@PathVariable Long id) {
-        return foodMenuService.findById(id);
+    @GetMapping("/{food-menu-id}")
+    public FoodMenu getFoodMenuById(@PathVariable(name = "food-menu-id",required = true) Long foodMenuId) {
+        return foodMenuService.findFoodMenuById(foodMenuId);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createFoodMenu(@RequestBody FoodMenuDto foodMenuDto) {
-        foodMenuService.save(foodMenuDto);
+        foodMenuService.saveFoodMenu(foodMenuDto);
     }
 
-    @PutMapping("/{id}")
-    public void updateFoodMenu(@PathVariable Long id, @RequestBody FoodMenuDto foodMenuDto) {
-        foodMenuService.update(id, foodMenuDto);
+    @PutMapping("/{food-menu-id}")
+    public void updateFoodMenu(@PathVariable(name = "food-menu-id",required = true) Long foodMenuId, @RequestBody FoodMenuDto foodMenuDto) {
+        foodMenuService.updateFoodMenu(foodMenuId, foodMenuDto);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteFoodMenu(@PathVariable Long id) {
-        foodMenuService.deleteById(id);
+    @DeleteMapping("/{food-menu-id}")
+    public void deleteFoodMenu(@PathVariable(name = "food-menu-id",required = true) Long foodMenuId) {
+        foodMenuService.deleteFoodMenuById(foodMenuId);
     }
 }

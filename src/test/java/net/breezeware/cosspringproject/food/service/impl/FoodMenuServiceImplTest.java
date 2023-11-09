@@ -60,7 +60,7 @@ class FoodMenuServiceImplTest {
     void testViewFoodMenus() {
         List<FoodMenu> mockFoodMenus = List.of(new FoodMenu(), new FoodMenu());
         when(foodMenuRepository.findAll()).thenReturn(mockFoodMenus);
-        List<FoodMenu> foodMenus = foodMenuService.findAll();
+        List<FoodMenu> foodMenus = foodMenuService.findAllFoodMenu();
         Assertions.assertThat(foodMenus).hasSize(mockFoodMenus.size());
         verify(foodMenuRepository).findAll();
     }
@@ -69,7 +69,7 @@ class FoodMenuServiceImplTest {
     void testViewFoodMenuById() {
         FoodMenu mockFoodMenu = FoodMenu.builder().id(1).build();
         when(foodMenuRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockFoodMenu));
-        FoodMenu foodMenu = foodMenuService.findById(1L);
+        FoodMenu foodMenu = foodMenuService.findFoodMenuById(1L);
         Assertions.assertThat(foodMenu).hasFieldOrProperty("type");
         assert mockFoodMenu != null;
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
@@ -78,14 +78,14 @@ class FoodMenuServiceImplTest {
 
     @Test
     void testViewFoodMenuByIdInvalidUserIdThrowCustomException() {
-        CustomException exception = assertThrows(CustomException.class, () -> foodMenuService.findById(-1L));
+        CustomException exception = assertThrows(CustomException.class, () -> foodMenuService.findFoodMenuById(-1L));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
         assertEquals("The Food Menu Id should be Greater than Zero.", exception.getMessage());
     }
 
     @Test
     void testViewFoodMenuByIdInvalidUserThrowCustomException() {
-        CustomException exception = assertThrows(CustomException.class, () -> foodMenuService.findById(2L));
+        CustomException exception = assertThrows(CustomException.class, () -> foodMenuService.findFoodMenuById(2L));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         assertEquals("The Food Menu not Found", exception.getMessage());
     }
@@ -103,12 +103,12 @@ class FoodMenuServiceImplTest {
                 Availability.builder().id(2).day("Tuesday").build());
         FoodMenuDto menuDto = FoodMenuDto.builder().foodItems(mockFoodItems).foodMenu(mockFoodMenu)
                 .availabilityList(mockAvailabilityList).build();
-        when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
-        when(availabilityService.findById(anyLong())).thenReturn(mockAvailability);
-        when(foodMenuFoodItemMapService.save(any())).thenReturn(mockFoodMenuFoodItemMap);
-        when(foodMenuAvailabilityMapService.save(any())).thenReturn(mockFoodMenuAvailabilityMap);
+        when(foodItemService.findFoodItemById(anyLong())).thenReturn(mockFoodItem);
+        when(availabilityService.findAvailabilityById(anyLong())).thenReturn(mockAvailability);
+        when(foodMenuFoodItemMapService.saveFoodMenuFoodItemMap(any())).thenReturn(mockFoodMenuFoodItemMap);
+        when(foodMenuAvailabilityMapService.saveFoodMenuAvailabilityMap(any())).thenReturn(mockFoodMenuAvailabilityMap);
         when(foodMenuRepository.save(any())).thenReturn(mockFoodMenu);
-        FoodMenu foodMenu = foodMenuService.save(menuDto);
+        FoodMenu foodMenu = foodMenuService.saveFoodMenu(menuDto);
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
     }
 
@@ -125,12 +125,12 @@ class FoodMenuServiceImplTest {
                 Availability.builder().id(2).day(Days.TUESDAY.name).build());
         FoodMenuDto menuDto = FoodMenuDto.builder().foodItems(mockFoodItems).foodMenu(mockFoodMenu)
                 .availabilityList(mockAvailabilityList).build();
-        when(foodItemService.findById(anyLong())).thenReturn(mockFoodItem);
-        when(availabilityService.findById(anyLong())).thenReturn(mockAvailability);
-        when(foodMenuFoodItemMapService.save(any())).thenReturn(mockFoodMenuFoodItemMap);
-        when(foodMenuAvailabilityMapService.save(any())).thenReturn(mockFoodMenuAvailabilityMap);
+        when(foodItemService.findFoodItemById(anyLong())).thenReturn(mockFoodItem);
+        when(availabilityService.findAvailabilityById(anyLong())).thenReturn(mockAvailability);
+        when(foodMenuFoodItemMapService.saveFoodMenuFoodItemMap(any())).thenReturn(mockFoodMenuFoodItemMap);
+        when(foodMenuAvailabilityMapService.saveFoodMenuAvailabilityMap(any())).thenReturn(mockFoodMenuAvailabilityMap);
         when(foodMenuRepository.save(any())).thenReturn(mockFoodMenu);
-        FoodMenu foodMenu = foodMenuService.save(menuDto);
+        FoodMenu foodMenu = foodMenuService.saveFoodMenu(menuDto);
         assertEquals(foodMenu.getId(), mockFoodMenu.getId());
     }
 
@@ -139,7 +139,7 @@ class FoodMenuServiceImplTest {
         FoodMenu mockFoodmenu = FoodMenu.builder().id(1).type("Veg").name("Breakfast").build();
         doNothing().when(foodMenuRepository).deleteById(1L);
         when(foodMenuRepository.findById(1L)).thenReturn(Optional.ofNullable(mockFoodmenu));
-        foodMenuService.deleteById(1L);
+        foodMenuService.deleteFoodMenuById(1L);
         Mockito.verify(foodMenuRepository, Mockito.times(1)).deleteById(1L);
     }
 }

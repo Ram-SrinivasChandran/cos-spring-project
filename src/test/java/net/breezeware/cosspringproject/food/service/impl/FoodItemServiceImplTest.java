@@ -42,7 +42,7 @@ class FoodItemServiceImplTest {
     void testFindAllFoodItems() {
         List<FoodItem> mockFoodItems = List.of(new FoodItem(), new FoodItem());
         when(foodItemRepository.findAll()).thenReturn(mockFoodItems);
-        List<FoodItem> foodItems = foodItemService.findAll();
+        List<FoodItem> foodItems = foodItemService.findAllFoodItems();
         Assertions.assertThat(foodItems).hasSize(mockFoodItems.size());
         verify(foodItemRepository).findAll();
     }
@@ -51,7 +51,7 @@ class FoodItemServiceImplTest {
     void testFindFoodItemsById() {
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(20).quantity(10).build();
         when(foodItemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockFoodItem));
-        FoodItem foodItem = foodItemService.findById(1L);
+        FoodItem foodItem = foodItemService.findFoodItemById(1L);
         Assertions.assertThat(foodItem).hasFieldOrProperty("cost");
         assert mockFoodItem != null;
         assertEquals(foodItem.getQuantity(), mockFoodItem.getQuantity());
@@ -60,14 +60,14 @@ class FoodItemServiceImplTest {
 
     @Test
     void testFindFoodItemByIdInvalidUserIdThrowCustomException() {
-        CustomException exception = assertThrows(CustomException.class, () -> foodItemService.findById(-1L));
+        CustomException exception = assertThrows(CustomException.class, () -> foodItemService.findFoodItemById(-1L));
         assertEquals(HttpStatus.BAD_REQUEST, exception.getHttpStatus());
         assertEquals("The Food Item Id should be Greater than Zero.", exception.getMessage());
     }
 
     @Test
     void testFindFoodItemByIdInvalidUserThrowCustomException() {
-        CustomException exception = assertThrows(CustomException.class, () -> foodItemService.findById(2L));
+        CustomException exception = assertThrows(CustomException.class, () -> foodItemService.findFoodItemById(2L));
         assertEquals(HttpStatus.NOT_FOUND, exception.getHttpStatus());
         assertEquals("The Food Item not Found", exception.getMessage());
     }
@@ -76,7 +76,7 @@ class FoodItemServiceImplTest {
     void testSaveFoodItem() {
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(25).quantity(20).build();
         when(foodItemRepository.save(any())).thenReturn(mockFoodItem);
-        FoodItem foodItem = foodItemService.save(mockFoodItem);
+        FoodItem foodItem = foodItemService.saveFoodItem(mockFoodItem);
         assertEquals(mockFoodItem.getQuantity(), foodItem.getQuantity());
         assertEquals(mockFoodItem.getCost(), foodItem.getCost());
         assertEquals(mockFoodItem.getId(), foodItem.getId());
@@ -88,7 +88,7 @@ class FoodItemServiceImplTest {
         when(foodItemRepository.findById(anyLong())).thenReturn(Optional.ofNullable(mockFoodItem));
         when(foodItemRepository.save(any())).thenReturn(mockFoodItem);
         assert mockFoodItem != null;
-        foodItemService.update(1L, mockFoodItem);
+        foodItemService.updateFoodItem(1L, mockFoodItem);
         Mockito.verify(foodItemRepository, Mockito.times(1)).save(any());
     }
 
@@ -96,7 +96,7 @@ class FoodItemServiceImplTest {
     void testDeleteFoodItem() {
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(25).quantity(20).build();
         doNothing().when(foodItemRepository).delete(mockFoodItem);
-        foodItemService.delete(mockFoodItem);
+        foodItemService.deleteFoodItem(mockFoodItem);
         Mockito.verify(foodItemRepository, Mockito.times(1)).delete(mockFoodItem);
     }
 
@@ -105,7 +105,7 @@ class FoodItemServiceImplTest {
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(25).quantity(20).build();
         doNothing().when(foodItemRepository).deleteById(1L);
         when(foodItemRepository.findById(any())).thenReturn(Optional.ofNullable(mockFoodItem));
-        foodItemService.deleteById(1L);
+        foodItemService.deleteFoodItemById(1L);
         Mockito.verify(foodItemRepository, Mockito.times(1)).deleteById(1L);
     }
 }

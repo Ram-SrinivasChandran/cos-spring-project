@@ -4,18 +4,49 @@ import java.util.List;
 
 import net.breezeware.cosspringproject.food.entity.Availability;
 
+/**
+ * The `AvailabilityService` interface defines the contract for managing
+ * availability of food Menus.
+ */
 public interface AvailabilityService {
-    List<Availability> findAll();
 
-    Availability findById(long id);
+    /**
+     * Retrieve a list of all availabilities.
+     * @return A list of all available availabilities.
+     */
+    List<Availability> findAllAvailabilities();
 
-    Availability save(Availability object);
+    /**
+     * Find an availability by its unique identifier.
+     * @param  availabilityId The unique identifier of the availability to find.
+     * @return                The found availability or `null` if not found.
+     */
+    Availability findAvailabilityById(long availabilityId);
 
-    void delete(Availability object);
+    /**
+     * Save an availability.
+     * @param  availability The availability to save.
+     * @return              The saved availability.
+     */
+    Availability saveAvailability(Availability availability);
 
-    void deleteById(long id);
+    /**
+     * Delete an availability.
+     * @param availability The availability to delete.
+     */
+    void deleteAvailability(Availability availability);
 
-    void update(Long id, Availability availability);
+    /**
+     * Delete an availability by its unique identifier.
+     * @param availabilityId The unique identifier of the availability to delete.
+     */
+    void deleteAvailabilityById(long availabilityId);
 
-    Availability findByDay(String day);
+    /**
+     * Find an availability by the day of the week.
+     * @param  day The day of the week to search for.
+     * @return     The found availability for the specified day or `null` if not
+     *             found.
+     */
+    Availability findAvailabilityByDay(String day);
 }

@@ -9,6 +9,11 @@ import net.breezeware.cosspringproject.order.entity.OrderItem;
 public interface OrderItemService {
     OrderItem createOrderItem(OrderItem orderItem);
 
+    /**
+     *
+     * @param order fghjk.
+     * @return
+     */
     List<OrderItem> findByOrder(Order order);
 
     void deleteOrderItemById(long id);

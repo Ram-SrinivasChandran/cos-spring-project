@@ -84,10 +84,10 @@ class OrderServiceImplTest {
                         FoodMenuAvailabilityMap.builder().id(2).foodMenu(mockFoodMenu).build());
         List<FoodMenuFoodItemMap> mockListOfFoodMenuFoodItemMap =
                 List.of(FoodMenuFoodItemMap.builder().id(1).build(), FoodMenuFoodItemMap.builder().id(2).build());
-        when(availabilityService.findByDay(any())).thenReturn(mockAvailability);
+        when(availabilityService.findAvailabilityByDay(any())).thenReturn(mockAvailability);
         when(foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByAvailability(any()))
                 .thenReturn(mockListOfFoodMenuAvailabilityMap);
-        when(foodMenuService.findById(anyLong())).thenReturn(mockFoodMenu);
+        when(foodMenuService.findFoodMenuById(anyLong())).thenReturn(mockFoodMenu);
         when(foodMenuFoodItemMapService.getFoodMenuFoodItemMapByFoodMenu(any()))
                 .thenReturn(mockListOfFoodMenuFoodItemMap);
         when(foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(any()))
@@ -121,7 +121,7 @@ class OrderServiceImplTest {
                 List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
-        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(foodItemService.findFoodItemById(1L)).thenReturn(mockFoodItem);
         OrderViewDto orderViewDto = orderService.viewOrder(1L);
         assertEquals(orderViewDto.getFoodItems().size(), 1);
         assertEquals(orderViewDto.getOrder().getId(), mockOrder.getId());
@@ -142,7 +142,7 @@ class OrderServiceImplTest {
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderItemService.findByOrder(mockOrder)).thenReturn(mockOrderItems);
         mockOrderItems.removeAll(mockNotNeededOrderItem);
-        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(foodItemService.findFoodItemById(1L)).thenReturn(mockFoodItem);
         doReturn(mockOrderItem).when(orderItemService).createOrderItem(any(OrderItem.class));
         when(orderRepository.save(mockOrder)).thenReturn(mockOrder);
         orderService.updateOrder(1, List.of(FoodItemDto.builder().foodItem(mockFoodItem).requiredQuantity(2).build()));
@@ -173,7 +173,7 @@ class OrderServiceImplTest {
                 List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
-        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(foodItemService.findFoodItemById(1L)).thenReturn(mockFoodItem);
         when(orderRepository.save(any())).thenReturn(mockOrder);
         OrderViewDto orderViewDto = orderService.placeOrder(1L, mockPlaceOrderDto);
         assertEquals(orderViewDto.getFoodItems().size(), 1);
@@ -188,11 +188,11 @@ class OrderServiceImplTest {
         List<OrderItem> mockOrderItems =
                 List.of(OrderItem.builder().id(1).foodItem(mockFoodItem).quantity(10).cost(20).build());
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
-        when(foodItemService.findById(1L)).thenReturn(mockFoodItem);
+        when(foodItemService.findFoodItemById(1L)).thenReturn(mockFoodItem);
         when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
         orderService.cancelOrder(1L);
         verify(orderRepository).findById(1L);
-        verify(foodItemService).findById(1L);
+        verify(foodItemService).findFoodItemById(1L);
         verify(orderItemService).findByOrder(any());
     }
 
