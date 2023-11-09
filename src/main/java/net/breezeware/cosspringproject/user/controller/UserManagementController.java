@@ -37,18 +37,18 @@ public class UserManagementController {
         userService.save(user);
     }
 
-    @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) throws CustomException {
-        return userService.findById(id);
+    @GetMapping("/{user-id}")
+    public User getUserById(@PathVariable(name = "user-id",required = true) Long userId) throws CustomException {
+        return userService.findById(userId);
     }
 
-    @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteById(id);
+    @DeleteMapping("/{user-id}")
+    public void deleteUser(@PathVariable(name = "user-id",required = true) Long userId) {
+        userService.deleteById(userId);
     }
 
-    @PutMapping("/{id}")
-    public void updateUser(@PathVariable Long id, @RequestBody User user) {
-        userService.update(id, user);
+    @PutMapping("/{user-id}")
+    public void updateUser(@PathVariable(name = "user-id",required = true) Long userId, @RequestBody User user) {
+        userService.update(userId, user);
     }
 }

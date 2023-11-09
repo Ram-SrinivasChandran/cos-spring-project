@@ -2,12 +2,40 @@ package net.breezeware.cosspringproject.user.service.api;
 
 import net.breezeware.cosspringproject.user.entity.User;
 
+/**
+ * The `UserService` interface extends the `GenericUserService` interface for managing user entities in the system.
+ * It provides additional methods for checking user roles and permissions.
+ */
 public interface UserService extends GenericUserService<User, Long> {
-    boolean isAAdmin(long id);
+    /**
+     * Checks if a user with the specified unique identifier is an admin.
+     *
+     * @param userId The unique identifier of the user to check.
+     * @return `true` if the user is an admin; otherwise, `false`.
+     */
+    boolean isAAdmin(long userId);
 
+    /**
+     * Checks if a user is a customer.
+     *
+     * @param user The user to check.
+     * @return `true` if the user is a customer; otherwise, `false`.
+     */
     boolean isACustomer(User user);
 
-    boolean isACafeteriaStaff(long id);
+    /**
+     * Checks if a user with the specified unique identifier is cafeteria staff.
+     *
+     * @param userId The unique identifier of the user to check.
+     * @return `true` if the user is cafeteria staff; otherwise, `false`.
+     */
+    boolean isACafeteriaStaff(long userId);
 
-    boolean isADeliveryStaff(long id);
+    /**
+     * Checks if a user with the specified unique identifier is delivery staff.
+     *
+     * @param userId The unique identifier of the user to check.
+     * @return `true` if the user is delivery staff; otherwise, `false`.
+     */
+    boolean isADeliveryStaff(long userId);
 }

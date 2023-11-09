@@ -17,6 +17,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a user role in the system.
+ */
 @Data
 @Builder
 @AllArgsConstructor
@@ -29,11 +32,17 @@ public class Role {
     @SequenceGenerator(name = "role_seq_gen", sequenceName = "role_seq", schema = "user_svc", allocationSize = 1)
     private long id;
 
+    /**
+     * The name of the role. It must be a valid and unique value.
+     */
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1, max = 20)
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
+    /**
+     * A brief description of the role.
+     */
     @NotBlank(message = "Please Enter a Valid Description.")
     @Size(min = 1, max = 20)
     @Column(name = "description", length = 20, nullable = false)

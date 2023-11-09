@@ -44,14 +44,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(Long id) throws CustomException {
-        log.info("Entering findById(), id: {}", id);
-        if (id <= 0) {
+    public User findById(Long userId) throws CustomException {
+        log.info("Entering findById(), id: {}", userId);
+        if (userId <= 0) {
             throw new CustomException("User Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
 
         log.info("Leaving findById()");
-        return userRepository.findById(id)
+        return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
 
@@ -82,11 +82,11 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void update(Long id, User updatedUser) {
+    public void update(Long userId, User updatedUser) {
         log.info("Entering update()");
         Set<ConstraintViolation<User>> constraintViolationSet = fieldValidator.validate(updatedUser);
         ValidationException.handlingException(constraintViolationSet);
-        User user = findById(id);
+        User user = findById(userId);
         user.setUserName(updatedUser.getUserName());
         user.setPassword(updatedUser.getPassword());
         user.setName(updatedUser.getName());
@@ -105,14 +105,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(Long userId) {
         log.info("Entering deleteById()");
-        User user = findById(id);
+        User user = findById(userId);
         List<UserRoleMap> userRoles = userRoleMapRepository.findByUser(user);
         userRoles.forEach(userRoleId -> {
             userRoleMapRepository.deleteById(userRoleId.getId());
         });
-        userRepository.deleteById(id);
+        userRepository.deleteById(userId);
         log.info("Leaving deleteById()");
     }
 
@@ -126,32 +126,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isACafeteriaStaff(long id) {
-        log.info("Entering isACafeteriaStaff(), id: {}", id);
-        User checkedUser = findById(id);
+    public boolean isACafeteriaStaff(long userId) {
+        log.info("Entering isACafeteriaStaff(), id: {}", userId);
+        User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.CAFETERIASTAFF.getName());
         log.info("Leaving isACafeteriaStaff()");
         return userCheck;
     }
 
     @Override
-    public boolean isAAdmin(long id) {
-        log.info("Entering isAAdmin(), id: {}", id);
-        User checkedUser = findById(id);
+    public boolean isAAdmin(long userId) {
+        log.info("Entering isAAdmin(), id: {}", userId);
+        User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.ADMIN.getName());
         log.info("Leaving isAAdmin()");
         return userCheck;
     }
 
     @Override
-    public boolean isADeliveryStaff(long id) {
-        log.info("Entering isADeliveryStaff(), id: {}", id);
-        User checkedUser = findById(id);
+    public boolean isADeliveryStaff(long userId) {
+        log.info("Entering isADeliveryStaff(), id: {}", userId);
+        User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.DELIVERYSTAFF.getName());
         log.info("Leaving isADeliveryStaff()");
         return userCheck;
     }
 
+    /**
+     * Checks if a given user has a specific role status.
+     * @param  checkedUser The user to be checked.
+     * @param  status      The role status to be checked.
+     * @return             `true` if the user has the specified role status, `false`
+     *                     otherwise.
+     */
     private boolean checkUser(User checkedUser, String status) {
         boolean userCheck = false;
         List<UserRoleMap> listOfUserRoleMap = userRoleMapRepository.findByUser(checkedUser);
@@ -166,4 +173,5 @@ public class UserServiceImpl implements UserService {
 
         return userCheck;
     }
+
 }

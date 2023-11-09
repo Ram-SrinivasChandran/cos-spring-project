@@ -20,6 +20,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents the mapping of a user to their address details.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -37,35 +40,56 @@ public class UserAddressMap {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+    /**
+     * The door number of the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid Door Number.")
     @Size(min = 1, max = 20)
     @Column(name = "door_number", length = 20, nullable = false)
     private String doorNumber;
 
+    /**
+     * The street name of the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid Street Name.")
     @Size(min = 1, max = 20)
     @Column(name = "street_name", length = 20, nullable = false)
     private String streetName;
 
+    /**
+     * The city of the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid City.")
     @Size(min = 1, max = 20)
     @Column(name = "city", length = 20, nullable = false)
     private String city;
 
+    /**
+     * The district of the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid District.")
     @Size(min = 1, max = 20)
     @Column(name = "district", length = 20, nullable = false)
     private String district;
 
+    /**
+     * The state of the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid State.")
     @Size(min = 1, max = 20)
     @Column(name = "state", length = 20, nullable = false)
     private String state;
 
+    /**
+     * The PIN code of the user's address. Must be a valid value.
+     */
     @NotNull(message = "Please Enter a Valid PinCode.")
     @Column(name = "pincode", nullable = false)
     private long pincode;
 
+    /**
+     * The landmark associated with the user's address. Must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid Landmark.")
     @Size(min = 1, max = 20)
     @Column(name = "landmark", length = 20, nullable = false)

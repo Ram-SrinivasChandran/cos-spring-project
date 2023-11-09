@@ -19,6 +19,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+/**
+ * Represents a user in the system.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,16 +34,25 @@ public class User {
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", schema = "user_svc", allocationSize = 1)
     private long id;
 
+    /**
+     * The name of the user. It must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1, max = 20)
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
+    /**
+     * The user's username. It must be a valid, unique value.
+     */
     @NotBlank(message = "Please Enter a Valid UserName.")
     @Size(min = 1, max = 20)
     @Column(name = "user_name", unique = true, length = 20, nullable = false)
     private String userName;
 
+    /**
+     * The user's password. It must be a valid value.
+     */
     @NotBlank(message = "Please Enter a Valid Password.")
     @Size(min = 1, max = 20)
     @Column(name = "password", length = 20, nullable = false)
@@ -54,5 +66,4 @@ public class User {
 
     @Transient
     private long roleId;
-
 }

@@ -21,38 +21,48 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
 
     @Override
     public List<UserAddressMap> findAll() {
-        return userAddressMapRepository.findAll();
+        log.info("Entering findAll()");
+        List<UserAddressMap> userAddressMaps = userAddressMapRepository.findAll();
+        log.info("Leaving findAll()");
+        return userAddressMaps;
     }
 
     @Override
-    public UserAddressMap findById(Long id) {
-        log.info("Entering findById(), id: {}", id);
-        if (id <= 0) {
+    public UserAddressMap findById(Long userAddressMapId) {
+        log.info("Entering findById(), id: {}", userAddressMapId);
+        if (userAddressMapId <= 0) {
             throw new CustomException("Address Id Must be Greater Than Zero.", HttpStatus.BAD_REQUEST);
         }
 
-        log.info("Leaving findById()");
-        return userAddressMapRepository.findById(id)
+        UserAddressMap userAddress = userAddressMapRepository.findById(userAddressMapId)
                 .orElseThrow(() -> new CustomException("The Address not Found", HttpStatus.NOT_FOUND));
+        log.info("Leaving findById()");
+        return userAddress;
     }
 
     @Override
     public UserAddressMap save(UserAddressMap userAddressMap) {
-        return userAddressMapRepository.save(userAddressMap);
+        log.info("Entering save()");
+        UserAddressMap savedUserAddressMap = userAddressMapRepository.save(userAddressMap);
+        log.info("Leaving save()");
+        return savedUserAddressMap;
     }
 
     @Override
-    public void update(Long id, UserAddressMap userAddressMap) {
-
+    public void update(Long userAddressMapId, UserAddressMap userAddressMap) {
     }
 
     @Override
     public void delete(UserAddressMap userAddressMap) {
+        log.info("Entering delete()");
         userAddressMapRepository.delete(userAddressMap);
+        log.info("Leaving delete()");
     }
 
     @Override
-    public void deleteById(Long id) {
-        userAddressMapRepository.deleteById(id);
+    public void deleteById(Long userAddressMapId) {
+        log.info("Entering deleteById()");
+        userAddressMapRepository.deleteById(userAddressMapId);
+        log.info("Leaving deleteById()");
     }
 }
