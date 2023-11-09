@@ -68,8 +68,8 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public List<FoodMenuDto> viewFoodMenus() {
-        log.info("Entering viewFoodMenus()");
+    public List<FoodMenuDto> retrieveAvailableFoodMenusForToday() {
+        log.info("Entering retrieveAvailableFoodMenusForToday()");
         Instant currentInstant = Instant.now();
         ZoneId zoneId = ZoneId.of("UTC");
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(currentInstant, zoneId);
@@ -102,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
             foodMenuDtos.add(foodMenuDto);
         }
 
-        log.info("Leaving viewFoodMenus()");
+        log.info("Leaving retrieveAvailableFoodMenusForToday()");
         return foodMenuDtos;
     }
 
@@ -299,9 +299,8 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Validates a phone number for a specific format.
-     *
-     * @param phoneNumber The phone number to validate.
-     * @return `true` if the phone number is valid, `false` otherwise.
+     * @param  phoneNumber The phone number to validate.
+     * @return             `true` if the phone number is valid, `false` otherwise.
      */
     private boolean validatePhoneNumber(String phoneNumber) {
         log.info("Entering validatePhoneNumber()");
@@ -318,9 +317,8 @@ public class OrderServiceImpl implements OrderService {
 
     /**
      * Validates an email address for a specific format.
-     *
-     * @param email The email address to validate.
-     * @return `true` if the email address is valid, `false` otherwise.
+     * @param  email The email address to validate.
+     * @return       `true` if the email address is valid, `false` otherwise.
      */
     private boolean validateEmail(String email) {
         log.info("Entering validateEmail()");
@@ -330,7 +328,6 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving validateEmail()");
         return matches;
     }
-
 
     /**
      * {@inheritDoc}
@@ -388,12 +385,12 @@ public class OrderServiceImpl implements OrderService {
         return viewOrder(savedOrder.getId());
     }
 
-
     /**
-     * Retrieves a list of orders with a specific status and returns them as a list of OrderViewDto objects.
-     *
-     * @param status The status of the orders to retrieve.
-     * @return A list of OrderViewDto objects representing the orders with the specified status.
+     * Retrieves a list of orders with a specific status and returns them as a list
+     * of OrderViewDto objects.
+     * @param  status The status of the orders to retrieve.
+     * @return        A list of OrderViewDto objects representing the orders with
+     *                the specified status.
      */
     private List<OrderViewDto> viewOrderListByStatus(String status) {
         log.info("Entering viewOrderListByStatus()");
@@ -403,10 +400,10 @@ public class OrderServiceImpl implements OrderService {
             OrderViewDto activeOrder = viewOrder(order.getId());
             orderList.add(activeOrder);
         }
+
         log.info("Leaving viewOrderListByStatus()");
         return orderList;
     }
-
 
     /**
      * {@inheritDoc}
@@ -418,26 +415,23 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
-        changeStatus(orderId, Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
+        changeOrderStatus(orderId, Status.ORDER_PREPARED_WAITING_FOR_DELIVERY.name());
         log.info("Leaving changeStatusToWaitingForDelivery()");
     }
 
-
     /**
      * Changes the status of an order identified by the given order ID.
-     *
      * @param orderId The unique identifier of the order to update.
-     * @param status The new status to set for the order.
+     * @param status  The new status to set for the order.
      */
-    private void changeStatus(long orderId, String status) {
-        log.info("Entering changeStatus()");
+    private void changeOrderStatus(long orderId, String status) {
+        log.info("Entering changeOrderStatus()");
         Order order = findOrderById(orderId);
         order.setStatus(status);
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
-        log.info("Leaving changeStatus()");
+        log.info("Leaving changeOrderStatus()");
     }
-
 
     /**
      * {@inheritDoc}
@@ -449,7 +443,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
-        changeStatus(orderId, Status.PENDING_DELIVERY.name());
+        changeOrderStatus(orderId, Status.PENDING_DELIVERY.name());
         log.info("Leaving changeStatusToPendingDelivery()");
     }
 
@@ -463,7 +457,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
-        changeStatus(orderId, Status.ORDER_DELIVERED.name());
+        changeOrderStatus(orderId, Status.ORDER_DELIVERED.name());
         log.info("Leaving changeStatusToOrderDelivered()");
     }
 
@@ -497,13 +491,12 @@ public class OrderServiceImpl implements OrderService {
         return viewOrder(order.getId());
     }
 
-
     /**
-     * Retrieves an order with the specified status, identified by its unique order ID.
-     *
-     * @param orderId The unique identifier of the order to retrieve.
-     * @param status The desired status to check for.
-     * @return The order if it has the specified status.
+     * Retrieves an order with the specified status, identified by its unique order
+     * ID.
+     * @param  orderId         The unique identifier of the order to retrieve.
+     * @param  status          The desired status to check for.
+     * @return                 The order if it has the specified status.
      * @throws CustomException if no order with the given status is found.
      */
     private Order viewOrderByStatus(long orderId, String status) {
@@ -513,9 +506,9 @@ public class OrderServiceImpl implements OrderService {
             log.info("Entering viewOrderByStatus()");
             return order;
         }
+
         throw new CustomException("The Order is Not with the Status of " + status, HttpStatus.NOT_FOUND);
     }
-
 
     /**
      * {@inheritDoc}

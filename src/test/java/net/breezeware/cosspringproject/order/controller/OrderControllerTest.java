@@ -43,7 +43,7 @@ class OrderControllerTest {
 
     @Test
     void testViewFoodMenus() throws Exception {
-        Mockito.when(orderService.viewFoodMenus()).thenReturn(List.of(new FoodMenuDto(), new FoodMenuDto()));
+        Mockito.when(orderService.retrieveAvailableFoodMenusForToday()).thenReturn(List.of(new FoodMenuDto(), new FoodMenuDto()));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/foodMenus"))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$", hasSize(2)));
     }

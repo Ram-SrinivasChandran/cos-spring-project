@@ -49,7 +49,8 @@ class FoodItemControllerTest {
         FoodItem mockfoodItem = FoodItem.builder().id(1).cost(20).quantity(10).build();
         Mockito.when(foodItemService.findFoodItemById(anyLong())).thenReturn(mockfoodItem);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/foodItems/{id}", 1))
-                .andExpectAll(jsonPath("$.id").value(1), jsonPath("$.cost").value(20), jsonPath("$.quantity").value(10))
+                .andExpectAll(jsonPath("$.id").value(1), jsonPath("$.cost")
+                        .value(20), jsonPath("$.quantity").value(10))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

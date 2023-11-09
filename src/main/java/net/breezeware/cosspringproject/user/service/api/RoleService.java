@@ -7,5 +7,4 @@ import net.breezeware.cosspringproject.user.entity.Role;
  * It provides methods for handling user role entities.
  */
 public interface RoleService extends GenericUserService<Role, Long> {
-    // This interface does not define any additional methods beyond those provided by GenericUserService.
 }

@@ -2,7 +2,6 @@ package net.breezeware.cosspringproject.user.controller;
 
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,13 +17,17 @@ import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.entity.User;
 import net.breezeware.cosspringproject.user.service.api.UserService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserManagementController {
+
     private final UserService userService;
+
     @GetMapping
-    public List<User> getUserList() {
+    public List<User> retrieveUsers() {
         return userService.findAll();
     }
 
@@ -35,17 +38,17 @@ public class UserManagementController {
     }
 
     @GetMapping("/{user-id}")
-    public User getUserById(@PathVariable(name = "user-id",required = true) Long userId) throws CustomException {
+    public User retrieveUser(@PathVariable(name = "user-id", required = true) Long userId) throws CustomException {
         return userService.findById(userId);
     }
 
     @DeleteMapping("/{user-id}")
-    public void deleteUser(@PathVariable(name = "user-id",required = true) Long userId) {
+    public void deleteUser(@PathVariable(name = "user-id", required = true) Long userId) {
         userService.deleteById(userId);
     }
 
     @PutMapping("/{user-id}")
-    public void updateUser(@PathVariable(name = "user-id",required = true) Long userId, @RequestBody User user) {
+    public void updateUser(@PathVariable(name = "user-id", required = true) Long userId, @RequestBody User user) {
         userService.update(userId, user);
     }
 }

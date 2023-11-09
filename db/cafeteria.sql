@@ -62,7 +62,7 @@ CREATE SEQUENCE food_svc.food_item_seq
   CACHE 1;
 CREATE TABLE food_svc.food_item(
         "id" int8 NOT NULL default NEXTVAL('food_svc.food_item_seq'),
-        "name"  VARCHAR(20) NOT NULL,
+        "name"  VARCHAR(20) NOT NULL UNIQUE,
         "cost"  DOUBLE PRECISION NOT NULL,
         "quantity" INT NOT NULL,
         "created_on" TIMESTAMPTZ,

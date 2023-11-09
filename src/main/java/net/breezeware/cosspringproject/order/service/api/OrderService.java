@@ -16,10 +16,11 @@ import net.breezeware.cosspringproject.user.entity.UserAddressMap;
 public interface OrderService {
 
     /**
-     * View the list of available food menus.
-     * @return A list of food menus.
+     * Retrieves the available food menus for the current day.
+     * @return List of FoodMenuDto containing available food menus, their items, and
+     *         availabilities.
      */
-    List<FoodMenuDto> viewFoodMenus();
+    List<FoodMenuDto> retrieveAvailableFoodMenusForToday();
 
     /**
      * Create a new order based on the provided order details.

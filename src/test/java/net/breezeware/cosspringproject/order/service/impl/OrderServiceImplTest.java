@@ -92,7 +92,7 @@ class OrderServiceImplTest {
                 .thenReturn(mockListOfFoodMenuFoodItemMap);
         when(foodMenuAvailabilityMapService.getFoodMenuAvailabilityMapByFoodMenu(any()))
                 .thenReturn(mockListOfFoodMenuAvailabilityMap);
-        List<FoodMenuDto> foodMenuDtos = orderService.viewFoodMenus();
+        List<FoodMenuDto> foodMenuDtos = orderService.retrieveAvailableFoodMenusForToday();
         Assertions.assertThat(foodMenuDtos).hasSize(2);
     }
 

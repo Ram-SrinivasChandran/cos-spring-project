@@ -47,6 +47,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void update(Long roleId, Role object) {
+
     }
 
     @Override

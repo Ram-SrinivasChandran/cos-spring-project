@@ -7,5 +7,4 @@ import net.breezeware.cosspringproject.user.entity.UserAddressMap;
  * It provides methods for handling user address mapping entities.
  */
 public interface UserAddressMapService extends GenericUserService<UserAddressMap, Long> {
-    // This interface does not define any additional methods beyond those provided by GenericUserService.
 }
