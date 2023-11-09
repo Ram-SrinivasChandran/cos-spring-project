@@ -64,6 +64,9 @@ public class OrderServiceImpl implements OrderService {
     private final UserAddressMapService userAddressMapService;
     private final Validator fieldValidator;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<FoodMenuDto> viewFoodMenus() {
         log.info("Entering viewFoodMenus()");
@@ -103,19 +106,25 @@ public class OrderServiceImpl implements OrderService {
         return foodMenuDtos;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Order findById(long id) {
+    public Order findById(long orderId) {
         log.info("Entering findById()");
-        if (id <= 0) {
+        if (orderId <= 0) {
             throw new CustomException("The Order Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
 
-        Order order = orderRepository.findById(id)
+        Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException("The Order Id is not available", HttpStatus.NOT_FOUND));
         log.info("Leaving findById()");
         return order;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public Order createOrder(OrderDto orderDto) {
@@ -145,12 +154,15 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(savedOrder);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
-    public OrderViewDto viewOrder(long id) {
+    public OrderViewDto viewOrder(long orderId) {
         log.info("Entering viewOrder()");
         OrderViewDto orderViewDto = new OrderViewDto();
-        Order order = findById(id);
+        Order order = findById(orderId);
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         List<FoodItem> foodItems = new ArrayList<>();
         for (var orderItem : orderItems) {
@@ -166,11 +178,14 @@ public class OrderServiceImpl implements OrderService {
         return orderViewDto;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
-    public void updateOrder(long id, List<FoodItemDto> foodItemDtos) {
+    public void updateOrder(long orderId, List<FoodItemDto> foodItemDtos) {
         log.info("Entering updateOrder()");
-        Order order = findById(id);
+        Order order = findById(orderId);
         foodItemDtos.forEach(foodItemDto -> {
             FoodItem foodItem = foodItemDto.getFoodItem();
             Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
@@ -225,6 +240,9 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving updateOrder()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserAddressMap createAddress(UserAddressMap userAddressMap) {
         log.info("Entering createAddress()");
@@ -243,10 +261,13 @@ public class OrderServiceImpl implements OrderService {
         return savedAddress;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public OrderViewDto placeOrder(long id, PlaceOrderDto placeOrderDto) {
+    public OrderViewDto placeOrder(long orderId, PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
-        Order order = findById(id);
+        Order order = findById(orderId);
         if (!validateEmail(placeOrderDto.getEmail())) {
             throw new CustomException("Enter a valid Email Address", HttpStatus.BAD_REQUEST);
         }
@@ -276,6 +297,12 @@ public class OrderServiceImpl implements OrderService {
         return viewOrder(savedOrder.getId());
     }
 
+    /**
+     * Validates a phone number for a specific format.
+     *
+     * @param phoneNumber The phone number to validate.
+     * @return `true` if the phone number is valid, `false` otherwise.
+     */
     private boolean validatePhoneNumber(String phoneNumber) {
         log.info("Entering validatePhoneNumber()");
         if (phoneNumber.length() != 10) {
@@ -289,6 +316,12 @@ public class OrderServiceImpl implements OrderService {
         return matches;
     }
 
+    /**
+     * Validates an email address for a specific format.
+     *
+     * @param email The email address to validate.
+     * @return `true` if the email address is valid, `false` otherwise.
+     */
     private boolean validateEmail(String email) {
         log.info("Entering validateEmail()");
         String emailRegex = "^[A-Za-z0-9+_.-]+@([A-Za-z0-9.-]+\\.[A-Za-z]{2,})$";
@@ -298,10 +331,14 @@ public class OrderServiceImpl implements OrderService {
         return matches;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void cancelOrder(long id) {
+    public void cancelOrder(long orderId) {
         log.info("Entering cancelOrder()");
-        Order order = findById(id);
+        Order order = findById(orderId);
         order.setStatus(Status.ORDER_CANCELLED.name());
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         for (var orderItem : orderItems) {
@@ -316,10 +353,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving cancelOrder()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<OrderViewDto> viewActiveOrders(long id) {
+    public List<OrderViewDto> viewActiveOrders(long orderId) {
         log.info("Entering viewActiveOrders()");
-        if (!userService.isACafeteriaStaff(id)) {
+        if (!userService.isACafeteriaStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -330,6 +370,9 @@ public class OrderServiceImpl implements OrderService {
         return sortedActiveOrders;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrderViewDto viewReceivedOrder(long userId, long orderId) {
         log.info("Entering viewReceivedOrder()");
@@ -345,6 +388,13 @@ public class OrderServiceImpl implements OrderService {
         return viewOrder(savedOrder.getId());
     }
 
+
+    /**
+     * Retrieves a list of orders with a specific status and returns them as a list of OrderViewDto objects.
+     *
+     * @param status The status of the orders to retrieve.
+     * @return A list of OrderViewDto objects representing the orders with the specified status.
+     */
     private List<OrderViewDto> viewOrderListByStatus(String status) {
         List<OrderViewDto> orderList = new ArrayList<>();
         List<Order> orders = orderRepository.getOrderByStatus(status);
@@ -356,6 +406,10 @@ public class OrderServiceImpl implements OrderService {
         return orderList;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changeStatusToWaitingForDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToWaitingForDelivery()");
@@ -367,6 +421,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving changeStatusToWaitingForDelivery()");
     }
 
+
+    /**
+     * Changes the status of an order identified by the given order ID.
+     *
+     * @param orderId The unique identifier of the order to update.
+     * @param status The new status to set for the order.
+     */
     private void changeStatus(long orderId, String status) {
         Order order = findById(orderId);
         order.setStatus(status);
@@ -374,6 +435,10 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changeStatusToPendingDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToPendingDelivery()");
@@ -385,6 +450,9 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving changeStatusToPendingDelivery()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void changeStatusToOrderDelivered(long userId, long orderId) {
         log.info("Entering changeStatusToOrderDelivered()");
@@ -396,10 +464,13 @@ public class OrderServiceImpl implements OrderService {
         log.info("Leaving changeStatusToOrderDelivered()");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<OrderViewDto> viewCancelledOrders(long id) {
+    public List<OrderViewDto> viewCancelledOrders(long orderId) {
         log.info("Entering viewCancelledOrders()");
-        if (!userService.isADeliveryStaff(id)) {
+        if (!userService.isADeliveryStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -408,6 +479,9 @@ public class OrderServiceImpl implements OrderService {
         return cancelledOrders;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrderViewDto viewCancelledOrder(long userId, long orderId) {
         log.info("Entering viewCancelledOrders()");
@@ -420,6 +494,15 @@ public class OrderServiceImpl implements OrderService {
         return viewOrder(order.getId());
     }
 
+
+    /**
+     * Retrieves an order with the specified status, identified by its unique order ID.
+     *
+     * @param orderId The unique identifier of the order to retrieve.
+     * @param status The desired status to check for.
+     * @return The order if it has the specified status.
+     * @throws CustomException if no order with the given status is found.
+     */
     private Order viewOrderByStatus(long orderId, String status) {
         Order order = findById(orderId);
         if (order.getStatus().equals(status)) {
@@ -429,10 +512,14 @@ public class OrderServiceImpl implements OrderService {
         throw new CustomException("The Order is Not with the Status of " + status, HttpStatus.NOT_FOUND);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<OrderViewDto> viewCompletedOrders(long id) {
+    public List<OrderViewDto> viewCompletedOrders(long orderId) {
         log.info("Entering viewCompletedOrders()");
-        if (!userService.isADeliveryStaff(id)) {
+        if (!userService.isADeliveryStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -441,6 +528,9 @@ public class OrderServiceImpl implements OrderService {
         return completedOrders;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrderViewDto viewCompletedOrder(long userId, long orderId) {
         log.info("Entering viewCompletedOrder()");

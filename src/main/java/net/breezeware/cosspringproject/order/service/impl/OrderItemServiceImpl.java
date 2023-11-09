@@ -25,6 +25,9 @@ public class OrderItemServiceImpl implements OrderItemService {
     private final OrderItemRepository orderItemRepository;
     private final FoodItemService foodItemService;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public OrderItem createOrderItem(OrderItem orderItem) {
         return orderItemRepository.save(orderItem);
@@ -42,11 +45,17 @@ public class OrderItemServiceImpl implements OrderItemService {
         return orderItems;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void deleteOrderItemById(long id) {
-        orderItemRepository.deleteById(id);
+    public void deleteOrderItemById(long orderId) {
+        orderItemRepository.deleteById(orderId);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public double addOrderItems(Order order, List<FoodItemDto> foodItemDtos) {
         double totalCostOfTheOrder = 0;

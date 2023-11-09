@@ -44,14 +44,14 @@ public class OrderController {
         return orderService.createOrder(orderDto);
     }
 
-    @GetMapping("/{id}")
-    OrderViewDto viewOrder(@PathVariable long id) {
-        return orderService.viewOrder(id);
+    @GetMapping("/{order-id}")
+    OrderViewDto viewOrder(@PathVariable(name = "order-id",required = true) long orderId) {
+        return orderService.viewOrder(orderId);
     }
 
-    @PutMapping("/{id}")
-    void updateOrder(@PathVariable long id, @RequestBody List<FoodItemDto> foodItemDtos) {
-        orderService.updateOrder(id, foodItemDtos);
+    @PutMapping("/{order-id}")
+    void updateOrder(@PathVariable(name = "order-id",required = true) long orderId, @RequestBody List<FoodItemDto> foodItemDtos) {
+        orderService.updateOrder(orderId, foodItemDtos);
     }
 
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,15 +60,15 @@ public class OrderController {
         return orderService.createAddress(userAddressMap);
     }
 
-    @PutMapping("/placeOrder/{id}")
-    OrderViewDto placeOrder(@PathVariable("id") long id, @RequestBody PlaceOrderDto placeOrderDto) {
+    @PutMapping("/placeOrder/{order-id}")
+    OrderViewDto placeOrder(@PathVariable(name = "order-id",required = true) long orderId, @RequestBody PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
-        return orderService.placeOrder(id, placeOrderDto);
+        return orderService.placeOrder(orderId, placeOrderDto);
     }
 
-    @PutMapping("/cancelOrder/{id}")
-    void cancelOrder(@PathVariable long id) {
-        orderService.cancelOrder(id);
+    @PutMapping("/cancelOrder/{order-id}")
+    void cancelOrder(@PathVariable(name = "order-id",required = true) long orderId) {
+        orderService.cancelOrder(orderId);
     }
 
     @GetMapping("/activeOrders")
@@ -76,26 +76,26 @@ public class OrderController {
         return orderService.viewActiveOrders(id);
     }
 
-    @GetMapping("/receivedOrder/{id}")
-    OrderViewDto receivedOrder(@RequestParam(value = "user-id") long userId, @PathVariable("id") long orderId) {
+    @GetMapping("/receivedOrder/{order-id}")
+    OrderViewDto receivedOrder(@RequestParam(value = "user-id") long userId, @PathVariable(name = "order-id",required = true) long orderId) {
         return orderService.viewReceivedOrder(userId, orderId);
     }
 
-    @PutMapping("/orderPrepared/{id}")
+    @PutMapping("/orderPrepared/{order-id}")
     void changeOrderStatusToOrderPrepared(@RequestParam(value = "user-id") long userId,
-            @PathVariable("id") long orderId) {
+            @PathVariable(name = "order-id",required = true) long orderId) {
         orderService.changeStatusToWaitingForDelivery(userId, orderId);
     }
 
-    @PutMapping("/pendingDelivery/{id}")
+    @PutMapping("/pendingDelivery/{order-id}")
     void changeOrderStatusToDeliveryPending(@RequestParam(value = "user-id") long userId,
-            @PathVariable("id") long orderId) {
+            @PathVariable(name = "order-id",required = true) long orderId) {
         orderService.changeStatusToPendingDelivery(userId, orderId);
     }
 
-    @PutMapping("/orderDelivered/{id}")
+    @PutMapping("/orderDelivered/{order-id}")
     void changeOrderStatusToOrderDelivered(@RequestParam(value = "user-id") long userId,
-            @PathVariable("id") long orderId) {
+            @PathVariable(name = "order-id",required = true) long orderId) {
         orderService.changeStatusToOrderDelivered(userId, orderId);
     }
 
@@ -104,8 +104,8 @@ public class OrderController {
         return orderService.viewCancelledOrders(id);
     }
 
-    @GetMapping("/cancelledOrder/{id}")
-    OrderViewDto cancelledOrder(@RequestParam(value = "user-id") long userId, @PathVariable("id") long orderId) {
+    @GetMapping("/cancelledOrder/{order-id}")
+    OrderViewDto cancelledOrder(@RequestParam(value = "user-id") long userId, @PathVariable(name = "order-id",required = true) long orderId) {
         return orderService.viewCancelledOrder(userId, orderId);
     }
 
@@ -114,8 +114,8 @@ public class OrderController {
         return orderService.viewCompletedOrders(id);
     }
 
-    @GetMapping("/completedOrder/{id}")
-    OrderViewDto completedOrder(@RequestParam(value = "user-id") long userId, @PathVariable("id") long orderId) {
+    @GetMapping("/completedOrder/{order-id}")
+    OrderViewDto completedOrder(@RequestParam(value = "user-id") long userId, @PathVariable(name = "order-id",required = true) long orderId) {
         return orderService.viewCompletedOrder(userId, orderId);
     }
 }

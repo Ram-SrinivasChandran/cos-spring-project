@@ -10,11 +10,22 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Data Transfer Object (DTO) representing an order view with associated food
+ * items.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class OrderViewDto {
+    /**
+     * The order associated with this order view.
+     */
     private Order order;
+
+    /**
+     * The list of food items associated with the order view.
+     */
     private List<FoodItem> foodItems;
 }
