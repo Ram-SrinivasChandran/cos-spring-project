@@ -2,6 +2,7 @@ package net.breezeware.cosspringproject.user.controller;
 
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,9 @@ import net.breezeware.cosspringproject.user.service.api.UserService;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
 public class UserManagementController {
     private final UserService userService;
-
-    public UserManagementController(UserService userService) {
-        this.userService = userService;
-    }
-
     @GetMapping
     public List<User> getUserList() {
         return userService.findAll();

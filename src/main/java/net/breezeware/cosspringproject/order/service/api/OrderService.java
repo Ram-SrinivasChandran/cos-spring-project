@@ -40,7 +40,7 @@ public interface OrderService {
      * @param  orderId The unique identifier of the order to find.
      * @return         The found order, or null if not found.
      */
-    Order findById(long orderId);
+    Order findOrderById(long orderId);
 
     /**
      * Update the food items in an existing order and recalculate the total cost.

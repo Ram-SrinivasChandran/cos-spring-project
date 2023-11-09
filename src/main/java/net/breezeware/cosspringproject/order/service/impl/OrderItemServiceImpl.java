@@ -30,8 +30,10 @@ public class OrderItemServiceImpl implements OrderItemService {
      */
     @Override
     public OrderItem createOrderItem(OrderItem orderItem) {
-        return orderItemRepository.save(orderItem);
-
+        log.info("Entering createOrderItem()");
+        OrderItem savedOrder = orderItemRepository.save(orderItem);
+        log.info("Leaving createOrderItem()");
+        return savedOrder;
     }
 
     /**
@@ -50,7 +52,9 @@ public class OrderItemServiceImpl implements OrderItemService {
      */
     @Override
     public void deleteOrderItemById(long orderId) {
+        log.info("Entering deleteOrderItemById()");
         orderItemRepository.deleteById(orderId);
+        log.info("Leaving deleteOrderItemById()");
     }
 
     /**
@@ -58,6 +62,7 @@ public class OrderItemServiceImpl implements OrderItemService {
      */
     @Override
     public double addOrderItems(Order order, List<FoodItemDto> foodItemDtos) {
+        log.info("Entering addOrderItems()");
         double totalCostOfTheOrder = 0;
         for (var foodItemDto : foodItemDtos) {
             FoodItem foodItem = foodItemDto.getFoodItem();
@@ -77,7 +82,7 @@ public class OrderItemServiceImpl implements OrderItemService {
             }
 
         }
-
+        log.info("Leaving addOrderItems()");
         return totalCostOfTheOrder;
     }
 }

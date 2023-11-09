@@ -110,15 +110,15 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public Order findById(long orderId) {
-        log.info("Entering findById()");
+    public Order findOrderById(long orderId) {
+        log.info("Entering findOrderById()");
         if (orderId <= 0) {
             throw new CustomException("The Order Id should be Greater than Zero.", HttpStatus.BAD_REQUEST);
         }
 
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(() -> new CustomException("The Order Id is not available", HttpStatus.NOT_FOUND));
-        log.info("Leaving findById()");
+        log.info("Leaving findOrderById()");
         return order;
     }
 
@@ -162,7 +162,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderViewDto viewOrder(long orderId) {
         log.info("Entering viewOrder()");
         OrderViewDto orderViewDto = new OrderViewDto();
-        Order order = findById(orderId);
+        Order order = findOrderById(orderId);
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         List<FoodItem> foodItems = new ArrayList<>();
         for (var orderItem : orderItems) {
@@ -185,7 +185,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrder(long orderId, List<FoodItemDto> foodItemDtos) {
         log.info("Entering updateOrder()");
-        Order order = findById(orderId);
+        Order order = findOrderById(orderId);
         foodItemDtos.forEach(foodItemDto -> {
             FoodItem foodItem = foodItemDto.getFoodItem();
             Set<ConstraintViolation<FoodItem>> constraintViolationSet = fieldValidator.validate(foodItem);
@@ -267,7 +267,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto placeOrder(long orderId, PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
-        Order order = findById(orderId);
+        Order order = findOrderById(orderId);
         if (!validateEmail(placeOrderDto.getEmail())) {
             throw new CustomException("Enter a valid Email Address", HttpStatus.BAD_REQUEST);
         }
@@ -338,7 +338,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void cancelOrder(long orderId) {
         log.info("Entering cancelOrder()");
-        Order order = findById(orderId);
+        Order order = findOrderById(orderId);
         order.setStatus(Status.ORDER_CANCELLED.name());
         List<OrderItem> orderItems = orderItemService.findByOrder(order);
         for (var orderItem : orderItems) {
@@ -380,7 +380,7 @@ public class OrderServiceImpl implements OrderService {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
-        Order order = findById(orderId);
+        Order order = findOrderById(orderId);
         order.setStatus(Status.RECEIVED_ORDER.name());
         order.setModifiedOn(Instant.now());
         Order savedOrder = orderRepository.save(order);
@@ -396,13 +396,14 @@ public class OrderServiceImpl implements OrderService {
      * @return A list of OrderViewDto objects representing the orders with the specified status.
      */
     private List<OrderViewDto> viewOrderListByStatus(String status) {
+        log.info("Entering viewOrderListByStatus()");
         List<OrderViewDto> orderList = new ArrayList<>();
         List<Order> orders = orderRepository.getOrderByStatus(status);
         for (var order : orders) {
             OrderViewDto activeOrder = viewOrder(order.getId());
             orderList.add(activeOrder);
         }
-
+        log.info("Leaving viewOrderListByStatus()");
         return orderList;
     }
 
@@ -429,10 +430,12 @@ public class OrderServiceImpl implements OrderService {
      * @param status The new status to set for the order.
      */
     private void changeStatus(long orderId, String status) {
-        Order order = findById(orderId);
+        log.info("Entering changeStatus()");
+        Order order = findOrderById(orderId);
         order.setStatus(status);
         order.setModifiedOn(Instant.now());
         orderRepository.save(order);
+        log.info("Leaving changeStatus()");
     }
 
 
@@ -504,11 +507,12 @@ public class OrderServiceImpl implements OrderService {
      * @throws CustomException if no order with the given status is found.
      */
     private Order viewOrderByStatus(long orderId, String status) {
-        Order order = findById(orderId);
+        log.info("Entering viewOrderByStatus()");
+        Order order = findOrderById(orderId);
         if (order.getStatus().equals(status)) {
+            log.info("Entering viewOrderByStatus()");
             return order;
         }
-
         throw new CustomException("The Order is Not with the Status of " + status, HttpStatus.NOT_FOUND);
     }
 
