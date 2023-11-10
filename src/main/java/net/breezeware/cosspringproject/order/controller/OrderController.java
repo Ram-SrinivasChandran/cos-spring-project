@@ -35,92 +35,134 @@ public class OrderController {
 
     @GetMapping("/foodMenus")
     List<FoodMenuDto> retrieveAvailableFoodMenusForToday() {
-        return orderService.retrieveAvailableFoodMenusForToday();
+        log.info("Entering retrieveAvailableFoodMenusForToday()");
+        List<FoodMenuDto> foodMenus = orderService.retrieveAvailableFoodMenusForToday();
+        log.info("Leaving retrieveAvailableFoodMenusForToday()");
+        return foodMenus;
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     Order createOrder(@RequestBody OrderDto orderDto) {
-        return orderService.createOrder(orderDto);
+        log.info("Entering createOrder()");
+        Order order = orderService.createOrder(orderDto);
+        log.info("Leaving createOrder()");
+        return order;
     }
 
     @GetMapping("/{order-id}")
     OrderViewDto viewOrder(@PathVariable(name = "order-id", required = true) long orderId) {
-        return orderService.viewOrder(orderId);
+        log.info("Entering viewOrder()");
+        OrderViewDto orderView = orderService.viewOrder(orderId);
+        log.info("Leaving viewOrder()");
+        return orderView;
     }
 
     @PutMapping("/{order-id}")
     void updateOrder(@PathVariable(name = "order-id", required = true) long orderId,
             @RequestBody List<FoodItemDto> foodItemDtos) {
+        log.info("Entering updateOrder()");
         orderService.updateOrder(orderId, foodItemDtos);
+        log.info("Leaving updateOrder()");
     }
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/address")
     UserAddressMap createAddress(@RequestBody UserAddressMap userAddressMap) {
-        return orderService.createAddress(userAddressMap);
+        log.info("Entering createAddress()");
+        UserAddressMap address = orderService.createAddress(userAddressMap);
+        log.info("Leaving createAddress()");
+        return address;
     }
 
     @PutMapping("/placeOrder/{order-id}")
     OrderViewDto placeOrder(@PathVariable(name = "order-id", required = true) long orderId,
             @RequestBody PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
-        return orderService.placeOrder(orderId, placeOrderDto);
+        OrderViewDto orderViewDto = orderService.placeOrder(orderId, placeOrderDto);
+        log.info("Leaving placeOrder()");
+        return orderViewDto;
     }
 
     @PutMapping("/cancelOrder/{order-id}")
     void cancelOrder(@PathVariable(name = "order-id", required = true) long orderId) {
+        log.info("Entering cancelOrder()");
         orderService.cancelOrder(orderId);
+        log.info("Leaving cancelOrder()");
     }
 
     @GetMapping("/activeOrders")
     List<OrderViewDto> activeOrders(@RequestParam(value = "user-id") long id) {
-        return orderService.viewActiveOrders(id);
+        log.info("Entering activeOrders()");
+        List<OrderViewDto> orderViewDtos = orderService.viewActiveOrders(id);
+        log.info("Leaving activeOrders()");
+        return orderViewDtos;
     }
 
     @GetMapping("/receivedOrder/{order-id}")
     OrderViewDto receivedOrder(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
-        return orderService.viewReceivedOrder(userId, orderId);
+        log.info("Entering receivedOrder()");
+        OrderViewDto orderViewDto = orderService.viewReceivedOrder(userId, orderId);
+        log.info("Leaving receivedOrder()");
+        return orderViewDto;
     }
 
     @PutMapping("/orderPrepared/{order-id}")
     void changeOrderStatusToOrderPrepared(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
+        log.info("Entering changeOrderStatusToOrderPrepared()");
         orderService.changeStatusToWaitingForDelivery(userId, orderId);
+        log.info("Leaving changeOrderStatusToOrderPrepared()");
     }
 
     @PutMapping("/pendingDelivery/{order-id}")
     void changeOrderStatusToDeliveryPending(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
+        log.info("Entering changeOrderStatusToDeliveryPending()");
         orderService.changeStatusToPendingDelivery(userId, orderId);
+        log.info("Leaving changeOrderStatusToDeliveryPending()");
     }
 
     @PutMapping("/orderDelivered/{order-id}")
     void changeOrderStatusToOrderDelivered(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
+        log.info("Entering changeStatusToOrderDelivered()");
         orderService.changeStatusToOrderDelivered(userId, orderId);
+        log.info("Leaving changeStatusToOrderDelivered()");
     }
 
     @GetMapping("/cancelledOrders")
     List<OrderViewDto> cancelledOrders(@RequestParam(value = "user-id") long id) {
-        return orderService.viewCancelledOrders(id);
+        log.info("Entering cancelledOrders()");
+        List<OrderViewDto> orderViewDtos = orderService.viewCancelledOrders(id);
+        log.info("Leaving cancelledOrders()");
+        return orderViewDtos;
     }
 
     @GetMapping("/cancelledOrder/{order-id}")
     OrderViewDto cancelledOrder(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
-        return orderService.viewCancelledOrder(userId, orderId);
+        log.info("Entering cancelledOrder()");
+        OrderViewDto orderViewDto = orderService.viewCancelledOrder(userId, orderId);
+        log.info("Leaving cancelledOrder()");
+        return orderViewDto;
     }
 
     @GetMapping("/completedOrders")
     List<OrderViewDto> completedOrders(@RequestParam(value = "user-id") long id) {
-        return orderService.viewCompletedOrders(id);
+        log.info("Entering completedOrders()");
+        List<OrderViewDto> orderViewDtos = orderService.viewCompletedOrders(id);
+        log.info("Leaving completedOrders()");
+        return orderViewDtos;
     }
 
     @GetMapping("/completedOrder/{order-id}")
     OrderViewDto completedOrder(@RequestParam(value = "user-id") long userId,
             @PathVariable(name = "order-id", required = true) long orderId) {
-        return orderService.viewCompletedOrder(userId, orderId);
+        log.info("Entering completedOrder()");
+        OrderViewDto orderViewDto = orderService.viewCompletedOrder(userId, orderId);
+        log.info("Leaving completedOrder()");
+        return orderViewDto;
     }
 }
