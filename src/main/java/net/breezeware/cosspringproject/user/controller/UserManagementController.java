@@ -59,6 +59,7 @@ public class UserManagementController {
         log.info("Leaving deleteUser()");
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{user-id}")
     public void updateUser(@PathVariable(name = "user-id", required = true) Long userId, @RequestBody User user) {
         log.info("Entering updateUser()");

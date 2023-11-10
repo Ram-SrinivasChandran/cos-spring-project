@@ -44,7 +44,7 @@ class OrderControllerTest {
     @Test
     void testViewFoodMenus() throws Exception {
         Mockito.when(orderService.retrieveAvailableFoodMenusForToday()).thenReturn(List.of(new FoodMenuDto(), new FoodMenuDto()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/foodMenus"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/food-menus"))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$", hasSize(2)));
     }
 
@@ -128,7 +128,8 @@ class OrderControllerTest {
                                 "requiredQuantity": 5
                             }
                         ]
-                        """)).andExpect(MockMvcResultMatchers.status().isOk());
+                        """)).andExpect(MockMvcResultMatchers.status().isNoContent()
+        );
     }
 
     @Test
@@ -154,7 +155,7 @@ class OrderControllerTest {
 
     @Test
     void testPlaceOrder() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/placeOrder/{id}", 1)
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/place-order/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON).content("""
                         {
                         "userAddressMap": {
@@ -182,20 +183,20 @@ class OrderControllerTest {
                             "phoneNumber": "9677963066",
                             "deliveryTime": "2023-11-06T12:00:00.000Z"
                         }
-                        """)).andExpect(MockMvcResultMatchers.status().isOk());
+                        """)).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testCancelOrder() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/orders/cancelOrder/{id}", 1).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                MockMvcRequestBuilders.put("/api/orders/cancel-order/{id}", 1).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testViewActiveOrders() throws Exception {
         Mockito.when(orderService.viewActiveOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/activeOrders?user-id=1"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/active-orders?user-id=1"))
                 .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$", hasSize(2)));
     }
 
@@ -205,32 +206,32 @@ class OrderControllerTest {
         mockOrder.setId(1);
         OrderViewDto mockOrderViewDto = OrderViewDto.builder().order(mockOrder).build();
         Mockito.when(orderService.viewReceivedOrder(1L, 1L)).thenReturn(mockOrderViewDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/receivedOrder/{id}?user-id=1", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/received-order/{id}?user-id=1", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void testChangeOrderStatusToOrderPrepared() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderPrepared/{id}?user-id=1", 1)
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/order-prepared/{id}?user-id=1", 1)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testChangeOrderStatusToPendingDelivery() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/pendingDelivery/{id}?user-id=1", 1)
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/pending-delivery/{id}?user-id=1", 1)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testChangeOrderStatusToOrderDelivered() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/orderDelivered/{id}?user-id=1", 1)
-                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/orders/order-delivered/{id}?user-id=1", 1)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testViewCancelledOrders() throws Exception {
         Mockito.when(orderService.viewCancelledOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelledOrders?user-id=1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelled-orders?user-id=1")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
@@ -241,14 +242,14 @@ class OrderControllerTest {
         mockOrder.setId(1);
         OrderViewDto mockOrderViewDto = OrderViewDto.builder().order(mockOrder).build();
         Mockito.when(orderService.viewCancelledOrder(1L, 1L)).thenReturn(mockOrderViewDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelledOrder/{id}?user-id=1", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/cancelled-order/{id}?user-id=1", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     void testViewCompletedOrders() throws Exception {
         Mockito.when(orderService.viewCompletedOrders(1L)).thenReturn(List.of(new OrderViewDto(), new OrderViewDto()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/completedOrders?user-id=1")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/completed-orders?user-id=1")
                 .contentType(MediaType.APPLICATION_JSON)).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
@@ -259,7 +260,7 @@ class OrderControllerTest {
         mockOrder.setId(1);
         OrderViewDto mockOrderViewDto = OrderViewDto.builder().order(mockOrder).build();
         Mockito.when(orderService.viewCompletedOrder(1L, 1L)).thenReturn(mockOrderViewDto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/completedOrder/{id}?user-id=1", 1))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/orders/completed-order/{id}?user-id=1", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 }

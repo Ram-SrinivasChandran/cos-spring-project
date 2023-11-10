@@ -20,7 +20,7 @@ import net.breezeware.cosspringproject.food.service.api.FoodItemService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/foodItems")
+@RequestMapping("/api/food-items")
 @RequiredArgsConstructor
 @Slf4j
 public class FoodItemController {
@@ -51,6 +51,7 @@ public class FoodItemController {
         log.info("Leaving saveFoodItem()");
     }
 
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{food-item-id}")
     public void updateFoodItem(@PathVariable(name = "food-item-id",required = true) Long foodItemId, @RequestBody FoodItem foodItem) {
         log.info("Entering updateFoodItem()");

@@ -76,7 +76,7 @@ class UserManagementControllerTest {
         mockMvc.perform(
                 MockMvcRequestBuilders.put("/api/users/{id}", 1).contentType(MediaType.APPLICATION_JSON).content(
                         "{\"name\":\"Sathiesh\",\"userName\":\"sathish_01\",\"password\":\"breeze123\",\"roleId\":\"1\"}"))
-                .andExpect(MockMvcResultMatchers.status().isOk());
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test

@@ -21,7 +21,7 @@ import net.breezeware.cosspringproject.food.service.api.FoodMenuService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/foodMenus")
+@RequestMapping("/api/food-menus")
 @RequiredArgsConstructor
 @Slf4j
 public class FoodMenuController {
@@ -50,7 +50,7 @@ public class FoodMenuController {
         foodMenuService.saveFoodMenu(foodMenuDto);
         log.info("Leaving createFoodMenu()");
     }
-
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{food-menu-id}")
     public void updateFoodMenu(@PathVariable(name = "food-menu-id",required = true) Long foodMenuId, @RequestBody FoodMenuDto foodMenuDto) {
         log.info("Entering updateFoodMenu()");

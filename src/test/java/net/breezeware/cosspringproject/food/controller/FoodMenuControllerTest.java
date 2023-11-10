@@ -40,7 +40,7 @@ class FoodMenuControllerTest {
     @Test
     void testFindAllFoodMenus() throws Exception {
         Mockito.when(foodMenuService.findAllFoodMenu()).thenReturn(List.of(new FoodMenu(), new FoodMenu()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/foodMenus")).andExpect(MockMvcResultMatchers.status().isOk())
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-menus")).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 
@@ -48,7 +48,7 @@ class FoodMenuControllerTest {
     void testFindFoodMenuById() throws Exception {
         FoodMenu mockFoodMenu = FoodMenu.builder().id(1).name("Breakfast").type("Veg").build();
         Mockito.when(foodMenuService.findFoodMenuById(anyLong())).thenReturn(mockFoodMenu);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/foodMenus/{id}", 1)).andExpectAll(jsonPath("$.id").value(1),
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-menus/{id}", 1)).andExpectAll(jsonPath("$.id").value(1),
                 jsonPath("$.name").value("Breakfast"), jsonPath("$.type").value("Veg"))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -56,7 +56,7 @@ class FoodMenuControllerTest {
     @Test
     void testSaveFoodMenu() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.post("/api/foodMenus").contentType(MediaType.APPLICATION_JSON).content("""
+                MockMvcRequestBuilders.post("/api/food-menus").contentType(MediaType.APPLICATION_JSON).content("""
                         {"foodMenu": {"name":"Breakfast","type":"Veg"},
                         "foodItems": [
                                 {
@@ -81,7 +81,7 @@ class FoodMenuControllerTest {
     @Test
     void testUpdateFoodMenu() throws Exception {
         mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/foodMenus/{id}", 1).contentType(MediaType.APPLICATION_JSON).content("""
+                MockMvcRequestBuilders.put("/api/food-menus/{id}", 1).contentType(MediaType.APPLICATION_JSON).content("""
                         {"foodMenu": {},
                         "foodItems": [
                                 {
@@ -100,12 +100,12 @@ class FoodMenuControllerTest {
                                     "id": 4,
                                     "day": "Thrusday"
                                 }
-                            ]}""")).andExpect(MockMvcResultMatchers.status().isOk());
+                            ]}""")).andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
     @Test
     void testDeleteFoodMenuById() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/foodMenus/{id}", 1))
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/food-menus/{id}", 1))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
