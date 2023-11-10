@@ -27,6 +27,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(schema = "user_svc", name = "role")
 public class Role {
+    /**
+     * The unique identifier for the role .
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "role_seq_gen")
     @SequenceGenerator(name = "role_seq_gen", sequenceName = "role_seq", schema = "user_svc", allocationSize = 1)
@@ -47,10 +50,14 @@ public class Role {
     @Size(min = 1, max = 20)
     @Column(name = "description", length = 20, nullable = false)
     private String description;
-
+    /**
+     * The timestamp when this mapping was created.
+     */
     @Column(name = "created_on")
     private Instant createdOn;
-
+    /**
+     * The timestamp when this mapping was last modified.
+     */
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

@@ -30,6 +30,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @Table(schema = "user_svc", name = "user_address_map")
 public class UserAddressMap {
+    /**
+     * The unique identifier for the user address mapping.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_address_map_seq_gen")
     @SequenceGenerator(name = "user_address_map_seq_gen", sequenceName = "user_address_map_seq", schema = "user_svc",
@@ -94,10 +97,14 @@ public class UserAddressMap {
     @Size(min = 1, max = 20)
     @Column(name = "landmark", length = 20, nullable = false)
     private String landmark;
-
+    /**
+     * The timestamp when this mapping was created.
+     */
     @Column(name = "created_on")
     private Instant createdOn;
-
+    /**
+     * The timestamp when this mapping was last modified.
+     */
     @Column(name = "modified_on")
     private Instant modifiedOn;
 }

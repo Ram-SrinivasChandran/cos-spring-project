@@ -27,8 +27,11 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 @Entity
-@Table(schema = "user_svc", name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_name" }) })
+@Table(schema = "user_svc", name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_name"})})
 public class User {
+    /**
+     * The unique identifier for the user.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_seq_gen")
     @SequenceGenerator(name = "user_seq_gen", sequenceName = "user_seq", schema = "user_svc", allocationSize = 1)
@@ -57,13 +60,19 @@ public class User {
     @Size(min = 1, max = 20)
     @Column(name = "password", length = 20, nullable = false)
     private String password;
-
+    /**
+     * The timestamp when this mapping was created.
+     */
     @Column(name = "created_on")
     private Instant createdOn;
-
+    /**
+     * The timestamp when this mapping was last modified.
+     */
     @Column(name = "modified_on")
     private Instant modifiedOn;
-
+    /**
+     * Marks the 'roleId' field as transient, indicating that it should not be persisted in the database.
+     */
     @Transient
     private long roleId;
 }
