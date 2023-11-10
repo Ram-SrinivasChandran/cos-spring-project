@@ -1,7 +1,9 @@
 package net.breezeware.cosspringproject.user.service.impl;
 
+import java.time.Instant;
 import java.util.List;
 
+import net.breezeware.cosspringproject.user.entity.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -61,6 +63,17 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
     @Transactional
     @Override
     public void update(Long userAddressMapId, UserAddressMap userAddressMap) {
+        log.info("Entering update()");
+        UserAddressMap userAddressMapToBeUpdated = findById(userAddressMapId);
+        userAddressMapToBeUpdated.setUser(userAddressMap.getUser());
+        userAddressMapToBeUpdated.setDoorNumber(userAddressMap.getDoorNumber());
+        userAddressMapToBeUpdated.setStreetName(userAddressMap.getStreetName());
+        userAddressMapToBeUpdated.setCity(userAddressMap.getCity());
+        userAddressMapToBeUpdated.setDistrict(userAddressMap.getDistrict());
+        userAddressMapToBeUpdated.setLandmark(userAddressMap.getLandmark());
+        userAddressMapToBeUpdated.setPincode(userAddressMap.getPincode());
+        userAddressMapToBeUpdated.setModifiedOn(Instant.now());
+        log.info("Leaving update()");
     }
     /**
      * {@inheritDoc}

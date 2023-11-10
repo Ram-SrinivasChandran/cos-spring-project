@@ -1,5 +1,6 @@
 package net.breezeware.cosspringproject.user.service.impl;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,9 +47,9 @@ public class RoleServiceImpl implements RoleService {
      */
     @Transactional
     @Override
-    public Role save(Role object) {
+    public Role save(Role role) {
         log.info("Entering save()");
-        Role savedRole = roleRepository.save(object);
+        Role savedRole = roleRepository.save(role);
         log.info("Leaving save()");
         return savedRole;
     }
@@ -57,8 +58,14 @@ public class RoleServiceImpl implements RoleService {
      */
     @Transactional
     @Override
-    public void update(Long roleId, Role object) {
-
+    public void update(Long roleId, Role role) {
+        log.info("Entering update()");
+        Role roleToBeUpdated = findById(roleId);
+        roleToBeUpdated.setDescription(role.getDescription());
+        roleToBeUpdated.setName(role.getName());
+        roleToBeUpdated.setModifiedOn(Instant.now());
+        roleRepository.save(roleToBeUpdated);
+        log.info("Leaving update()");
     }
     /**
      * {@inheritDoc}
