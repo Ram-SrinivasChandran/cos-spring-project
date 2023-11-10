@@ -34,7 +34,9 @@ public class UserServiceImpl implements UserService {
     private final UserRoleMapRepository userRoleMapRepository;
     private final RoleRepository roleRepository;
     private final Validator fieldValidator;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<User> findAll() {
         log.info("Entering findAll()");
@@ -42,7 +44,9 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving findAll()");
         return users;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public User findById(Long userId) throws CustomException {
         log.info("Entering findById(), id: {}", userId);
@@ -54,7 +58,9 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public User save(User user) {
@@ -79,7 +85,9 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving save()");
         return savedUser;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public void update(Long userId, User updatedUser) {
@@ -94,7 +102,9 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         log.info("Leaving update()");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public void delete(User user) {
@@ -102,7 +112,9 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
         log.info("Leaving delete()");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Transactional
     @Override
     public void deleteById(Long userId) {
@@ -115,7 +127,9 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
         log.info("Leaving deleteById()");
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isACustomer(User user) {
         log.info("Entering isACustomer(), id: {}", user.getId());
@@ -124,7 +138,9 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isACustomer()");
         return userCheck;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isACafeteriaStaff(long userId) {
         log.info("Entering isACafeteriaStaff(), id: {}", userId);
@@ -133,7 +149,9 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isACafeteriaStaff()");
         return userCheck;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isAAdmin(long userId) {
         log.info("Entering isAAdmin(), id: {}", userId);
@@ -142,7 +160,9 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isAAdmin()");
         return userCheck;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean isADeliveryStaff(long userId) {
         log.info("Entering isADeliveryStaff(), id: {}", userId);

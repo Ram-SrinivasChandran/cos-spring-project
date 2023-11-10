@@ -12,13 +12,16 @@ import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserAddressMapServiceImpl implements UserAddressMapService {
     private final UserAddressMapRepository userAddressMapRepository;
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<UserAddressMap> findAll() {
         log.info("Entering findAll()");
@@ -26,7 +29,9 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving findAll()");
         return userAddressMaps;
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public UserAddressMap findById(Long userAddressMapId) {
         log.info("Entering findById(), id: {}", userAddressMapId);
@@ -39,7 +44,10 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving findById()");
         return userAddress;
     }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
     public UserAddressMap save(UserAddressMap userAddressMap) {
         log.info("Entering save()");
@@ -47,18 +55,27 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving save()");
         return savedUserAddressMap;
     }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
     public void update(Long userAddressMapId, UserAddressMap userAddressMap) {
     }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
     public void delete(UserAddressMap userAddressMap) {
         log.info("Entering delete()");
         userAddressMapRepository.delete(userAddressMap);
         log.info("Leaving delete()");
     }
-
+    /**
+     * {@inheritDoc}
+     */
+    @Transactional
     @Override
     public void deleteById(Long userAddressMapId) {
         log.info("Entering deleteById()");

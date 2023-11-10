@@ -12,6 +12,7 @@ import net.breezeware.cosspringproject.food.service.api.AvailabilityService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -49,6 +50,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public Availability saveAvailability(Availability availability) {
         log.info("Entering saveAvailability()");
@@ -60,6 +62,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteAvailability(Availability availability) {
         log.info("Entering deleteAvailability()");
@@ -70,6 +73,7 @@ public class AvailabilityServiceImpl implements AvailabilityService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteAvailabilityById(long availabilityId) {
         log.info("Entering deleteAvailabilityById()");

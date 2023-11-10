@@ -18,6 +18,7 @@ import net.breezeware.cosspringproject.food.service.api.FoodItemService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -56,6 +57,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public FoodItem saveFoodItem(FoodItem foodItem) {
         log.info("Entering saveFoodItem()");
@@ -70,6 +72,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void updateFoodItem(long foodItemId, FoodItem updatedFoodItem) {
         log.info("Entering updateFoodItem()");
@@ -87,6 +90,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodItem(FoodItem foodItem) {
         log.info("Entering deleteFoodItem()");
@@ -97,6 +101,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodItemById(long foodItemId) {
         log.info("Entering deleteFoodItemById()");

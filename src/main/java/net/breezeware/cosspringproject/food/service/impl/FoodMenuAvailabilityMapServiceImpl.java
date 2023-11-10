@@ -14,6 +14,7 @@ import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapS
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -52,6 +53,7 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public FoodMenuAvailabilityMap saveFoodMenuAvailabilityMap(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
         log.info("Entering saveFoodMenuAvailabilityMap()");
@@ -64,6 +66,7 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenuAvailabilityMap(FoodMenuAvailabilityMap foodMenuAvailabilityMap) {
         log.info("Entering deleteFoodMenuAvailabilityMap()");
@@ -86,6 +89,7 @@ public class FoodMenuAvailabilityMapServiceImpl implements FoodMenuAvailabilityM
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenuAvailabilityMapById(long foodMenuAvailabilityMapId) {
         log.info("Entering deleteFoodMenuAvailabilityMapById()");

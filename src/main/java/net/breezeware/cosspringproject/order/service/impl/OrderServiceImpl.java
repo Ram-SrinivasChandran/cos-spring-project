@@ -243,6 +243,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public UserAddressMap createAddress(UserAddressMap userAddressMap) {
         log.info("Entering createAddress()");
@@ -264,6 +265,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public OrderViewDto placeOrder(long orderId, PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
@@ -332,6 +334,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void cancelOrder(long orderId) {
         log.info("Entering cancelOrder()");
@@ -408,6 +411,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void changeStatusToWaitingForDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToWaitingForDelivery()");
@@ -436,6 +440,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void changeStatusToPendingDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToPendingDelivery()");
@@ -450,6 +455,7 @@ public class OrderServiceImpl implements OrderService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void changeStatusToOrderDelivered(long userId, long orderId) {
         log.info("Entering changeStatusToOrderDelivered()");

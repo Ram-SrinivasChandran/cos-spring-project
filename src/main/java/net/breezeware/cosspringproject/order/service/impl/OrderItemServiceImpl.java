@@ -17,6 +17,7 @@ import net.breezeware.cosspringproject.order.service.api.OrderItemService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -28,6 +29,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public OrderItem createOrderItem(OrderItem orderItem) {
         log.info("Entering createOrderItem()");
@@ -50,6 +52,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteOrderItemById(long orderId) {
         log.info("Entering deleteOrderItemById()");
@@ -60,6 +63,7 @@ public class OrderItemServiceImpl implements OrderItemService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public double addOrderItems(Order order, List<FoodItemDto> foodItemDtos) {
         log.info("Entering addOrderItems()");

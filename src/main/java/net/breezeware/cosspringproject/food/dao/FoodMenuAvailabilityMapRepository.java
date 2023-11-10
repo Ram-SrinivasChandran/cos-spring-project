@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import net.breezeware.cosspringproject.food.entity.Availability;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
 import net.breezeware.cosspringproject.food.entity.FoodMenuAvailabilityMap;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface FoodMenuAvailabilityMapRepository extends JpaRepository<FoodMenuAvailabilityMap, Long> {
     List<FoodMenuAvailabilityMap> getFoodMenuAvailabilityMapByFoodMenu(FoodMenu foodMenu);
 

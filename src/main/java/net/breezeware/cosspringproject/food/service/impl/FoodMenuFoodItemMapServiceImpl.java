@@ -13,6 +13,7 @@ import net.breezeware.cosspringproject.food.service.api.FoodMenuFoodItemMapServi
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -51,6 +52,7 @@ public class FoodMenuFoodItemMapServiceImpl implements FoodMenuFoodItemMapServic
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public FoodMenuFoodItemMap saveFoodMenuFoodItemMap(FoodMenuFoodItemMap foodMenuFoodItemMap) {
         log.info("Entering saveFoodMenuFoodItemMap()");
@@ -74,6 +76,7 @@ public class FoodMenuFoodItemMapServiceImpl implements FoodMenuFoodItemMapServic
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenuFoodItemMap(FoodMenuFoodItemMap foodMenuFoodItemMap) {
         log.info("Entering deleteFoodMenuFoodItemMap()");
@@ -84,6 +87,7 @@ public class FoodMenuFoodItemMapServiceImpl implements FoodMenuFoodItemMapServic
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenuFoodItemMapById(long foodMenuFoodItemMapId) {
         log.info("Entering deleteFoodMenuFoodItemMapId()");

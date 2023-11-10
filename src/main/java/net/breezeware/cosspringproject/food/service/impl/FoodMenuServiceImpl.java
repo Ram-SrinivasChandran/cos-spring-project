@@ -71,6 +71,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public FoodMenu saveFoodMenu(FoodMenuDto foodMenuDto) {
         log.info("Entering saveFoodMenu()");
@@ -205,6 +206,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenu(FoodMenu foodMenu) {
         log.info("Entering deleteFoodMenu()");
@@ -215,6 +217,7 @@ public class FoodMenuServiceImpl implements FoodMenuService {
     /**
      * {@inheritDoc}
      */
+    @Transactional
     @Override
     public void deleteFoodMenuById(long foodMenuId) {
         log.info("Entering deleteFoodMenuById()");
