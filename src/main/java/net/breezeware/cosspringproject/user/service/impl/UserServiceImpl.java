@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isACustomer(User user) {
+    public boolean isCustomer(User user) {
         log.info("Entering isACustomer(), id: {}", user.getId());
         User checkedUser = findById(user.getId());
         boolean userCheck = checkUser(checkedUser, UserRole.CUSTOMER.getName());
@@ -142,7 +142,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isACafeteriaStaff(long userId) {
+    public boolean isCafeteriaStaff(long userId) {
         log.info("Entering isACafeteriaStaff(), id: {}", userId);
         User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.CAFETERIASTAFF.getName());
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isAAdmin(long userId) {
+    public boolean isAdmin(long userId) {
         log.info("Entering isAAdmin(), id: {}", userId);
         User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.ADMIN.getName());
@@ -164,7 +164,7 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isADeliveryStaff(long userId) {
+    public boolean isDeliveryStaff(long userId) {
         log.info("Entering isADeliveryStaff(), id: {}", userId);
         User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.DELIVERYSTAFF.getName());

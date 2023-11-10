@@ -102,7 +102,7 @@ class OrderServiceImplTest {
         mockOrder.setUser(User.builder().id(1).roleId(2).build());
         FoodItem mockFoodItem = FoodItem.builder().id(1).cost(30).quantity(30).build();
         OrderItem mockOrderItem = OrderItem.builder().id(1).quantity(2).cost(50).build();
-        when(userService.isACustomer(any())).thenReturn(true);
+        when(userService.isCustomer(any())).thenReturn(true);
         when(orderRepository.save(any())).thenReturn(mockOrder);
         when(orderRepository.save(any())).thenReturn(mockOrder);
         Order order = orderService.createOrder(OrderDto.builder().order(mockOrder)
@@ -154,7 +154,7 @@ class OrderServiceImplTest {
         User mockUser = User.builder().id(1).name("Ram").userName("ram_06").password("breeze123").roleId(1).build();
         UserAddressMap mockAddress = UserAddressMap.builder().id(1).user(mockUser).pincode(624001).build();
         when(userAddressMapService.save(any())).thenReturn(mockAddress);
-        when(userService.isACustomer(mockUser)).thenReturn(true);
+        when(userService.isCustomer(mockUser)).thenReturn(true);
         UserAddressMap address = orderService.createAddress(mockAddress);
         assertEquals(address.getId(), mockAddress.getId());
         assertEquals(address.getPincode(), mockAddress.getPincode());
@@ -202,7 +202,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         List<Order> mockOrders = List.of(mockOrder);
         when(orderRepository.getOrderByStatus(any())).thenReturn(mockOrders);
-        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(userService.isCafeteriaStaff(1L)).thenReturn(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         List<OrderViewDto> orderViewDtos = orderService.viewActiveOrders(1L);
         Assertions.assertThat(orderViewDtos).hasSize(1);
@@ -213,7 +213,7 @@ class OrderServiceImplTest {
         Order mockOrder = new Order();
         mockOrder.setId(1);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
-        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(userService.isCafeteriaStaff(1L)).thenReturn(true);
         when(orderRepository.save(any())).thenReturn(mockOrder);
         OrderViewDto orderViewDto = orderService.viewReceivedOrder(1L, 1L);
         assertEquals(mockOrder.getId(), orderViewDto.getOrder().getId());
@@ -225,7 +225,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderRepository.save(any())).thenReturn(mockOrder);
-        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(userService.isCafeteriaStaff(1L)).thenReturn(true);
         orderService.changeStatusToWaitingForDelivery(1L, 1L);
         verify(orderRepository).findById(1L);
         verify(orderRepository).save(any());
@@ -237,7 +237,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderRepository.save(any())).thenReturn(mockOrder);
-        when(userService.isACafeteriaStaff(1L)).thenReturn(true);
+        when(userService.isCafeteriaStaff(1L)).thenReturn(true);
         orderService.changeStatusToPendingDelivery(1L, 1L);
         verify(orderRepository).findById(1L);
         verify(orderRepository).save(any());
@@ -249,7 +249,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         when(orderRepository.save(any())).thenReturn(mockOrder);
-        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(userService.isDeliveryStaff(1L)).thenReturn(true);
         orderService.changeStatusToOrderDelivered(1L, 1L);
         verify(orderRepository).findById(1L);
         verify(orderRepository).save(any());
@@ -261,7 +261,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         List<Order> mockOrders = List.of(mockOrder);
         when(orderRepository.getOrderByStatus(any())).thenReturn(mockOrders);
-        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(userService.isDeliveryStaff(1L)).thenReturn(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         List<OrderViewDto> orderViewDtos = orderService.viewCancelledOrders(1L);
         Assertions.assertThat(orderViewDtos).hasSize(1);
@@ -272,7 +272,7 @@ class OrderServiceImplTest {
         Order mockOrder = new Order();
         mockOrder.setId(1);
         mockOrder.setStatus(Status.ORDER_CANCELLED.name());
-        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(userService.isDeliveryStaff(1L)).thenReturn(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         orderService.viewCancelledOrder(1L, 1L);
         verify(orderRepository, Mockito.times(2)).findById(1L);
@@ -284,7 +284,7 @@ class OrderServiceImplTest {
         mockOrder.setId(1);
         List<Order> mockOrders = List.of(mockOrder);
         when(orderRepository.getOrderByStatus(any())).thenReturn(mockOrders);
-        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(userService.isDeliveryStaff(1L)).thenReturn(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         List<OrderViewDto> orderViewDtos = orderService.viewCompletedOrders(1L);
         Assertions.assertThat(orderViewDtos).hasSize(1);
@@ -295,7 +295,7 @@ class OrderServiceImplTest {
         Order mockOrder = new Order();
         mockOrder.setId(1);
         mockOrder.setStatus(Status.ORDER_DELIVERED.name());
-        when(userService.isADeliveryStaff(1L)).thenReturn(true);
+        when(userService.isDeliveryStaff(1L)).thenReturn(true);
         when(orderRepository.findById(1L)).thenReturn(Optional.of(mockOrder));
         orderService.viewCompletedOrder(1L, 1L);
         verify(orderRepository, Mockito.times(2)).findById(1L);

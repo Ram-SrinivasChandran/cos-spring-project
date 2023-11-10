@@ -130,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
     public Order createOrder(OrderDto orderDto) {
         log.info("Entering createOrder()");
         Order order = orderDto.getOrder();
-        if (!userService.isACustomer(order.getUser())) {
+        if (!userService.isCustomer(order.getUser())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
         ValidationException.handlingException(constraintViolationSet);
         Set<ConstraintViolation<UserAddressMap>> constraintViolationSet1 = fieldValidator.validate(userAddressMap);
         ValidationException.handlingException(constraintViolationSet1);
-        if (!userService.isACustomer(userAddressMap.getUser())) {
+        if (!userService.isCustomer(userAddressMap.getUser())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -359,7 +359,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderViewDto> viewActiveOrders(long orderId) {
         log.info("Entering viewActiveOrders()");
-        if (!userService.isACafeteriaStaff(orderId)) {
+        if (!userService.isCafeteriaStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -376,7 +376,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewReceivedOrder(long userId, long orderId) {
         log.info("Entering viewReceivedOrder()");
-        if (!userService.isACafeteriaStaff(userId)) {
+        if (!userService.isCafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -415,7 +415,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void changeStatusToWaitingForDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToWaitingForDelivery()");
-        if (!userService.isACafeteriaStaff(userId)) {
+        if (!userService.isCafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -444,7 +444,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void changeStatusToPendingDelivery(long userId, long orderId) {
         log.info("Entering changeStatusToPendingDelivery()");
-        if (!userService.isACafeteriaStaff(userId)) {
+        if (!userService.isCafeteriaStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -459,7 +459,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void changeStatusToOrderDelivered(long userId, long orderId) {
         log.info("Entering changeStatusToOrderDelivered()");
-        if (!userService.isADeliveryStaff(userId)) {
+        if (!userService.isDeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -473,7 +473,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderViewDto> viewCancelledOrders(long orderId) {
         log.info("Entering viewCancelledOrders()");
-        if (!userService.isADeliveryStaff(orderId)) {
+        if (!userService.isDeliveryStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -488,7 +488,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewCancelledOrder(long userId, long orderId) {
         log.info("Entering viewCancelledOrders()");
-        if (!userService.isADeliveryStaff(userId)) {
+        if (!userService.isDeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -522,7 +522,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderViewDto> viewCompletedOrders(long orderId) {
         log.info("Entering viewCompletedOrders()");
-        if (!userService.isADeliveryStaff(orderId)) {
+        if (!userService.isDeliveryStaff(orderId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -537,7 +537,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderViewDto viewCompletedOrder(long userId, long orderId) {
         log.info("Entering viewCompletedOrder()");
-        if (!userService.isADeliveryStaff(userId)) {
+        if (!userService.isDeliveryStaff(userId)) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
