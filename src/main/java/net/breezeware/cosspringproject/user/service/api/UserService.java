@@ -18,10 +18,10 @@ public interface UserService extends GenericUserService<User, Long> {
     /**
      * Checks if a user is a customer.
      *
-     * @param user The user to check.
+     * @param userId The unique identifier of the user to check.
      * @return `true` if the user is a customer; otherwise, `false`.
      */
-    boolean isCustomer(User user);
+    boolean isCustomer(long userId);
 
     /**
      * Checks if a user with the specified unique identifier is cafeteria staff.

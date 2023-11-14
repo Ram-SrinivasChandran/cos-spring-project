@@ -42,7 +42,7 @@ class FoodItemServiceImplTest {
     void testFindAllFoodItems() {
         List<FoodItem> mockFoodItems = List.of(new FoodItem(), new FoodItem());
         when(foodItemRepository.findAll()).thenReturn(mockFoodItems);
-        List<FoodItem> foodItems = foodItemService.findAllFoodItems();
+        List<FoodItem> foodItems = foodItemService.findAllFoodItems(1L);
         Assertions.assertThat(foodItems).hasSize(mockFoodItems.size());
         verify(foodItemRepository).findAll();
     }

@@ -131,9 +131,9 @@ public class UserServiceImpl implements UserService {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCustomer(User user) {
-        log.info("Entering isACustomer(), id: {}", user.getId());
-        User checkedUser = findById(user.getId());
+    public boolean isCustomer(long userId) {
+        log.info("Entering isACustomer(), id: {}", userId);
+        User checkedUser = findById(userId);
         boolean userCheck = checkUser(checkedUser, UserRole.CUSTOMER.getName());
         log.info("Leaving isACustomer()");
         return userCheck;

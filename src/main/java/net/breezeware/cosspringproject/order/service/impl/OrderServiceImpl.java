@@ -130,7 +130,7 @@ public class OrderServiceImpl implements OrderService {
     public Order createOrder(OrderDto orderDto) {
         log.info("Entering createOrder()");
         Order order = orderDto.getOrder();
-        if (!userService.isCustomer(order.getUser())) {
+        if (!userService.isCustomer(order.getUser().getId())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 
@@ -251,7 +251,7 @@ public class OrderServiceImpl implements OrderService {
         ValidationException.handlingException(constraintViolationSet);
         Set<ConstraintViolation<UserAddressMap>> constraintViolationSet1 = fieldValidator.validate(userAddressMap);
         ValidationException.handlingException(constraintViolationSet1);
-        if (!userService.isCustomer(userAddressMap.getUser())) {
+        if (!userService.isCustomer(userAddressMap.getUser().getId())) {
             throw new CustomException("Access Denied.", HttpStatus.UNAUTHORIZED);
         }
 

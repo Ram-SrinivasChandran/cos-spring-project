@@ -7,6 +7,7 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class FoodItemServiceImpl implements FoodItemService {
 
     private final FoodItemRepository foodItemRepository;
+    private final UserService userService;
     private final Validator fieldValidator;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public List<FoodItem> findAllFoodItems() {
+    public List<FoodItem> findAllFoodItems(long userId) {
         log.info("Entering findAllFoodItems()");
+        userCheck(userId);
         List<FoodItem> foodItem = foodItemRepository.findAll();
         log.info("Leaving findAllFoodItems()");
         return foodItem;
@@ -108,5 +111,10 @@ public class FoodItemServiceImpl implements FoodItemService {
         findFoodItemById(foodItemId);
         foodItemRepository.deleteById(foodItemId);
         log.info("Leaving deleteFoodItemById()");
+    }
+    private void userCheck(long userId){
+        if(!userService.isAdmin(userId)){
+            throw new CustomException("Access Denied",HttpStatus.UNAUTHORIZED);
+        }
     }
 }

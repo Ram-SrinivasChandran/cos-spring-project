@@ -154,7 +154,7 @@ class OrderServiceImplTest {
         User mockUser = User.builder().id(1).name("Ram").userName("ram_06").password("breeze123").roleId(1).build();
         UserAddressMap mockAddress = UserAddressMap.builder().id(1).user(mockUser).pincode(624001).build();
         when(userAddressMapService.save(any())).thenReturn(mockAddress);
-        when(userService.isCustomer(mockUser)).thenReturn(true);
+        when(userService.isCustomer(mockUser.getId())).thenReturn(true);
         UserAddressMap address = orderService.createAddress(mockAddress);
         assertEquals(address.getId(), mockAddress.getId());
         assertEquals(address.getPincode(), mockAddress.getPincode());

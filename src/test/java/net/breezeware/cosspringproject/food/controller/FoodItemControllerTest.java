@@ -39,8 +39,8 @@ class FoodItemControllerTest {
 
     @Test
     void testFindAllFoodItems() throws Exception {
-        Mockito.when(foodItemService.findAllFoodItems()).thenReturn(List.of(new FoodItem(), new FoodItem()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-items")).andExpect(MockMvcResultMatchers.status().isOk())
+        Mockito.when(foodItemService.findAllFoodItems(1L)).thenReturn(List.of(new FoodItem(), new FoodItem()));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-items?user-id=1")).andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
     }
 

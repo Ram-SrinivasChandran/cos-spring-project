@@ -13,7 +13,7 @@ public interface FoodItemService {
      * Retrieve a list of all food items.
      * @return A list of all available food items.
      */
-    List<FoodItem> findAllFoodItems();
+    List<FoodItem> findAllFoodItems(long userId);
 
     /**
      * Find a food item by its unique identifier.
