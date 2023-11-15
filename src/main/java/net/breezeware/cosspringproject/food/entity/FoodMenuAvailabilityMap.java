@@ -12,6 +12,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +27,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Builder
+@Schema(description = "Food Menu Availability Map")
 @Table(schema = "food_svc", name = "food_menu_availability_map")
 public class FoodMenuAvailabilityMap {
     /**
@@ -35,6 +37,7 @@ public class FoodMenuAvailabilityMap {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_menu_availability_map_seq_gen")
     @SequenceGenerator(name = "food_menu_availability_map_seq_gen", sequenceName = "food_menu_availability_map_seq",
             schema = "food_svc", allocationSize = 1)
+    @Schema(description = "Food Menu Availability Map Id",example = "1")
     private long id;
 
     /**
@@ -55,6 +58,7 @@ public class FoodMenuAvailabilityMap {
      * The timestamp indicating when the food menu availability map was created.
      */
     @Column(name = "created_on")
+    @Schema(description = "Food Menu Availability Map Created on",example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
 
     /**
@@ -62,5 +66,6 @@ public class FoodMenuAvailabilityMap {
      * modified.
      */
     @Column(name = "modified_on")
+    @Schema(description = "Food Menu Availability Map Modified on",example = "2023-11-15T05:27:10.787Z")
     private Instant modifiedOn;
 }

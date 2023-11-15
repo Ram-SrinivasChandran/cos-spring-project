@@ -11,6 +11,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Builder
+@Schema(description = "Food Menu Availability")
 @Table(schema = "food_svc", name = "availability")
 public class Availability {
     /**
@@ -34,6 +36,7 @@ public class Availability {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "availability_seq_gen")
     @SequenceGenerator(name = "availability_seq_gen", sequenceName = "availability_seq", schema = "food_svc",
             allocationSize = 1)
+    @Schema(description = "Availability Id",example = "1")
     private long id;
 
     /**
@@ -41,17 +44,20 @@ public class Availability {
      */
     @NotBlank(message = "Please Enter a valid Day.")
     @Column(name = "day")
+    @Schema(description = "Food Menu Available Day",example = "Monday")
     private String day;
 
     /**
      * The timestamp indicating when the availability entry was created.
      */
     @Column(name = "created_on")
+    @Schema(description = "Availability Created on",example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
 
     /**
      * The timestamp indicating when the availability entry was last modified.
      */
     @Column(name = "modified_on")
+    @Schema(description = "Availability Modified on",example = "2023-11-15T05:27:10.787Z")
     private Instant modifiedOn;
 }
