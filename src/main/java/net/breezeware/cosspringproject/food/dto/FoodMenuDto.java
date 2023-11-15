@@ -2,6 +2,7 @@ package net.breezeware.cosspringproject.food.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import net.breezeware.cosspringproject.food.entity.Availability;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
@@ -20,6 +21,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Food Menu Dto")
 public class FoodMenuDto {
     /**
      * The FoodMenu entity associated with this DTO.
