@@ -14,11 +14,12 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * The `FoodItem` entity class represents an item of food available in a menu.
@@ -38,7 +39,7 @@ public class FoodItem {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_item_seq_gen")
     @SequenceGenerator(name = "food_item_seq_gen", sequenceName = "food_item_seq", schema = "food_svc",
             allocationSize = 1)
-    @Schema(description = "Food Item Id",example = "1")
+    @Schema(description = "Food Item Id", example = "1")
     private long id;
 
     /**
@@ -47,7 +48,7 @@ public class FoodItem {
     @Column(name = "name", length = 30, unique = true)
     @NotBlank(message = "Please Provide a Valid Name.")
     @Size(min = 1, max = 20, message = "FoodItem Name Size should be lesser than 20")
-    @Schema(description = "Food Item Name",example = "Dosa")
+    @Schema(description = "Food Item Name", example = "Dosa")
     private String name;
 
     /**
@@ -55,7 +56,7 @@ public class FoodItem {
      */
     @NotNull(message = "Please Enter a Valid Cost.")
     @Column(name = "cost")
-    @Schema(description = "Food Item Cost",example = "20.0")
+    @Schema(description = "Food Item Cost", example = "20.0")
     private double cost;
 
     /**
@@ -63,20 +64,20 @@ public class FoodItem {
      */
     @NotNull(message = "Please Enter a Valid Quantity.")
     @Column(name = "quantity")
-    @Schema(description = "Food Item Quantity",example = "1")
+    @Schema(description = "Food Item Quantity", example = "1")
     private int quantity;
 
     /**
      * The timestamp indicating when the food item was created.
      */
     @Column(name = "created_on")
-    @Schema(description = "Food Item Created on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Item Created on", example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
 
     /**
      * The timestamp indicating when the food item was last modified.
      */
     @Column(name = "modified_on")
-    @Schema(description = "Food Item Modified on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Item Modified on", example = "2023-11-15T05:27:10.787Z")
     private Instant modifiedOn;
 }

@@ -2,8 +2,6 @@ package net.breezeware.cosspringproject.user.controller;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Parameters;
-import net.breezeware.cosspringproject.food.entity.FoodItem;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -100,26 +99,23 @@ public class UserManagementController {
         log.info("Leaving retrieveUsers()");
         return users;
     }
+
     @Operation(summary = "Save User", description = "Create a User")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)) })
     @Parameter(allowEmptyValue = false, name = "user", description = "User to be Created", required = true,
             in = ParameterIn.QUERY)
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "201", description = "User Created",
-                            content = @Content),
-                    @ApiResponse(responseCode = "405", description = "Only POST Method Allowed",
-                            content = { @Content(mediaType = "application/json", schema = @Schema(example = """
-                                {
-                                    "httpStatusCode": 405,
-                                    "message": "METHOD_NOT_ALLOWED",
-                                    "errorDetails": [
-                                        "Only POST Method Allowed Other Method Not Allowed."
-                                    ]
-                                }
-                                """)) })
-            })
+    @ApiResponses(value = { @ApiResponse(responseCode = "201", description = "User Created", content = @Content),
+        @ApiResponse(responseCode = "405", description = "Only POST Method Allowed",
+                content = { @Content(mediaType = "application/json", schema = @Schema(example = """
+                        {
+                            "httpStatusCode": 405,
+                            "message": "METHOD_NOT_ALLOWED",
+                            "errorDetails": [
+                                "Only POST Method Allowed Other Method Not Allowed."
+                            ]
+                        }
+                        """)) }) })
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public void createUser(@RequestBody User user) {
@@ -181,74 +177,67 @@ public class UserManagementController {
         log.info("Leaving retrieveUser()");
         return user;
     }
+
     @Operation(summary = "Delete User", description = "Deleting a User")
     @Parameter(allowEmptyValue = false, name = "user-id", description = "User to be Deleted", required = true,
             in = ParameterIn.PATH)
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "User Deleted",
-                            content = @Content),
-                    @ApiResponse(responseCode = "400", description = "Invalid User Id",
-                            content = { @Content(mediaType = "application/json", schema = @Schema(example = """
-                                {
-                                    "httpStatusCode": 400,
-                                    "message": "INVALID_VALUE",
-                                    "errorDetails": [
-                                        "Invalid User Id"
-                                    ]
-                                }
-                                """)) }),
-                    @ApiResponse(responseCode = "405", description = "Only DELETE Method Allowed",
-                            content = { @Content(mediaType = "application/json", schema = @Schema(example = """
-                                {
-                                    "httpStatusCode": 405,
-                                    "message": "METHOD_NOT_ALLOWED",
-                                    "errorDetails": [
-                                        "Only DELETE Method Allowed Other Method Not Allowed."
-                                    ]
-                                }
-                                """)) })
-            })
+    @ApiResponses(value = { @ApiResponse(responseCode = "200", description = "User Deleted", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Invalid User Id",
+                content = { @Content(mediaType = "application/json", schema = @Schema(example = """
+                        {
+                            "httpStatusCode": 400,
+                            "message": "INVALID_VALUE",
+                            "errorDetails": [
+                                "Invalid User Id"
+                            ]
+                        }
+                        """)) }),
+        @ApiResponse(responseCode = "405", description = "Only DELETE Method Allowed",
+                content = { @Content(mediaType = "application/json", schema = @Schema(example = """
+                        {
+                            "httpStatusCode": 405,
+                            "message": "METHOD_NOT_ALLOWED",
+                            "errorDetails": [
+                                "Only DELETE Method Allowed Other Method Not Allowed."
+                            ]
+                        }
+                        """)) }) })
     @DeleteMapping("/{user-id}")
     public void deleteUser(@PathVariable(name = "user-id", required = true) Long userId) {
         log.info("Entering deleteUser()");
         userService.deleteById(userId);
         log.info("Leaving deleteUser()");
     }
+
     @Operation(summary = "Update User", description = "Updating a User")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = { @Content(mediaType = "application/json", schema = @Schema(implementation = User.class)) })
     @Parameters({
-            @Parameter(allowEmptyValue = false, name = "user-id", description = "User to be Updated", required = true,
-                    in = ParameterIn.PATH),
-            @Parameter(allowEmptyValue = false, name = "user", description = "Updated User", required = true,
-                    in = ParameterIn.QUERY)
-    })
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "204", description = "User Updated",
-                            content = @Content),
-                    @ApiResponse(responseCode = "400", description = "Invalid User Id",
-                            content = { @Content(mediaType = "application/json", schema = @Schema(example = """
-                                {
-                                    "httpStatusCode": 400,
-                                    "message": "INVALID_VALUE",
-                                    "errorDetails": [
-                                        "Invalid User Id"
-                                    ]
-                                }
-                                """)) }),
-                    @ApiResponse(responseCode = "405", description = "Only PUT Method Allowed",
-                            content = { @Content(mediaType = "application/json", schema = @Schema(example = """
-                                {
-                                    "httpStatusCode": 405,
-                                    "message": "METHOD_NOT_ALLOWED",
-                                    "errorDetails": [
-                                        "Only PUT Method Allowed Other Method Not Allowed."
-                                    ]
-                                }
-                                """)) })
-            })
+        @Parameter(allowEmptyValue = false, name = "user-id", description = "User to be Updated", required = true,
+                in = ParameterIn.PATH),
+        @Parameter(allowEmptyValue = false, name = "user", description = "Updated User", required = true,
+                in = ParameterIn.QUERY) })
+    @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "User Updated", content = @Content),
+        @ApiResponse(responseCode = "400", description = "Invalid User Id",
+                content = { @Content(mediaType = "application/json", schema = @Schema(example = """
+                        {
+                            "httpStatusCode": 400,
+                            "message": "INVALID_VALUE",
+                            "errorDetails": [
+                                "Invalid User Id"
+                            ]
+                        }
+                        """)) }),
+        @ApiResponse(responseCode = "405", description = "Only PUT Method Allowed",
+                content = { @Content(mediaType = "application/json", schema = @Schema(example = """
+                        {
+                            "httpStatusCode": 405,
+                            "message": "METHOD_NOT_ALLOWED",
+                            "errorDetails": [
+                                "Only PUT Method Allowed Other Method Not Allowed."
+                            ]
+                        }
+                        """)) }) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/{user-id}")
     public void updateUser(@PathVariable(name = "user-id", required = true) Long userId, @RequestBody User user) {

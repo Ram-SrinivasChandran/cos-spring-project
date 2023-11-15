@@ -12,11 +12,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * The `FoodMenuFoodItemMap` entity class represents the mapping between a food
@@ -37,7 +38,7 @@ public class FoodMenuFoodItemMap {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_menu_food_item_map_seq_gen")
     @SequenceGenerator(name = "food_menu_food_item_map_seq_gen", sequenceName = "food_menu_food_item_map_seq",
             schema = "food_svc", allocationSize = 1)
-    @Schema(description = "Food Menu Food Item Map Id",example = "1")
+    @Schema(description = "Food Menu Food Item Map Id", example = "1")
     private long id;
 
     /**
@@ -58,14 +59,14 @@ public class FoodMenuFoodItemMap {
      * The timestamp indicating when the food menu-food item map was created.
      */
     @Column(name = "created_on")
-    @Schema(description = "Food Menu Food Item Map Created on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Menu Food Item Map Created on", example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
 
     /**
      * The timestamp indicating when the food menu-food item map was last modified.
      */
     @Column(name = "modified_on")
-    @Schema(description = "Food Menu Food Item Map Modified on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Menu Food Item Map Modified on", example = "2023-11-15T05:27:10.787Z")
 
     private Instant modifiedOn;
 }

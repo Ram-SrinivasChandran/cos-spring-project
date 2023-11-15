@@ -1,12 +1,13 @@
 package net.breezeware.cosspringproject.order.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * Data Transfer Object (DTO) representing a food item with its required

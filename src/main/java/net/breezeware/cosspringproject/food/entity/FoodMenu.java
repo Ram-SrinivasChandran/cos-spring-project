@@ -12,11 +12,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * The `FoodMenu` entity class represents a type or category of food menu.
@@ -36,7 +37,7 @@ public class FoodMenu {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "food_menu_seq_gen")
     @SequenceGenerator(name = "food_menu_seq_gen", sequenceName = "food_menu_seq", schema = "food_svc",
             allocationSize = 1)
-    @Schema(description = "Food Menu Id",example = "1")
+    @Schema(description = "Food Menu Id", example = "1")
     private long id;
 
     /**
@@ -45,7 +46,7 @@ public class FoodMenu {
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1, max = 20, message = "Food Menu Name should be greater than or equal to 1")
     @Column(name = "name")
-    @Schema(description = "Food Menu Name",example = "BreakFast")
+    @Schema(description = "Food Menu Name", example = "BreakFast")
     private String name;
 
     /**
@@ -54,20 +55,20 @@ public class FoodMenu {
     @NotBlank(message = "Please Enter a Valid Type.")
     @Size(min = 1, max = 20, message = "Food Menu Type should be greater than or equal to 1")
     @Column(name = "type")
-    @Schema(description = "Food Menu Type",example = "Veg")
+    @Schema(description = "Food Menu Type", example = "Veg")
     private String type;
 
     /**
      * The timestamp indicating when the food menu was created.
      */
     @Column(name = "created_on")
-    @Schema(description = "Food Menu Created on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Menu Created on", example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
 
     /**
      * The timestamp indicating when the food menu was last modified.
      */
     @Column(name = "modified_on")
-    @Schema(description = "Food Menu Modified on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "Food Menu Modified on", example = "2023-11-15T05:27:10.787Z")
     private Instant modifiedOn;
 }

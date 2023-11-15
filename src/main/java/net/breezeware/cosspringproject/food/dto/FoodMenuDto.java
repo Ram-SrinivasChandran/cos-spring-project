@@ -2,7 +2,6 @@ package net.breezeware.cosspringproject.food.dto;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import net.breezeware.cosspringproject.food.entity.Availability;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.entity.FoodMenu;
@@ -11,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
  * The `FoodMenuDto` class is a Data Transfer Object (DTO) used to transfer data

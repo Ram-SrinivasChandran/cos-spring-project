@@ -306,8 +306,8 @@ public class OrderController {
     }
 
     @Operation(summary = "Place Order", description = "Change the Status of the Order to Placed Order")
-    @io.swagger.v3.oas.annotations.parameters.RequestBody(content = {
-            @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) })
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = { @Content(mediaType = "application/json", schema = @Schema(implementation = Order.class)) })
     @Parameter(allowEmptyValue = false, name = "order-id", description = "The Order in which the Status to be Changed",
             required = true, in = ParameterIn.PATH)
     @ApiResponses(value = { @ApiResponse(responseCode = "204", description = "Order Placed", content = @Content),

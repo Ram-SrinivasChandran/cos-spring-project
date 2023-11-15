@@ -47,7 +47,7 @@ public class User {
     @NotBlank(message = "Please Enter a Valid Name.")
     @Size(min = 1, max = 20)
     @Column(name = "name", length = 20, nullable = false)
-    @Schema(description = "User Full Name",example = "Seenu")
+    @Schema(description = "User Full Name", example = "Seenu")
     private String name;
 
     /**
@@ -56,7 +56,7 @@ public class User {
     @NotBlank(message = "Please Enter a Valid UserName.")
     @Size(min = 1, max = 20)
     @Column(name = "user_name", unique = true, length = 20, nullable = false)
-    @Schema(description = "User Name of the User",example = "seenu_01")
+    @Schema(description = "User Name of the User", example = "seenu_01")
     private String userName;
 
     /**
@@ -65,25 +65,25 @@ public class User {
     @NotBlank(message = "Please Enter a Valid Password.")
     @Size(min = 1, max = 20)
     @Column(name = "password", length = 20, nullable = false)
-    @Schema(description = "User's Password",example = "breeze123")
+    @Schema(description = "User's Password", example = "breeze123")
     private String password;
     /**
      * The timestamp when this mapping was created.
      */
     @Column(name = "created_on")
-    @Schema(description = "User Created on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "User Created on", example = "2023-11-15T05:27:10.787Z")
     private Instant createdOn;
     /**
      * The timestamp when this mapping was last modified.
      */
     @Column(name = "modified_on")
-    @Schema(description = "User Modified on",example = "2023-11-15T05:27:10.787Z")
+    @Schema(description = "User Modified on", example = "2023-11-15T05:27:10.787Z")
     private Instant modifiedOn;
     /**
      * Marks the 'roleId' field as transient, indicating that it should not be
      * persisted in the database.
      */
-    @Schema(description = "User Role Id",example = "1")
+    @Schema(description = "User Role Id", example = "1")
     @Transient
     private long roleId;
 }
