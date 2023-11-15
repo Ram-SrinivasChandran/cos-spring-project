@@ -1,5 +1,6 @@
 package net.breezeware.cosspringproject.order.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 
 import lombok.AllArgsConstructor;
@@ -15,6 +16,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Food Item Dto")
 public class FoodItemDto {
     /**
      * The food item associated with this DTO.

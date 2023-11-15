@@ -2,6 +2,7 @@ package net.breezeware.cosspringproject.order.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import net.breezeware.cosspringproject.order.entity.Order;
 
 import lombok.AllArgsConstructor;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Schema(description = "Order Dto")
 public class OrderDto {
     /**
      * The order associated with this DTO.
