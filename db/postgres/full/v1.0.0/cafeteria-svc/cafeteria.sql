@@ -28,7 +28,7 @@ CREATE TABLE food_svc.availability(
     	"modified_on" TIMESTAMPTZ,
         CONSTRAINT availability_pkey PRIMARY KEY (id)
 );
-select setval('food_svc.availability_seq', (select max(id)+1 from food_svc.availability), false);
+
 
 CREATE SEQUENCE food_svc.food_menu_availability_map_seq
   INCREMENT 1
@@ -52,6 +52,8 @@ CREATE TABLE food_svc.food_menu_availability_map(
         ON UPDATE NO ACTION ON DELETE NO ACTION,
         CONSTRAINT food_menu_availability_map_pkey PRIMARY KEY (id)
 );
+
+
 select setval('food_svc.food_menu_availability_map_seq', (select max(id)+1 from food_svc.food_menu_availability_map), false);
 
 CREATE SEQUENCE food_svc.food_item_seq
@@ -105,12 +107,12 @@ CREATE SEQUENCE user_svc.role_seq
 CREATE TABLE user_svc.role(
         "id" int8 NOT NULL default NEXTVAL('user_svc.role_seq'),
         "name"  VARCHAR(20) NOT NULL,
-        "description"  VARCHAR(20) NOT NULL,
+        "description"  VARCHAR(50) NOT NULL,
         "created_on" TIMESTAMPTZ,
     	"modified_on" TIMESTAMPTZ,
         CONSTRAINT role_pkey PRIMARY KEY (id)
 );
-select setval('user_svc.role_seq', (select max(id)+1 from user_svc.role), false);
+
 
 CREATE SEQUENCE user_svc.user_seq
   INCREMENT 1
@@ -229,17 +231,22 @@ CREATE TABLE order_svc.order_item (
 );
 select setval('order_svc.order_item_seq', (select max(id)+1 from order_svc.order_item ), false);
 
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (1, "Monday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (2, "Tuesday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (3, "Wednesday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (4, "Thursday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (5, "Friday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (6, "Saturday", now(),now());
-INSERT INTO food_svc.availability(id, day, created_on,modified_on)
-VALUES (7, "Sunday", now(),now());
+INSERT INTO food_svc.availability("id","day", "created_on","modified_on")
+VALUES (1,'Monday', now(),now()),
+ (2,'Tuesday', now(),now()),
+ (3,'Wednesday', now(),now()),
+ (4,'Thursday', now(),now()),
+ (5,'Friday', now(),now()),
+ (6,'Saturday', now(),now()),
+ (7,'Sunday', now(),now());
+
+select setval('food_svc.availability_seq', (select max(id)+1 from food_svc.availability), false);
+
+
+INSERT INTO user_svc.role("id","name","description","created_on","modified_on")
+VALUES (1,'ADMIN','Can Have All Access', now(),now()),
+ (2,'CUSTOMER','Can Order Food', now(),now()),
+ (3,'CAFETERIASTAFF','Can Prepare the Food and Update the Status', now(),now()),
+ (4,'DELIVERYSTAFF','Can Deliver the Food and Update the Status', now(),now());
+
+select setval('user_svc.role_seq', (select max(id)+1 from user_svc.role), false);
