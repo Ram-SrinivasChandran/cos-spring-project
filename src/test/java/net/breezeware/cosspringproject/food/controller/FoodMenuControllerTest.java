@@ -80,8 +80,8 @@ class FoodMenuControllerTest {
 
     @Test
     void testUpdateFoodMenu() throws Exception {
-        mockMvc.perform(
-                MockMvcRequestBuilders.put("/api/food-menus/{id}", 1).contentType(MediaType.APPLICATION_JSON).content("""
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/food-menus/{id}", 1).contentType(MediaType.APPLICATION_JSON)
+                .content("""
                         {"foodMenu": {},
                         "foodItems": [
                                 {

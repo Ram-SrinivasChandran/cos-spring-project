@@ -4,16 +4,17 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.dao.RoleRepository;
 import net.breezeware.cosspringproject.user.entity.Role;
 import net.breezeware.cosspringproject.user.service.api.RoleService;
-import org.springframework.transaction.annotation.Transactional;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RoleServiceImpl implements RoleService {
 
     private final RoleRepository roleRepository;
+
     /**
      * {@inheritDoc}
      */
@@ -31,6 +33,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Leaving findAll()");
         return roles;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -42,6 +45,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Leaving findById()");
         return role;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -53,6 +57,7 @@ public class RoleServiceImpl implements RoleService {
         log.info("Leaving save()");
         return savedRole;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -67,6 +72,7 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.save(roleToBeUpdated);
         log.info("Leaving update()");
     }
+
     /**
      * {@inheritDoc}
      */
@@ -77,6 +83,7 @@ public class RoleServiceImpl implements RoleService {
         roleRepository.delete(object);
         log.info("Leaving delete()");
     }
+
     /**
      * {@inheritDoc}
      */

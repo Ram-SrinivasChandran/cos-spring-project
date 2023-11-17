@@ -1,8 +1,7 @@
 /**
- * ErrorResponse Class
- *
- * This class represents an error response structure to be used in exception handling.
- * It contains details such as HTTP status code, error message, and a list of error details.
+ * ErrorResponse Class This class represents an error response structure to be
+ * used in exception handling. It contains details such as HTTP status code,
+ * error message, and a list of error details.
  */
 package net.breezeware.cosspringproject.exception;
 

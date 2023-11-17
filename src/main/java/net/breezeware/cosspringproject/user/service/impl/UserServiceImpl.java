@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final UserRoleMapRepository userRoleMapRepository;
     private final RoleRepository roleRepository;
     private final Validator fieldValidator;
+
     /**
      * {@inheritDoc}
      */
@@ -44,6 +45,7 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving findAll()");
         return users;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -58,6 +60,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new CustomException("The User not Found", HttpStatus.NOT_FOUND));
     }
+
     /**
      * {@inheritDoc}
      */
@@ -85,6 +88,7 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving save()");
         return savedUser;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -102,6 +106,7 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
         log.info("Leaving update()");
     }
+
     /**
      * {@inheritDoc}
      */
@@ -112,6 +117,7 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user);
         log.info("Leaving delete()");
     }
+
     /**
      * {@inheritDoc}
      */
@@ -127,6 +133,7 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(userId);
         log.info("Leaving deleteById()");
     }
+
     /**
      * {@inheritDoc}
      */
@@ -138,6 +145,7 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isACustomer()");
         return userCheck;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -149,6 +157,7 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isACafeteriaStaff()");
         return userCheck;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -160,6 +169,7 @@ public class UserServiceImpl implements UserService {
         log.info("Leaving isAAdmin()");
         return userCheck;
     }
+
     /**
      * {@inheritDoc}
      */

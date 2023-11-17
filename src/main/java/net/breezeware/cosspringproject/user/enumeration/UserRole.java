@@ -11,7 +11,8 @@ import lombok.Getter;
 @Getter
 public enum UserRole {
     /**
-     * The `ADMIN` role represents an administrator with full system access and privileges.
+     * The `ADMIN` role represents an administrator with full system access and
+     * privileges.
      */
     ADMIN("admin"),
 
@@ -21,12 +22,14 @@ public enum UserRole {
     CUSTOMER("customer"),
 
     /**
-     * The `CAFETERIASTAFF` role represents staff members working in the cafeteria or restaurant.
+     * The `CAFETERIASTAFF` role represents staff members working in the cafeteria
+     * or restaurant.
      */
     CAFETERIASTAFF("cafeteria_staff"),
 
     /**
-     * The `DELIVERYSTAFF` role represents staff members responsible for order delivery.
+     * The `DELIVERYSTAFF` role represents staff members responsible for order
+     * delivery.
      */
     DELIVERYSTAFF("delivery_staff");
 

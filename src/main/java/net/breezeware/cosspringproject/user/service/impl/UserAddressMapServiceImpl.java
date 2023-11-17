@@ -3,9 +3,9 @@ package net.breezeware.cosspringproject.user.service.impl;
 import java.time.Instant;
 import java.util.List;
 
-import net.breezeware.cosspringproject.user.entity.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.user.dao.UserAddressMapRepository;
@@ -14,13 +14,13 @@ import net.breezeware.cosspringproject.user.service.api.UserAddressMapService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class UserAddressMapServiceImpl implements UserAddressMapService {
     private final UserAddressMapRepository userAddressMapRepository;
+
     /**
      * {@inheritDoc}
      */
@@ -31,6 +31,7 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving findAll()");
         return userAddressMaps;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -46,6 +47,7 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving findById()");
         return userAddress;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -57,6 +59,7 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         log.info("Leaving save()");
         return savedUserAddressMap;
     }
+
     /**
      * {@inheritDoc}
      */
@@ -75,6 +78,7 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         userAddressMapToBeUpdated.setModifiedOn(Instant.now());
         log.info("Leaving update()");
     }
+
     /**
      * {@inheritDoc}
      */
@@ -85,6 +89,7 @@ public class UserAddressMapServiceImpl implements UserAddressMapService {
         userAddressMapRepository.delete(userAddressMap);
         log.info("Leaving delete()");
     }
+
     /**
      * {@inheritDoc}
      */

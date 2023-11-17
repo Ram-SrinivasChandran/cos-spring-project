@@ -7,19 +7,19 @@ import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
-import net.breezeware.cosspringproject.user.service.api.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.exception.ValidationException;
 import net.breezeware.cosspringproject.food.dao.FoodItemRepository;
 import net.breezeware.cosspringproject.food.entity.FoodItem;
 import net.breezeware.cosspringproject.food.service.api.FoodItemService;
+import net.breezeware.cosspringproject.user.service.api.UserService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -112,15 +112,16 @@ public class FoodItemServiceImpl implements FoodItemService {
         foodItemRepository.deleteById(foodItemId);
         log.info("Leaving deleteFoodItemById()");
     }
+
     /**
      * Validates if a user has admin privileges.
-     *
-     * @param userId The ID of the user to check.
+     * @param  userId          The ID of the user to check.
      * @throws CustomException Thrown if the user does not have admin privileges.
      */
     private void validateAdminAccess(long userId) {
         if (!userService.isAdmin(userId)) {
             throw new CustomException("Access Denied", HttpStatus.UNAUTHORIZED);
         }
+
     }
 }

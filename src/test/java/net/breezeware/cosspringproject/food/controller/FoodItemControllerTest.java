@@ -40,8 +40,8 @@ class FoodItemControllerTest {
     @Test
     void testFindAllFoodItems() throws Exception {
         Mockito.when(foodItemService.findAllFoodItems(1L)).thenReturn(List.of(new FoodItem(), new FoodItem()));
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-items?user-id=1")).andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(jsonPath("$", hasSize(2)));
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/food-items?user-id=1"))
+                .andExpect(MockMvcResultMatchers.status().isOk()).andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
@@ -49,8 +49,7 @@ class FoodItemControllerTest {
         FoodItem mockfoodItem = FoodItem.builder().id(1).cost(20).quantity(10).build();
         Mockito.when(foodItemService.findFoodItemById(anyLong())).thenReturn(mockfoodItem);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/food-items/{id}", 1))
-                .andExpectAll(jsonPath("$.id").value(1), jsonPath("$.cost")
-                        .value(20), jsonPath("$.quantity").value(10))
+                .andExpectAll(jsonPath("$.id").value(1), jsonPath("$.cost").value(20), jsonPath("$.quantity").value(10))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

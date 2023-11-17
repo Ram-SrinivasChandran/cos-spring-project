@@ -46,7 +46,6 @@ public enum Days {
 
     /**
      * Constructs a `Days` enum value with the specified name.
-     *
      * @param name The name of the day.
      */
     Days(String name) {

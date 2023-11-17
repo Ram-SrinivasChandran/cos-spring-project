@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import net.breezeware.cosspringproject.exception.CustomException;
 import net.breezeware.cosspringproject.food.dao.FoodMenuAvailabilityMapRepository;
@@ -14,7 +15,6 @@ import net.breezeware.cosspringproject.food.service.api.FoodMenuAvailabilityMapS
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
