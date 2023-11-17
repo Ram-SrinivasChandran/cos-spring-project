@@ -36,7 +36,7 @@ public class FoodItemServiceImpl implements FoodItemService {
     @Override
     public List<FoodItem> findAllFoodItems(long userId) {
         log.info("Entering findAllFoodItems()");
-        userCheck(userId);
+        validateAdminAccess(userId);
         List<FoodItem> foodItem = foodItemRepository.findAll();
         log.info("Leaving findAllFoodItems()");
         return foodItem;
@@ -112,9 +112,15 @@ public class FoodItemServiceImpl implements FoodItemService {
         foodItemRepository.deleteById(foodItemId);
         log.info("Leaving deleteFoodItemById()");
     }
-    private void userCheck(long userId){
-        if(!userService.isAdmin(userId)){
-            throw new CustomException("Access Denied",HttpStatus.UNAUTHORIZED);
+    /**
+     * Validates if a user has admin privileges.
+     *
+     * @param userId The ID of the user to check.
+     * @throws CustomException Thrown if the user does not have admin privileges.
+     */
+    private void validateAdminAccess(long userId) {
+        if (!userService.isAdmin(userId)) {
+            throw new CustomException("Access Denied", HttpStatus.UNAUTHORIZED);
         }
     }
 }
