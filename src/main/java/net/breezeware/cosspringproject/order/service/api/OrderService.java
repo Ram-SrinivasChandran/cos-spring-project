@@ -63,7 +63,7 @@ public interface OrderService {
      * @param  placeOrderDto The order placement details.
      * @return               The details of the placed order.
      */
-    OrderViewDto placeOrder(long orderId, PlaceOrderDto placeOrderDto);
+    void placeOrder(long orderId, PlaceOrderDto placeOrderDto);
 
     /**
      * Cancel an order with the specified unique identifier.

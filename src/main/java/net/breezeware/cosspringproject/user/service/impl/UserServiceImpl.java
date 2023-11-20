@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
     public boolean isCustomer(long userId) {
         log.info("Entering isACustomer(), id: {}", userId);
         User checkedUser = findById(userId);
-        boolean userCheck = checkUser(checkedUser, UserRole.CUSTOMER.getName());
+        boolean userCheck = checkUser(checkedUser, String.valueOf(UserRole.CUSTOMER));
         log.info("Leaving isACustomer()");
         return userCheck;
     }
@@ -153,7 +153,7 @@ public class UserServiceImpl implements UserService {
     public boolean isCafeteriaStaff(long userId) {
         log.info("Entering isACafeteriaStaff(), id: {}", userId);
         User checkedUser = findById(userId);
-        boolean userCheck = checkUser(checkedUser, UserRole.CAFETERIASTAFF.getName());
+        boolean userCheck = checkUser(checkedUser, String.valueOf(UserRole.CAFETERIASTAFF));
         log.info("Leaving isACafeteriaStaff()");
         return userCheck;
     }
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
     public boolean isAdmin(long userId) {
         log.info("Entering isAAdmin(), id: {}", userId);
         User checkedUser = findById(userId);
-        boolean userCheck = checkUser(checkedUser, UserRole.ADMIN.getName());
+        boolean userCheck = checkUser(checkedUser, String.valueOf(UserRole.ADMIN));
         log.info("Leaving isAAdmin()");
         return userCheck;
     }
@@ -177,7 +177,7 @@ public class UserServiceImpl implements UserService {
     public boolean isDeliveryStaff(long userId) {
         log.info("Entering isADeliveryStaff(), id: {}", userId);
         User checkedUser = findById(userId);
-        boolean userCheck = checkUser(checkedUser, UserRole.DELIVERYSTAFF.getName());
+        boolean userCheck = checkUser(checkedUser,String.valueOf(UserRole.DELIVERYSTAFF));
         log.info("Leaving isADeliveryStaff()");
         return userCheck;
     }

@@ -175,9 +175,10 @@ class OrderServiceImplTest {
         when(orderItemService.findByOrder(any())).thenReturn(mockOrderItems);
         when(foodItemService.findFoodItemById(1L)).thenReturn(mockFoodItem);
         when(orderRepository.save(any())).thenReturn(mockOrder);
-        OrderViewDto orderViewDto = orderService.placeOrder(1L, mockPlaceOrderDto);
-        assertEquals(orderViewDto.getFoodItems().size(), 1);
-        assertEquals(orderViewDto.getOrder().getId(), mockOrder.getId());
+        orderService.placeOrder(1L, mockPlaceOrderDto);
+        verify(orderRepository).findById(1L);
+        verify(foodItemService).findFoodItemById(1L);
+        verify(orderItemService).findByOrder(any());
     }
 
     @Test

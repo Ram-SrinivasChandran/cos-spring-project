@@ -267,7 +267,7 @@ public class OrderServiceImpl implements OrderService {
      */
     @Transactional
     @Override
-    public OrderViewDto placeOrder(long orderId, PlaceOrderDto placeOrderDto) {
+    public void placeOrder(long orderId, PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
         Order order = findOrderById(orderId);
         if (!validateEmail(placeOrderDto.getEmail())) {
@@ -290,13 +290,11 @@ public class OrderServiceImpl implements OrderService {
             int orderItemQuantity = orderItem.getQuantity();
             FoodItem foodItem = foodItemService.findFoodItemById(orderItem.getFoodItem().getId());
             int foodItemQuantity = foodItem.getQuantity();
-            foodItem.setQuantity(foodItemQuantity - orderItemQuantity);
+            foodItem.setQuantity((foodItemQuantity - orderItemQuantity));
             foodItemService.saveFoodItem(foodItem);
         }
-
         Order savedOrder = orderRepository.save(order);
         log.info("Leaving placeOrder()");
-        return viewOrder(savedOrder.getId());
     }
 
     /**

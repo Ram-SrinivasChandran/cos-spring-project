@@ -122,6 +122,5 @@ public class FoodItemServiceImpl implements FoodItemService {
         if (!userService.isAdmin(userId)) {
             throw new CustomException("Access Denied", HttpStatus.UNAUTHORIZED);
         }
-
     }
 }

@@ -62,7 +62,6 @@ public class Order {
     /**
      * The email associated with the order.
      */
-    @NotBlank(message = "Please Enter the Email")
     @Column(name = "email")
     @Schema(description = "Email of the User", example = "chand2ram@gmail.com")
     private String email;
@@ -70,7 +69,6 @@ public class Order {
     /**
      * The phone number associated with the order.
      */
-    @NotBlank(message = "Please Enter the Phone Number")
     @Column(name = "phone_number")
     @Schema(description = "Phone Number of the User", example = "9677963066")
     private String phoneNumber;
@@ -85,7 +83,7 @@ public class Order {
     /**
      * The status of the order.
      */
-    @Size(min = 1, max = 35)
+
     @Column(name = "status")
     @Schema(description = "Status of the Order", example = "ORDER_PLACED")
 

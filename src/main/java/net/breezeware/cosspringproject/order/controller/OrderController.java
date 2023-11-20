@@ -323,12 +323,11 @@ public class OrderController {
                         """)) }) })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PutMapping("/place-order/{order-id}")
-    OrderViewDto placeOrder(@PathVariable(name = "order-id", required = true) long orderId,
+    void placeOrder(@PathVariable(name = "order-id", required = true) long orderId,
             @RequestBody PlaceOrderDto placeOrderDto) {
         log.info("Entering placeOrder()");
-        OrderViewDto orderViewDto = orderService.placeOrder(orderId, placeOrderDto);
+        orderService.placeOrder(orderId, placeOrderDto);
         log.info("Leaving placeOrder()");
-        return orderViewDto;
     }
 
     @Operation(summary = "Cancel Order", description = "Change the Status of the Order to Order Cancelled")
@@ -703,7 +702,7 @@ public class OrderController {
                         }
                         """)) }) })
     @GetMapping("/cancelled-orders")
-    List<OrderViewDto> cancelledOrders(@RequestParam(value = "user-userId") long userId) {
+    List<OrderViewDto> cancelledOrders(@RequestParam(value = "user-id") long userId) {
         log.info("Entering cancelledOrders()");
         List<OrderViewDto> orderViewDtos = orderService.viewCancelledOrders(userId);
         log.info("Leaving cancelledOrders()");
@@ -894,7 +893,7 @@ public class OrderController {
                         }
                         """)) }) })
     @GetMapping("/completed-orders")
-    List<OrderViewDto> completedOrders(@RequestParam(value = "user-userId") long userId) {
+    List<OrderViewDto> completedOrders(@RequestParam(value = "user-id") long userId) {
         log.info("Entering completedOrders()");
         List<OrderViewDto> orderViewDtos = orderService.viewCompletedOrders(userId);
         log.info("Leaving completedOrders()");
